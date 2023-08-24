@@ -1,0 +1,355 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+
+/* base styles */
+* {
+  margin: 0;
+  font-family: "Quicksand";
+  color: #f2f1f1;
+}
+.container {
+  position: relative;
+  z-index: 1;
+}
+.home {
+  position: relative;
+  background-color: #202025;
+  top: 0;
+  min-height: 100vh;
+  height: 100%;
+}
+.show {
+  position: relative;
+  /* display: flex; */
+  background-color: #202025;
+  top: 0;
+  min-height: 100vh;
+  height: 100%;
+}
+.nav {
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  background-color: #44444c;
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  z-index: 10;
+  height: 3vw;
+  top: 0;
+  border-bottom: .1vw solid #f2f2f2;
+}
+.nav ul {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  list-style: none;
+  display: flex;
+}
+.nav h1 {
+  color: #f1356d;
+  text-align: center;
+  font-size: 2.5vw;
+  padding: 1vw;
+}
+.nav .links {
+  margin-left: auto;
+}
+.nav .site-title {
+  align-items: center;
+  font-size: 2vw;
+  padding: 0 2vw;
+  font-weight: bold;
+}
+.nav li.active {
+  background-color: #555;
+}
+.nav li:hover {
+  background-color: #777;
+}
+.nav a {
+  /* margin-left: 16px; */
+  text-decoration: none;
+  font-size: 2vw;
+  height: 100%;
+  padding: .11vw 2vw;
+  display: flex;
+  text-align: center;
+}
+.nav a:hover {
+  color: #f1356d;
+}
+.content {
+  /* max-width: 600px; */
+  display: flex;
+  flex-direction: column;
+  margin: 2vw auto;
+  padding: 1vw;
+}
+.actorName {
+  font-size: 3vw;
+  text-decoration: underline;
+  background-color: cadetblue;
+  text-align: center;
+  padding: 20px;
+  margin: auto;
+}
+
+/* role previews / list */
+.role-preview {
+  padding: 10px 16px;
+  margin: 20px 0;
+  border-bottom: 1px solid #fafafa;
+  /* border: 1px solid #fafafa; */
+  display: grid;
+  gap: 20px;
+  max-width: fit-content;
+  height: 12vw;
+  /* margin-right: auto;
+  margin-left: auto; */
+  margin: auto;
+}
+.role-preview:hover {
+  box-shadow: 1px 3px 5px rgba(255, 255, 255, 0.477);
+}
+.role-preview h2 {
+  font-size: min(2vw, 40px);
+  color: #f1356d;
+  padding-bottom: 8px;
+}
+.role-preview a {
+  color: rgb(145, 205, 207);
+  text-decoration: none;
+}
+.role-preview p {
+  font-size: 1vw;
+  max-width: 10vw;
+  overflow-wrap: break-word;
+}
+.role-preview-text {
+  grid-column: 2;
+  max-width: 60%;
+}
+.charImg {
+  max-width: 8vw;
+  grid-column: 1;
+  right: 0;
+}
+.roleList {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: auto;
+  margin-right: auto;
+  gap: 0;
+  max-width: 90%;
+  padding-bottom: 20px;
+}
+.showsList {
+  display: grid;
+  gap: 20px;
+}
+#showHeader {
+  margin-left: 5vw;
+}
+.show .header {
+  /* display: flex; */
+  /* position: sticky; */
+  text-align: center;
+  padding: 20px;
+  font-size: 2vw;
+}
+.show .header h1 {
+  text-align: center;
+}
+.searchSide {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  right: 0px;
+  top: 1vw;
+}
+#Search {
+  align-self: flex-end;
+  right: 0px;
+  top: 0;
+  height: 3vw;
+  width: 22vw;
+  font-size: 2vw;
+  border-width: .25vw;
+  border-radius: 1vw;
+  color: white;
+  margin: 0 1vw;
+  padding-left: 1vw;
+}
+.results {
+  /* position: absolute; */
+  margin: 0 1vw;
+  right: 0px;
+  top: 0px;
+  display: flex;
+  flex-direction: column;
+  font-size: 1.75vw;
+}
+.resBox {
+  position: relative;
+  background-color:#202025;
+  text-align: left;
+  right: 0;
+  border: #f1356d ridge .25vw;
+  border-radius: 1vw;
+  margin: .1vw;
+  width: 20vw;
+  padding-left: 1vw;
+  text-decoration: none;
+  cursor: pointer;
+}
+.showTitle {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  font-size: 3vw;
+  padding-bottom: 2vw;
+}
+.showInfo {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 50px;
+  gap: 0;
+  max-width: 90%;
+  padding-bottom: 0px;
+  justify-content: space-between;
+}
+.roleTogglePrev {
+  background-color: darkslategrey;
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  flex: none;
+  padding: 0;
+  font-size: 1vw;
+  border-width: .3vw;
+}
+.roleToggleNext {
+  background-color: darkslategrey;
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  /* align-self:stretch; */
+  flex: none;
+  padding: 0;
+  font-size: 1vw;
+  border-width: .3vw;
+}
+.imgNav {
+  display: flex;
+  /* flex-direction: row; */
+  width: 225px;
+  height: fit-content;
+  /* justify-content: ; */
+  padding: 1vw 0;
+  /* justify-content: space-between; */
+}
+.selectionDots {
+  flex: auto;
+  font-size: 25px;
+  text-align: center;
+  /* max-width: 6vw; */
+  flex-wrap: wrap;
+  padding-left: .3vw;
+  padding-right: .3vw;
+}
+.selectionDots .index {
+  /* text-align: end; */
+  font-size: 19px;
+  display: flex;
+  flex-direction: row-reverse;
+  margin-right: .1vw;
+}
+.roleGallery {
+  width: 225px;
+  display: flex;
+  flex-direction: column;
+  /* height: 30vw; */
+  height: fit-content;
+  padding: 20px 10px;
+  padding-top: 0;
+  border-bottom: 1px;
+  /* padding-bottom: 0; */
+}
+.roleGallery img {
+  width: 225px;
+  height: 326px;
+}
+.showsList p {
+  text-align: end;
+  cursor: pointer;
+  font-size: 20px;
+  gap: .5vw
+}
+.roleActor {
+  max-width: 225px;
+  height: 100px;
+  align-self: center;
+  /* height: 3vw; */
+  display: flex;
+  flex-direction:column-reverse;
+}
+.roleGallery h3 {
+  font-size: 30px; /* legacy */
+  text-align: center;
+  max-width: 11vw;
+  text-anchor: end;
+  padding-bottom: 10px;
+}
+.roleGallery h4 {
+  color: #6598ea;
+  font-size: 37.5px;
+  /* font-size: 1.5vw; */
+}
+.roleGallery p {
+  /* font-size: 30px;
+  font-size: 1.2vw; */
+  text-align: right;
+}
+.home {
+  display: flex;
+  width: 100%;
+  padding: 2vw;
+}
+.home .viewer {
+  display: flex;
+  position: relative;
+  right: 0;
+  margin-left: auto;
+  /* align-self: flex-end; */
+  padding: 50px 4vw;
+}
+.homeActorImg {
+  width: 100px;
+  height: 155px;
+  padding: 1vw;
+  padding-top: 3vw;
+  flex-direction: column-reverse;
+}
+#homeRightPane {
+  display: flex;
+  flex-direction: column;
+}
+.nextActor {
+  background-color: darkslategrey;
+  height: fit-content;
+  font-size: 1.2vw;
+  /* align-self: auto; */
+  /* margin-top: auto; */
+  /* margin-bottom: auto; */
+  /* position: relative; */
+  top: 17vw;
+}
+input {
+  background-color: #4b4b52;
+}
+input::-webkit-search-cancel-button{
+  color: #f1356d;
+  position:relative;
+  right:20px;    
+}
