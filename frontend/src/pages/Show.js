@@ -1,18 +1,32 @@
 import ShowInfo from "../components/ShowInfo"
 // import {myList} from './Home'
 // import SearchBar from "../components/SearchBar"
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useParams, Link } from "react-router-dom";
 // import { unmountComponentAtNode } from "react-dom";
+const   ShowID      = 0,
+        Title       = 1,
+        ImageURL    = 2;
+
 
 export default function Show() {
     
     // const CLIENT_ID = '5dbcd29b3178e6d62ec7ecf17b4daf56'
-    
+    const { id, title } = useParams()
     const [keyword, setKeyword] = useState('');
     const [shows, setShows] = useState([]);
     const [titles, setTitles] = useState([]);
-    const [returnedData, setReturnedData] = useState([]);
-    const [showSelected, setShowSelected] = useState([]);
+    const [showSelected, setShowSelected] = useState([id || 0, title || '']);
+    // const [showActors, setShowActors] = useState([]);
+    
+    // useEffect(() => {
+    // }, [showSelected])
+
+    useEffect(() => {
+        setShowSelected([id, title]);
+        setKeyword("");
+        getSearchData("");
+    }, [id, title])
     
     const getSearchData = async(keyword) => {
         setKeyword(keyword);
@@ -35,18 +49,37 @@ export default function Show() {
                 })
             })
             .then(res => res.json());
-            setReturnedData(searchData);
             // console.log("SD", searchData)
 
             // console.log("RD", returnedData)
             for (let i in searchData) {
-                tRes.push(searchData[i].Title);
-                idRes.push(searchData[i].ShowID);
+                searchData[i] = Object.values(searchData[i]);
+                tRes.push(searchData[i][Title]);
+                idRes.push(searchData[i][ShowID]);
             }
             setTitles(tRes);
             setShows(idRes);
         }
     }
+
+    // const getShowActors = async() => {
+    //     const showData = await fetch ('/show', {
+    //       method: 'POST',
+    //       headers: {
+    //         'content-type': 'application/json',
+    //         'Accept': 'application/json'
+    //       },
+    //       body: JSON.stringify({
+    //         ShowID: showSelected[0]
+    //       })
+    //     })
+    //     .then(res => res.json());
+    //     // console.log(showData)
+    //     for (let i in showData) {
+    //         showData[i] = Object.values(showData[i])
+    //     }
+    //     setShowActors(showData);
+    // }
     // const updateKeyword = async(keyword) => {
 
     //     // const results = myList.titles.filter((entry) => {
@@ -74,35 +107,25 @@ export default function Show() {
     //     // console.log(titles)
     // }
 
-    const CLIENT_ID = '5dbcd29b3178e6d62ec7ecf17b4daf56';
-
-    function changeShow(index) {
-        setKeyword("");
-        getSearchData("");
-        setShowSelected([shows[index], titles[index]]);
-        console.log("showSelected", showSelected)
-    }
-
-    // function fetchList(username) {
-    //     var url = 'https://api.myanimelist.net/v2/users/' + username + '/animelist?fields={title,related_anime,id,alternative_titles=en}&limit=1000'
-    //     let response = fetch(url, {
-    //         headers: {'X-MAL-CLIENT-ID': CLIENT_ID,
-    //                   'Access-Control-Allow-Origin': '*',
-    //                   "Access-Control-Allow-Methods": "POST, GET, PUT",
-    //                   "Access-Control-Allow-Headers": "Content-Type"
-    //                 }
-    //     })
-    //     console.log(response)
-    //     // response.raise_for_status()
+    // function changeShow(index) {
+    //     setKeyword("");
+    //     getSearchData("");
+    //     setShowSelected([shows[index], titles[index]]);
+    //     console.log(showSelected)
+    //     getShowActors();
+    //     // if (document.getElementById("currList"))
+    //     //     document.getElementById("currList").remove()
+    //     // console.log("showSelected", showSelected)
     // }
+
 
     return (   
         <div className="show">
             {/* {console.log(myList.shows)} */}
             {/* <SearchBar keyword={keyword} onChange={updateKeyword} /> */}
             <div className="header">
-                {showSelected
-                    ? <h1> {showSelected.title} </h1>
+                {showSelected[0] != 0
+                    ? <h1> {showSelected[Title]} </h1>
                     : <></>
                 }
                 <div className="searchSide">
@@ -115,17 +138,16 @@ export default function Show() {
                     <div className="results">
                         {/* Display 10 filtered results. Change Show on click */}
                         {titles.slice(0,10).map((title, index) => (
-                            <div className="resBox" key={index} onClick={(e) => changeShow(index)}>
-                                    <p>{title}</p>
-                            </div>
+                            <Link to={`/Show/${shows[index]}/${title}`} className="resBox">{title}</Link>
                         ))}
                     </div>
                     {/* <button onClick={() => fetchList("RufusPeanut")}>Fetch List</button> */}
                 </div>
             </div>
             {/* {console.log("showSelected", showSelected)} */}
-            {showSelected != 0
-                ? <ShowInfo id="currList" Show={showSelected} />
+            {showSelected[0] != 0//.length > 1 //!== []
+                ? <><ShowInfo Show={showSelected}/>
+                  {console.log("created showe info")}  </>
                 : <h2 id="showHeader">Search for a Show in Your List to Begin!</h2>
             }
             
@@ -136,3 +158,11 @@ export default function Show() {
 
     )
 }
+// function setShowFromLabel() {
+//     setShowSelected([id, title]);
+// }
+
+
+// module.exports = {
+//     setShowFromLabel
+// }

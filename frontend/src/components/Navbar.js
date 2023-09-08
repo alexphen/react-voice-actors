@@ -9,8 +9,8 @@ const Navbar = () => {
             MyAnimeList Voice Actors
         </Link>
         <ul>
-            <CustomLink to="/Show">Show Search</CustomLink>
-            <CustomLink to="/Actor">Actor Search</CustomLink>
+            <CustomLink to="/Show/0/0">Show Search</CustomLink>
+            <CustomLink to="/Actor/0/0">Actor Search</CustomLink>
         </ul>
         </nav>
     )

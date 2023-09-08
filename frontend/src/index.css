@@ -145,18 +145,23 @@
 .showsList {
   display: grid;
   gap: 20px;
+  text-align: end;
 }
 #showHeader {
   margin-left: 5vw;
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
 }
 .show .header {
-  /* display: flex; */
-  /* position: sticky; */
+  position: sticky;
+  display: flex;
   text-align: center;
   padding: 20px;
   font-size: 2vw;
+  justify-content: center;
 }
 .show .header h1 {
+  width: 30vw;
   text-align: center;
 }
 .searchSide {
@@ -198,8 +203,8 @@
   margin: .1vw;
   width: 20vw;
   padding-left: 1vw;
-  text-decoration: none;
   cursor: pointer;
+  text-decoration: none;
 }
 .showTitle {
   margin-left: auto;
@@ -227,7 +232,7 @@
   flex: none;
   padding: 0;
   font-size: 1vw;
-  border-width: .3vw;
+  border-width: .3vh;
 }
 .roleToggleNext {
   background-color: darkslategrey;
@@ -238,7 +243,7 @@
   flex: none;
   padding: 0;
   font-size: 1vw;
-  border-width: .3vw;
+  border-width: .3vh;
 }
 .imgNav {
   display: flex;
@@ -280,10 +285,11 @@
   width: 225px;
   height: 326px;
 }
-.showsList p {
-  text-align: end;
+.showsList a {
+  text-align: center;
   cursor: pointer;
   font-size: 20px;
+  text-decoration: none;
   gap: .5vw
 }
 .roleActor {
@@ -345,6 +351,16 @@
   /* position: relative; */
   top: 17vw;
 }
+.firstActor {
+  background-color: darkslategrey;
+  height: fit-content;
+  font-size: 3vw;
+  /* align-self: auto; */
+  /* margin-top: auto; */
+  /* margin-bottom: auto; */
+  /* position: relative; */
+  top: 17vw;
+}
 input {
   background-color: #4b4b52;
 }
@@ -352,4 +368,45 @@ input::-webkit-search-cancel-button{
   color: #f1356d;
   position:relative;
   right:20px;    
+}
+.actorPage {
+  display: flex;
+}
+.actorInfo {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  width: 25%;
+  left: 70% ;
+  top: 30%;
+  font-size: 1.6vh;
+  text-align: center;
+  /* margin-left: -300px; */
+  /* margin-left: auto;
+  margin-right: auto; */
+  align-items: center;
+}
+.actorImg {
+  display: flex;
+  align-self: center;
+  width: 15vh;
+}
+.actorRoles {
+  margin-top: 1vh;
+  gap: 1vw;
+  width: 70%;
+  display: flex;
+  flex-wrap: wrap;
+}
+.actorRoles img {
+  width: 15vh;
+  /* width: 225px; */
+  /* height: 350px; */
+}
+.info {
+  display: none;
+}
+.actorRoles img:hover + div {
+  box-shadow: 0px 0px 10px 10px #6598ea;
+  z-index: 1;
 }
