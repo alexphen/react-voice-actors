@@ -2,26 +2,30 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import Show from "../pages/Show";
 
-const CharID = 0;
-const CharName = 1;
+const CharID    = 0;
+const CharName  = 1;
 const Favorites = 2;
-const ImageURL = 3;
+const ImageURL  = 3;
 // const ActorID = 4;
-const ShowID = 5;
-const Title = 7;
+const ShowID    = 5;
+const Title     = 7;
+const rank      = 8;
 
-const ShowRoleToggle = ({actorID, actorName, showID}) => {
+const ShowRoleToggle = ({actorID, actorName, showID, flag, user, myList}) => {
 
     // console.log("actorID received ", actorID)
     
     const [pos, setPos] = useState(0);
     const [posDot, setPosDot] = useState(pos);
     const [roleReturn, setRoleReturn] = useState([]);
+    // console.log(user, "in Toggle")
+    var filterFlag = user.length > 0;
     // const [roles, setRoles] = useState([]);
     var size;
     var ext;
     var prev;
 
+    // 
     useEffect(() => {
         // console.log(actorID)
         if (prev != actorID) {
@@ -31,6 +35,15 @@ const ShowRoleToggle = ({actorID, actorName, showID}) => {
             restart();
         }
     }, [actorID]);
+
+
+    useEffect(() => {
+        if (myList.length > 0) {
+            sleep(5000)
+            console.log(myList)
+            getRoles(actorID);
+        }
+    }, [myList])
 
     useEffect(() => {
         restart();
@@ -49,16 +62,18 @@ const ShowRoleToggle = ({actorID, actorName, showID}) => {
                 'Accept': 'application/json'
             },
             body: JSON.stringify({
-                ActorID: actID
+                ActorID: actID,
+                flag: filterFlag
             })
         }).then(res => res.json())
+        // console.log(roleData)
         if (roleData[0].CharName) {
             for (let i in roleData) {
                 roleData[i] = Object.values(roleData[i])
             }
         }
         setRoleReturn(Object.values(roleData));
-        // console.log("rd", Object.values(roleData))
+        console.log("rd", Object.values(roleData))
         // actors[actors.length] = roleData;
     }
 
@@ -114,22 +129,7 @@ function next() {
     }
 } 
 
-    // function showShows(titles) {
-    //     console.log(titles);
-    //     <MoreShows titles={titles} />
-    // }
-
-  
-    // console.log('size', size)
-    // console.log('ext', ext)
-    // var buffer = ext;
     const arr = [];
-    // for (let i = 0; i < Math.min(size, 10); i++) {
-    //     if (i === posDot)
-    //         arr[i] = "⦿"
-    //     else
-    //         arr[i] = "◦";
-    // }
     
     return ( 
         
@@ -159,18 +159,27 @@ function next() {
                         }
                     </div>
                     <h4>{roleReturn[String(pos)][CharName]}</h4>
-                    <div className="showsList">
-                        {roleReturn[pos][Title] ?
-                        <>
-                        {/* <p>from </p> */}
-                        {roleReturn[pos][Title].map((title, n) => 
-                            <div key={n}>
-                                <Link to={`/Show/${roleReturn[pos][ShowID][n]}/${title}`}>{title}</Link>
-                            </div>
-                        )}</>
-                            : <></>
-                        }
-                    </div> 
+                    <div id="topTitle">
+                        <Link to={`/Show/${roleReturn[pos][ShowID][0]}/${roleReturn[pos][Title][0]}`}>{roleReturn[pos][Title][0]}</Link>
+                    </div>
+                    {roleReturn[pos][Title].length > 1
+                        ?<><div id="moreTitles">•••</div>
+                        <div className="showsList">
+                            {roleReturn[pos][Title] ?
+                            <>
+                            {roleReturn[pos][Title].map((title, n) => 
+                                <div key={n}>
+                                    {n > 0
+                                        ?<Link to={`/Show/${roleReturn[pos][ShowID][n]}/${title}`}>{title}</Link>
+                                        :<></>
+                                    }
+                                </div>
+                            )}</>
+                                : <></>
+                            }
+                        </div></>
+                        : <></>
+                    }
                     </>
                     : <></>
                 }
@@ -180,9 +189,9 @@ function next() {
         </div>
      );
 
-     function handleShowClick(show) {
-        Show.setShowSelected(show);
-     }
+     function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
 
      function handleRoles() {
         combineRoles();
@@ -193,24 +202,31 @@ function next() {
      function combineRoles() {
         var currRoleShowIDs = [];
         var currRoleTitles = [];
+        var currRoleRanks = [];
         // console.log(roleReturn)
         for (let i = 0; i < roleReturn.length; i++) {
+            // If Title is currently a String, turn it into an array
             if (typeof roleReturn[i][Title] == 'string') {
                 currRoleShowIDs = [roleReturn[i][ShowID]];
-                currRoleTitles = [roleReturn[i][Title]];
-                // var currRoleShowIDs = [roleReturn[i].ShowID];
-                // var currRoleTitles = [roleReturn[i].Title];
+                currRoleTitles  = [roleReturn[i][Title]];
             }
             else {
                 currRoleShowIDs = roleReturn[i][ShowID];
-                currRoleTitles = roleReturn[i][Title];
+                currRoleTitles  = roleReturn[i][Title];
             }
+            if (typeof roleReturn[i][rank] == 'number') {
+                currRoleRanks = [roleReturn[i][rank]];
+            } else {
+                currRoleRanks = roleReturn[i][rank];                
+            }
+
+            // 
             for (let p = i + 1; p < roleReturn.length; p++) {
                 if(roleReturn[i][CharID] === roleReturn[p][CharID]) {
-                    // console.log(currRoleShowIDs)
+                    // console.log(currRoleTitles, currRoleRanks)
                     currRoleShowIDs.push(roleReturn[p][ShowID]);
-                    currRoleTitles.push(roleReturn[p][Title]);
-                    // console.log(currRoleTitles)
+                    currRoleTitles.push(String(roleReturn[p][Title]));
+                    currRoleRanks.push(roleReturn[p][rank]);
                     roleReturn.splice(p, 1);
                     p--;
                 }
@@ -219,8 +235,29 @@ function next() {
                     break
                 }
             }
+            console.log(currRoleTitles, currRoleRanks)
+
+            var swapped, temp;
+            for (let k = 0; k < currRoleShowIDs.length; k++) {
+                swapped = false
+                for (let m = 0; m < currRoleShowIDs.length; m++) {
+                    if (currRoleRanks[m] > currRoleRanks[m+1]) 
+                    {
+                        swap(currRoleRanks, m, m+1)
+                        swap(currRoleShowIDs, m, m+1)
+                        swap(currRoleTitles, m, m+1)
+                        swapped = true;
+                    }
+                }
+                // IF no two elements were 
+                // swapped by inner loop, then break
+                if (swapped === false)
+                break;
+            }
+
             roleReturn[i][ShowID] = currRoleShowIDs;
             roleReturn[i][Title] = currRoleTitles;
+            roleReturn[i][rank] = currRoleRanks;
         }
         size = roleReturn.length;
         ext = size - 10;
@@ -230,6 +267,12 @@ function next() {
             else
                 arr[i] = "◦";
         }
+    }
+
+    function swap(arr, i1, i2) {
+        var temp = arr[i1];
+        arr[i1] = arr[i2];
+        arr[i2] = temp;
     }
 
     function bubbleSort(roles, n)
@@ -248,9 +291,10 @@ function next() {
                 if (roles[j][Favorites] < roles[j + 1][Favorites]) 
                 {
                     // Swap arr[j] and arr[j+1]
-                    temp = roles[j];
-                    roles[j] = roles[j + 1];
-                    roles[j + 1] = temp;
+                    swap(roles, j, j+1)
+                    // temp = roles[j];
+                    // roles[j] = roles[j + 1];
+                    // roles[j + 1] = temp;
                     swapped = true;
                 }
             }

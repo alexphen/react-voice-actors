@@ -4,8 +4,10 @@ const exp           = require('constants'),
       dbOperation   = require('./dbFiles/dbOperation'),
       cors          = require('cors'),
       oracledb      = require('oracledb'),
+      MAL           = require("myanimelist-api-wrapper"),
+      sql           = require('mssql'),
       dbConfig      = require('./dbFiles/dbConfig');
-const { config } = require('process');
+const { config }    = require('process');
 
 
 // // const API_PORT = process.env.PORT || 1521; // oracle
@@ -136,66 +138,119 @@ app.use(express.json());
 app.use(express.urlencoded());
 app.use(cors());
 
-// app.post('/mal', async(req, res) => {
-//     console.log('Called');
-//     const result = await dbOperation.getMAL(req.body.Username)
-//     res.send(result.recordset); 
-// })
-
-app.post('/api', async(req, res) => {
-    console.log('Called');
-    const result = await dbOperation.getAnime(req.body.Title)
-    res.send(result.recordset);    
-})
-
-app.post('/hello', async(req, res) => {
-    await dbOperation.addAnime(req.body);
-    const result = await dbOperation.getAnime(req.body.Title)
-    console.log('Called quit');
-    res.send(result.recordset);  
-})
-
 app.post('/actor', async(req, res) => {
-    console.log('Called actor', req.body);
-    const result = await dbOperation.getActor(req.body.ActorID)
-    // console.log(result.recordset)
-    res.send(result.recordset);  
+    try {
+        console.log('Called actor', req.body);
+        const result = await dbOperation.getActor(req.body.ActorID)
+        // console.log(result.recordset)
+        res.send(result.recordset);  
+        
+    } catch (error) {
+        console.log(error)
+    }
 })
 
 app.post('/actorFull', async(req, res) => {
-    console.log('Called actorFull', req.body);
-    const result = await dbOperation.getActorFull(req.body.ActorID)
-    // console.log(result.recordset)
-    res.send(result.recordset);  
+    try {
+        console.log('Called actorFull', req.body);
+        const result = await dbOperation.getActorFull(req.body.ActorID, req.body.flag)
+        // console.log(result.recordset)
+        res.send(result.recordset);  
+        
+    } catch (error) {
+        console.log(error)
+    }
 })
 
 app.post('/home', async(req, res) => {
-    console.log('Called home', req.body);
-    const result = await dbOperation.getHomeData(req.body.ActorID)
-    // console.log(result.recordset)
-    res.send(result.recordset);  
+    try {
+        console.log('Called home', req.body);
+        const result = await dbOperation.getHomeData(req.body.ActorID)
+        // console.log(result.recordset)
+        res.send(result.recordset);  
+        
+    } catch (error) {
+        console.log(error)
+    }
 })
 
-app.post('/search', async(req, res) => {
-    console.log('Called search', req.body);
-    const result = await dbOperation.getSearchData(req.body.Title)
-    // console.log(result.recordset)
-    res.send(result.recordset);  
+app.post('/list', async(req, res) => {
+    try {
+        console.log('Called list', req.body);
+        const result = await dbOperation.setList(req.body.ids)
+        // console.log(result)
+        res.send(result);
+        
+    } catch (error) {
+        console.log(error)
+    }
 })
 
-app.post('/show', async(req, res) => {
-    console.log('Called show', req.body);
-    const result = await dbOperation.getShowActors(req.body.ShowID)
-    // console.log(result.recordset)
-    res.send(result.recordset);  
+app.post('/mal', async(req, res) => {
+    try {
+        console.log('Called mal', req.body);
+        const result = await dbOperation.getMAL(req.body.Username)
+        // console.log(result)
+        res.send(result); 
+        
+    } catch (error) {
+        console.log(error)
+    }
 })
 
 app.post('/roles', async(req, res) => {
-    console.log('Called roles', req.body);
-    const result = await dbOperation.getRoles(req.body.ActorID)
-    // console.log(result.recordset)
-    res.send(result.recordset);  
+    try {
+        console.log('Called roles', req.body);
+        const result = await dbOperation.getRoles(req.body.ActorID, req.body.flag)
+        // console.log(result.recordset)
+        res.send(result.recordset);  
+        
+    } catch (error) {
+        console.log(error)
+        
+    }
 })
+
+app.post('/search', async(req, res) => {
+    try {
+        console.log('Called search', req.body);
+        const result = await dbOperation.getSearchData(req.body.Title, req.body.flag)
+        // console.log(result.recordset)
+        res.send(result.recordset);  
+        
+    } catch (error) {
+        console.log(error)
+        
+    }
+})
+
+app.post('/searchActor', async(req, res) => {
+    try {
+        console.log('Called search actor', req.body);
+        const result = await dbOperation.getSearchActorData(req.body.Title, req.body.flag)
+        // console.log(result.recordset)
+        res.send(result.recordset);  
+        
+    } catch (error) {
+        console.log(error)
+        
+    }
+})
+
+app.post('/show', async(req, res) => {
+    try {
+        console.log('Called show', req.body);
+        const result = await dbOperation.getShowActors(req.body.ShowID)
+        // console.log(result.recordset)
+        res.send(result.recordset);  
+        
+    } catch (error) {
+        console.log(error)
+        
+    }
+})
+
+
 
 
 // let test = new Anime(-1, "Test Anime", "https://img.freepik.com/free-photo/puppy-that-is-walking-snow_1340-37228.jpg?w=2000")
@@ -203,7 +258,7 @@ app.post('/roles', async(req, res) => {
 
 // dbOperation.addAnime(test);
 
-// dbOperation.getActorFull(1).then(res => {
+// dbOperation.getActor(1).then(res => {
 //     console.log("manual call")
 //     console.log(res.recordset);
 // })

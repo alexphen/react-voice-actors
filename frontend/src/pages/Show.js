@@ -9,14 +9,16 @@ const   ShowID      = 0,
         ImageURL    = 2;
 
 
-export default function Show() {
+export default function Show({user, myList}) {
     
     // const CLIENT_ID = '5dbcd29b3178e6d62ec7ecf17b4daf56'
-    const { id, title } = useParams()
+    const { id, title } = useParams();
     const [keyword, setKeyword] = useState('');
     const [shows, setShows] = useState([]);
     const [titles, setTitles] = useState([]);
     const [showSelected, setShowSelected] = useState([id || 0, title || '']);
+    var filterFlag = user.length > 0;
+    console.log(user, "in Show")
     // const [showActors, setShowActors] = useState([]);
     
     // useEffect(() => {
@@ -45,11 +47,12 @@ export default function Show() {
                   'Accept': 'application/json'
                 },
                 body: JSON.stringify({
-                  Title: keyword
+                  Title: keyword,
+                  flag: filterFlag
                 })
             })
             .then(res => res.json());
-            // console.log("SD", searchData)
+            console.log("SD", searchData)
 
             // console.log("RD", returnedData)
             for (let i in searchData) {
@@ -133,6 +136,7 @@ export default function Show() {
                         id="Search"
                         type="search"
                         placeholder="Search Show"
+                        autoComplete="off"
                         onChange={(e) => getSearchData(e.target.value)}
                         value={keyword} />
                     <div className="results">
@@ -145,8 +149,9 @@ export default function Show() {
                 </div>
             </div>
             {/* {console.log("showSelected", showSelected)} */}
-            {showSelected[0] != 0//.length > 1 //!== []
-                ? <><ShowInfo Show={showSelected}/>
+            {showSelected[0] != 0 && showSelected[0] != null //!= 0//.length > 1 //
+                ? <> {console.log(showSelected)}
+                  <ShowInfo Show={showSelected} user={user} myList={myList} flag={filterFlag}/>
                   {console.log("created showe info")}  </>
                 : <h2 id="showHeader">Search for a Show in Your List to Begin!</h2>
             }

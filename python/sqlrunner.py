@@ -19,8 +19,7 @@ conn = pyodbc.connect('Driver={SQL Server};'
 
 cursor = conn.cursor()
 
-# user = str()
-user = ("RufusPeanut") ################
+# user = ("RufusPeanut") ################
 # user = user.get()
 
 
@@ -38,12 +37,18 @@ def rename(char) :
         char = char[index+2:] + " " + char[:index]
     return char
 
+def noQuote(str) :
+    res = str.replace("'", "''")
+    res2 = res.replace('"', '"')
+    return res2
+
 def makeList() :
+    user = input("Enter Username: ")
     print("Fetching user anime list: ", user)
-    url = 'https://api.myanimelist.net/v2/users/' + user + '/animelist?fields={title,related_anime,id,alternative_titles=en}&limit=1000'
+    url = 'https://api.myanimelist.net/v2/users/' + user + '/animelist?fields={title,related_anime,id,popularity,alternative_titles=en}&limit=1000'
     response = requests.get(url, headers = {
         'X-MAL-CLIENT-ID': CLIENT_ID
-        })
+    })
 
     response.raise_for_status()
     anime = response.json()
@@ -64,15 +69,15 @@ def makeList() :
             img = entry["node"]["main_picture"]["medium"]
             # if id is not yet in myList, append
             id = entry["node"]["id"]
-            # related = entry["node"]["related_anime"]
+            popularity = entry["node"]["popularity"]
             cursor.execute('SELECT * FROM Anime WHERE ShowID = ' + str(id))
             # for i in cursor :
             #     print(i)
             res = cursor.fetchall()
             if not res :
                 print('Adding ' + title)
-                cursor.execute(f'''INSERT INTO Anime(ShowID, Title, ImageURL)
-                                   VALUES ({id}, \'{title}\', \'{img}\')''')
+                cursor.execute(f'''INSERT INTO Anime(ShowID, Title, ImageURL, Popularity)
+                                   VALUES ({id}, \'{noQuote(title)}\', \'{img}\', {popularity})''')
                 f.write(f'Added {title}\n\n')
                 vaParse(id, CLIENT_ID, title, img)
             else :
@@ -97,6 +102,67 @@ def makeList() :
     duration = time.mktime(endtime) - time.mktime(starttime)
     print ("Completed in: " + str(duration) + " seconds")
 
+
+def topList() :
+    num = input("Top x = ")
+    print("Fetching top ", num, " anime...")
+    url = 'https://api.myanimelist.net/v2/anime/ranking?ranking_type=all&fields={title,related_anime,id,popularity,alternative_titles=en}&limit=' + num
+    response = requests.get(url, headers = {
+        'X-MAL-CLIENT-ID': CLIENT_ID
+    })
+
+    response.raise_for_status()
+    anime = response.json()
+    print("anime")
+
+    total = len(anime["data"])
+    count = 1
+    starttime = time.localtime()
+
+    # scrape user anime list, calls vaParse for each show
+    while True :
+        # loop thru current page. print english title if available
+        for entry in anime["data"]:
+            # print(entry["node"])
+            if entry["node"]["alternative_titles"]["en"] == "" :
+                title = entry["node"]["title"]
+            else :
+                title = entry["node"]["alternative_titles"]["en"]
+            img = entry["node"]["main_picture"]["medium"]
+            # if id is not yet in myList, append
+            id = entry["node"]["id"]
+            popularity = entry["node"]["popularity"]
+            cursor.execute('SELECT * FROM Anime WHERE ShowID = ' + str(id))
+            # for i in cursor :
+            #     print(i)
+            res = cursor.fetchall()
+            if not res :
+                print('Adding ' + title)
+                cursor.execute(f'''INSERT INTO Anime(ShowID, Title, ImageURL, Popularity)
+                                   VALUES ({id}, \'{noQuote(title)}\', \'{img}\', {popularity})''')
+                f.write(f'Added {title}\n\n')
+                vaParse(id, CLIENT_ID, title, img)
+            else :
+                print(title + ' Already in List')
+                f.write(f'{title} already found in DB: {res}\n\n')
+            
+            print("(" + str(count) + "/" + str(total) + ") " + title)
+            count += 1
+        # if there is a next page, continue loop with that page as the new url
+        if "next" in anime["paging"] :
+            url = anime["paging"]["next"]
+            response = requests.get(url, headers = {
+                'X-MAL-CLIENT-ID': CLIENT_ID
+                })
+            response.raise_for_status()
+            anime = response.json()
+        else :
+            break
+    response.close()
+    # f.close()
+    endtime = time.localtime()
+    duration = time.mktime(endtime) - time.mktime(starttime)
+    print ("Completed in: " + str(duration) + " seconds")
 
 
 
@@ -175,8 +241,8 @@ def vaParse(showID, token, title, imgS) :
                             except :
                                 print(actorJSON)
                         
-                        query = f''' INSERT INTO Actors(ActorID, ActorName, Favorites, ImageURL)
-                                            VALUES ({actorID}, \'{rename(actor)}\', {aFavs}, \'{img}\')'''
+                        query = f''' INSERT INTO Actors(ActorID, ActorName, aFavs, ImageURL)
+                                            VALUES ({actorID}, \'{noQuote(rename(actor))}\', {aFavs}, \'{img}\')'''
                         cursor.execute(query)
                         conn.commit()
                        
@@ -189,8 +255,8 @@ def vaParse(showID, token, title, imgS) :
                         
                         actorResponse.close()
                     
-                    query = f''' INSERT INTO Roles(CharID, CharName, Favorites, ImageURL, ActorID, ShowID)
-                                            VALUES ({charID}, \'{char}\', {favs}, \'{img}\', {actorID}, {showID})'''
+                    query = f''' INSERT INTO Roles(CharID, CharName, Favorites, CharImg, ActorID, ShowID)
+                                            VALUES ({charID}, \'{noQuote(char)}\', {favs}, \'{img}\', {actorID}, {showID})'''
                     cursor.execute(query)
                     conn.commit()
                     # else :
@@ -207,12 +273,119 @@ def vaParse(showID, token, title, imgS) :
     # myList.shows[showID] = currShow
     # return currShow
 
+def addShowFavs() :
+    cursor.execute('''SELECT ShowID FROM Anime
+                    WHERE Popularity IS NULL
+                    AND ShowID > 0''')
+    data = cursor.fetchall()
+    # print(len(data))
+    for i in data :
+        curr = str(i)
+        curr = curr[curr.index('(')+1:curr.index(',')]
+        url = 'https://api.jikan.moe/v4/anime/' + curr
+        # url = 'https://api.myanimelist.net/v2/anime/' + curr + '?fields=popularity'
+        trying = True
+        attempts = 0
+
+        # response = requests.get(url, headers = {
+        #     'X-MAL-CLIENT-ID': CLIENT_ID
+        # })
+        # response.raise_for_status()
+        # anime = response.json()
+        # res = int(anime["data"]["popularity"])
+        # print(anime["data"]["title"], res) 
+
+
+        while trying :
+            try :
+                response = requests.get(url, headers = {
+                    'X-MAL-CLIENT-ID': CLIENT_ID
+                })
+                response.raise_for_status()
+                anime = response.json()
+                res = int(anime["data"]["popularity"])
+                print(anime["data"]["title"], res)  
+                cursor.execute(f'''UPDATE Anime
+                                    SET Popularity = {res}
+                                    WHERE ShowID = {int(curr)};''')
+                conn.commit()
+            except :
+                # print("Exception at gui.vaParse")
+                if attempts == 20 :
+                    trying = False
+                    # res = 99999
+                    print ("Too Many Attempts on ", curr)
+                else :
+                    time.sleep(.1)
+                attempts+= 1
+            else :
+                trying = False
+            
+            
+
+
+
+
     
-makeList()
+    # print(res)
+
+    # url = 'https://api.myanimelist.net/v2/users/' + user + '/animelist?fields={title,related_anime,id,alternative_titles=en}&limit=1000'
+    # response = requests.get(url, headers = {
+    #     'X-MAL-CLIENT-ID': CLIENT_ID
+    # })
+    # response.raise_for_status()
+    # anime = response.json()
+    # cursor.execute(f'''INSERT INTO Anime(ShowFavs)
+    #                                VALUES({})''')
+    # f.write(f'Added {title}\n\n')
+
+
+def fixActorImg() :
+    cursor.execute('''SELECT ActorID FROM Actors
+                    WHERE ImageURL LIKE '%character%' ''')
+    data = cursor.fetchall()
+    # print(data)
+    for i in data :
+        curr = str(i)
+        curr = curr[curr.index('(')+1:curr.index(',')]
+        url = 'https://api.jikan.moe/v4/people/' + curr + '/pictures'
+        trying = True
+        attempts = 0
+
+        while trying :
+            try :
+                response = requests.get(url, headers = {
+                    'X-MAL-CLIENT-ID': CLIENT_ID
+                })
+                response.raise_for_status()
+                actor = response.json()
+                res = actor["data"][0]["jpg"]["image_url"]
+                print("curr", curr, "res", res)
+                cursor.execute(f'''UPDATE Actors
+                            SET ImageURL = '{res}'
+                            WHERE ActorID = {int(curr)};''')
+                conn.commit()
+            except :
+                # print("Exception at gui.vaParse")
+                if attempts == 20 :
+                    trying = False
+                    print ("Too Many Attempts on ", curr)
+                else :
+                    time.sleep(.1)
+                attempts+= 1
+            else :
+                trying = False
+
+# makeList()
+topList()
+
+addShowFavs()
+
+fixActorImg()
 
 f.close()
 
-
+# print(noQuote("house's"))
 
 
 
@@ -299,8 +472,6 @@ f.close()
 
 
 def addShow() :
-    added.pack_forget()
-    index = options.curselection()[0]
     # parse the show if not in list already
     tempID = animeSearch["data"][index]["mal_id"]
     tempImg = animeSearch["data"][index]["images"]["jpg"]["image_url"]

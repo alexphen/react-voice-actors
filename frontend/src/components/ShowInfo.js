@@ -10,7 +10,7 @@ const   CharName    = 0,
 var toggles = [];
 var set = false;
 
-const ShowInfo = () => {
+const ShowInfo = ({ user, myList, flag }) => {
 
     // console.log(Show)
 
@@ -37,9 +37,11 @@ const ShowInfo = () => {
 
     useEffect(() => {
         // console.log(id)
-        setShowSelected([id, Title])
-        getShowActors();
-        set = true;
+        if (id > 0) {
+            setShowSelected([id, Title])
+            getShowActors();
+            set = true;
+        }
     }, [id]);
 
     // useEffect(() => {
@@ -102,8 +104,10 @@ const ShowInfo = () => {
                             {/* {console.log("toggle", actor[ActorID])} */}
                             <ShowRoleToggle actorID={actor[ActorID]}
                                             actorName={actor[ActorName]}
-                                            showID={id}/>
-                                        
+                                            showID={id}
+                                            flag={flag}
+                                            user={user}
+                                            myList={myList}/>
                         </div>
                     )
                     : <>
@@ -121,8 +125,8 @@ const ShowInfo = () => {
             let actor = actors[i];
             console.log(actor);
             arr.push(<ShowRoleToggle actorID={actor[ActorID]}
-                            actorName={actor[ActorName]}
-                            showID={id}/>)
+                                     actorName={actor[ActorName]}
+                                     showID={id}/>)
         } 
         return arr;
     }
