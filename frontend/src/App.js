@@ -1,68 +1,112 @@
-import Navbar from "./components/Navbar"
-import Show from "./pages/Show"
-import Home from "./pages/Home"
-import Actor from "./pages/Actor"
-import { Route, Routes } from "react-router-dom"
-import { useState } from "react"
+import Navbar from "./components/Navbar";
+import Show from "./pages/Show";
+import Home from "./pages/Home";
+import Actor from "./pages/Actor";
+import { Route, Routes } from "react-router-dom";
+import { useCookies } from "react-cookie";
+import { useState, useEffect, useCallback } from "react";
 
 
 function App() {
+	console.log("app renders")
+	const [cookies, setCookies] = useCookies(["acc"])
+	const [entry, setEntry]  	= useState(cookies.acc || "");
+	const [myList, setMyList] 	= useState([]);
+  	const [user, setUser]     	= useState(cookies.acc || "");
+	
 
-  const [returnedData, setDataReturned] = useState(['']);
-  const [anime, setAnime] = useState({ShowID: 0, Title: "", ImageURL: ""});
-  const [actor, setActor] = useState({ActorID: 0, ActorName: "", Favorites: 0, ImageURL: ""});
+	useEffect(() => {
+		setDBList();
+	}, [myList])
 
-  const setInput = (e) => {
-    const {name, value} = e.target;
-    console.log(value);
-  }
+	useEffect(() => {
+		getMALData()
+	}, [])
 
-  const getData = async () => {
-    const newData = await fetch ('/api', {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        'Accept': 'application/json'
-      },
-      body: JSON.stringify({
-        name: anime.Title
-      })
-    })
-    .then(res => res.json());
-    console.log(newData);
-    setDataReturned(newData[0])
-  }
 
-  const createActor = async () => {
-    const newData = await fetch ('/hello', {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        'Accept': 'application/json'
-      },
-      body: JSON.stringify({
-        ...actor
-      })
-    })
-    .then(res => res.json());
-    console.log(newData);
-    setDataReturned(newData[0])
-  }
+	const getMALData = async() => {
+		console.log("getting MAL data")
+		try {
+			const malData = await fetch ('/mal', {
+				method: 'POST',
+				headers: {
+					'content-type': 'application/json',
+					'Accept': 'application/json'
+				},
+				body: JSON.stringify({
+					Username: entry
+				})
+			})
+			.then(res => res.json());
+			let temp = [];
+			for (let i in malData.data) {
+				temp[i] = malData.data[i].node.id;
+			}
+			console.log(temp)
+			setMyList(temp)
+			if (temp.length > 0) {
+				setUser(entry)
+				setCookies('acc', user, {path: '/'})
+			}
+		} catch (error) {
+			console.log(error)
+		}
+	}
 
-  return (
-      <>
-        <Navbar />
-        <div className="container">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/Show" element={<Show />} />
-            <Route path="/Actor" element={<Actor />} />
-          </Routes>
-        </div>
-        {/* <button onClick={getData}>Click</button> */}
-      </>
-  
-  );
+
+	const setDBList = async() => {
+		if (myList.length > 0) {
+			const lister = await fetch('/list', {
+				method: 'POST',
+				headers: {
+				'content-type': 'application/json',
+				'Accept': 'application/json'
+				},
+				body: JSON.stringify({
+				ids: myList
+				})
+			})
+		}
+	}
+
+	return (
+		<>
+		{console.log(user, "in APP")}
+			{/* <h6>{cookies.acc}</h6> */}
+			<div className="userSearchArea">
+					<input id="userSearch"
+						type="text"
+						placeholder="MAL Username" 
+						value={entry} 
+						onChange={(e) => setEntry(e.target.value)}></input>
+					<button id="userSearchButton" onClick={() => getMALData()}>Filter by User</button>
+				<div id='filterLabel'>
+					<h6 id='filter'>Filtered by {user.length > 0 ? user : "All Anime"}</h6>
+					{user != ""
+						? <button id='unfilter' onClick={removeFilter}>Remove Filter</button>
+						: <></>
+					}
+				</div>
+			</div>
+			<Navbar username={user}/>
+			<div className="container">
+			<Routes>
+				<Route path="/" element={<Home user={user} myList={myList}/>} />
+				<Route path="/Show/:id?/:title?" element={<Show user={user} myList={myList}/>} />
+				<Route path="/Actor/:id?" element={<Actor user={user} myList={myList}/>} />
+			</Routes>
+			</div>
+			{/* <button onClick={getData}>Click</button> */}
+		</>
+	
+	);
+
+	function removeFilter() {
+		setUser("")
+		setMyList([])
+		setEntry("")
+
+	}
 }
 export default App
 

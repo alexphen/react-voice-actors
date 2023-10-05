@@ -6,9 +6,14 @@
   font-family: "Quicksand";
   color: #f2f1f1;
 }
+a {
+  text-decoration: none;
+}
 .container {
   position: relative;
   z-index: 1;
+  min-height: 100vh;
+  background-color: #202025;
 }
 .home {
   position: relative;
@@ -58,6 +63,31 @@
   font-size: 2vw;
   padding: 0 2vw;
   font-weight: bold;
+}
+#filter {
+  font-size: 1vw;
+}
+#unfilter {
+  /* height: 2vh; */
+  border-width: .1vw;
+  font-size: 1vw;
+  background-color: rgb(105, 105, 105);  
+  padding: .1vw;
+}
+#filterLabel {
+  gap: 0;
+  position: fixed;
+  align-items: stretch;
+  height: 3vw;
+  left: 15%;
+  display: flex;
+  z-index: 11;
+  flex-direction: column;
+}
+#navLeftPane {
+  display: flex;
+  flex-direction: row;
+  gap: 4vw;
 }
 .nav li.active {
   background-color: #555;
@@ -142,29 +172,66 @@
   max-width: 90%;
   padding-bottom: 20px;
 }
+#topTitle {
+  text-align: end;
+}
+#moreTitles {
+  text-align: center;
+  margin-top: .5em;
+}
 .showsList {
-  display: grid;
+  display: none;
   gap: 20px;
+  text-align: end;
+}
+#moreTitles:hover + .showsList {
+  position: absolute;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  border-radius: 1em;
+  background-color: #44444c;
+  padding: 1em;
+  padding-top: 0;
+}
+.showsList:hover {
+  position: absolute;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  border-radius: 1em;
+  background-color: #44444c;
+  padding: 1em;
+  padding-top: 0;
 }
 #showHeader {
   margin-left: 5vw;
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  width: 60%;
 }
 .show .header {
+  position: sticky;
   /* display: flex; */
-  /* position: sticky; */
   text-align: center;
   padding: 20px;
   font-size: 2vw;
+  justify-content: center;
 }
 .show .header h1 {
+  width: 30vw;
   text-align: center;
+  margin: auto;
 }
 .searchSide {
   position: absolute;
   display: flex;
   flex-direction: column;
   right: 0px;
-  top: 1vw;
+  top: 4vw;
+  z-index: 1;
 }
 #Search {
   align-self: flex-end;
@@ -178,6 +245,7 @@
   color: white;
   margin: 0 1vw;
   padding-left: 1vw;
+  
 }
 .results {
   /* position: absolute; */
@@ -198,8 +266,8 @@
   margin: .1vw;
   width: 20vw;
   padding-left: 1vw;
-  text-decoration: none;
   cursor: pointer;
+  text-decoration: none;
 }
 .showTitle {
   margin-left: auto;
@@ -226,8 +294,8 @@
   text-align: center;
   flex: none;
   padding: 0;
-  font-size: 1vw;
-  border-width: .3vw;
+  font-size: 1em;
+  border-width: .3vh;
 }
 .roleToggleNext {
   background-color: darkslategrey;
@@ -237,8 +305,8 @@
   /* align-self:stretch; */
   flex: none;
   padding: 0;
-  font-size: 1vw;
-  border-width: .3vw;
+  font-size: 1em;
+  border-width: .3vh;
 }
 .imgNav {
   display: flex;
@@ -280,26 +348,30 @@
   width: 225px;
   height: 326px;
 }
-.showsList p {
-  text-align: end;
+.showsList a {
+  text-align: center;
   cursor: pointer;
   font-size: 20px;
+  text-decoration: none;
   gap: .5vw
 }
 .roleActor {
-  max-width: 225px;
+  width: 245px;
   height: 100px;
+  font-size: 1.5em;
   align-self: center;
   /* height: 3vw; */
   display: flex;
   flex-direction:column-reverse;
-}
-.roleGallery h3 {
-  font-size: 30px; /* legacy */
   text-align: center;
-  max-width: 11vw;
-  text-anchor: end;
+}
+.roleGallery a {
+  font-size: 1em; /* legacy */
+  /* font-size: 2vh; */
+  /* text-align: center; */
+  /* text-anchor: end; */
   padding-bottom: 10px;
+  margin: auto;
 }
 .roleGallery h4 {
   color: #6598ea;
@@ -318,15 +390,15 @@
 }
 .home .viewer {
   display: flex;
-  position: relative;
+  position: fixed;
   right: 0;
-  margin-left: auto;
+  margin: auto;
   /* align-self: flex-end; */
   padding: 50px 4vw;
 }
 .homeActorImg {
-  width: 100px;
-  height: 155px;
+  width: 200px;
+  height: 310px;
   padding: 1vw;
   padding-top: 3vw;
   flex-direction: column-reverse;
@@ -345,6 +417,16 @@
   /* position: relative; */
   top: 17vw;
 }
+.firstActor {
+  background-color: darkslategrey;
+  height: fit-content;
+  font-size: 3vw;
+  /* align-self: auto; */
+  /* margin-top: auto; */
+  /* margin-bottom: auto; */
+  /* position: relative; */
+  top: 17vw;
+}
 input {
   background-color: #4b4b52;
 }
@@ -352,4 +434,106 @@ input::-webkit-search-cancel-button{
   color: #f1356d;
   position:relative;
   right:20px;    
+}
+.actorPage {
+    position: relative;
+    display: flex;
+    background-color: #202025;
+    top: 0;
+    /* min-height: 100vh; */
+    height: 100%;
+}
+.actorInfo {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  width: 25%;
+  left: 70% ;
+  top: 30%;
+  font-size: 1.6vh;
+  text-align: center;
+  /* margin-left: -300px; */
+  /* margin-left: auto;
+  margin-right: auto; */
+  align-items: center;
+}
+.actorImg {
+  display: flex;
+  align-self: center;
+  width: 15vh;
+}
+.actorRoles {
+  margin-top: 1vh;
+  margin-bottom: 30vh;
+  margin-left: 2vh;
+  gap: 1vw;
+  width: 70%;
+  display: flex;
+  align-content: flex-start;
+  flex-wrap: wrap;
+}
+.actorRole {
+  height: 23.3vh;
+  display: flex;
+  position: relative;
+}
+.actorRoles img {
+  width: 15vh;
+  height: 23.3vh;
+  /* width: 225px; */
+  /* height: 350px; */
+}
+.info {
+  display: none;
+  margin: auto;
+  padding: 10px;
+  left: 15vh;
+  z-index: 18;
+  min-width: 20vh;
+  max-width: 40vh;
+}
+.actorRole img:hover {
+  box-shadow: 0vh 0vh 1vh .5vh  #f1356d;
+}
+.actorRole img:hover + .info {
+  background-color: #f1356d;
+  border-radius: 1vh;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  gap: 10px;
+  /* left: 15vh; */
+}
+.info:hover {
+  background-color: #53768d;
+  border-radius: 1vh;
+  z-index: 2;
+  display: block;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  /* left: 15vh; */
+}
+#userSearch {
+  position: fixed;
+  display: flex;
+  left: 30%;
+  z-index: 11;
+  font-size: 2vw;
+  height: 2vw;
+  top: .25vw;
+  padding: 0vw 0vw 0vw .25vw;
+  border-width: .2vw;
+}
+#userSearchButton {
+  position: fixed;
+  z-index: 11;
+  font-size: 2vw;
+  left: 52%;
+  background-color: rgb(105, 105, 105);  
+  height: 3vw;
+  border-width: .3vw;
+  padding: 0 1vw 0 1vw;
 }

@@ -1,17 +1,22 @@
 import { useEffect, useState } from "react";
 import ShowRoleToggle from "./ShowRoleToggle";
-import { act } from "react-dom/test-utils";
+import { useParams } from "react-router-dom";
 
+const   CharName    = 0,
+        Favorites   = 1,
+        ActorID     = 2,
+        ActorName   = 3;
 
-const ShowInfo = ({Show}) => {
+var toggles = [];
+var set = false;
 
-    console.log(Show)
+const ShowInfo = ({ user, myList, flag }) => {
 
-    const [ShowID, Title] = Show;
-    const [returnedData, setReturnedData] = useState([]);
-    const [roleReturn, setRoleReturn] = useState([]);
+    // console.log(Show)
+
+    const {id, Title} = useParams();
+    const [showSelected, setShowSelected] = useState([id || 0, Title || ""])
     const [actors, setActors] = useState([]);
-
     const getShowActors = async() => {
         const showData = await fetch ('/show', {
           method: 'POST',
@@ -20,31 +25,33 @@ const ShowInfo = ({Show}) => {
             'Accept': 'application/json'
           },
           body: JSON.stringify({
-            ShowID: ShowID
+            ShowID: id
           })
         })
         .then(res => res.json());
-        console.log(showData)
-        setReturnedData(showData);
+        for (let i in showData) {
+            showData[i] = Object.values(showData[i]);
+        }
+        setActors(showData)
     }
 
     useEffect(() => {
-        getShowActors();
-    }, []);
+        // console.log(id)
+        if (id > 0) {
+            setShowSelected([id, Title])
+            getShowActors();
+            set = true;
+        }
+    }, [id]);
 
-    useEffect(() => {
-        getShowActors();
-    }, [Show]);
+    // useEffect(() => {
+    //     getShowActors();
+    // }, [Show]);
     
-    useEffect(() => {
-        // removeDups();
-    }, [returnedData]);
+    // useEffect(() => {
+    //     // removeDups();
+    // }, [actors]);
 
-    var ids = [];
-    var index = 0;
-    var roleOrder = [];
-    
-    var keys = [];
 
     function bubbleSortActors(acts, n) {
         var i, j, temp;
@@ -54,7 +61,7 @@ const ShowInfo = ({Show}) => {
         {
             swapped = false;
             for (j = 0; j < n - i - 1; j++) {
-                if (acts[j].Favorites < acts[j + 1].Favorites) {
+                if (acts[j][Favorites] < acts[j + 1][Favorites]) {
                         // Swap arr[j] and arr[j+1]
                         temp = acts[j];
                         acts[j] = acts[j + 1];
@@ -64,47 +71,65 @@ const ShowInfo = ({Show}) => {
             } 
             // IF no two elements were 
             // swapped by inner loop, then break
-            if (swapped == false)
-            break;
+            if (swapped === false)
+                break;
         }
     }
  
     function removeDups() {
         var actorIDs = [];
-        for (var i in returnedData) {
-            // console.log(returnedData[i].ActorID)
+        for (var i in actors) {
+            // console.log(actors[i].ActorID)
             // console.log(actorIDs)
-            if (actorIDs.includes(returnedData[i].ActorID)) {
-                returnedData.splice(i, 1);
+            if (actorIDs.includes(actors[i][ActorID])) {
+                actors.splice(i, 1);
                 i--;
             }
             else {
-                actorIDs.push(returnedData[i].ActorID)
+                actorIDs.push(actors[i][ActorID])
             }
         }
     }
 
     return (  
         <>
-            <h1 className="showTitle">{Title}</h1>
+            {/* {console.log("rendered")} */}
+            {/* <h1 className="showTitle">{Title}</h1> */}
             <div className="showInfo">
                 {removeDups()}
-                {bubbleSortActors(returnedData, returnedData.length)}
-                {/* {console.log(returnedData)} */}
-                {returnedData.length > 0
-                    ? Object.entries(returnedData).map((actor, n) => 
-                        <div>
-                            <ShowRoleToggle key={actor[1].ActorID} actorID={actor[1].ActorID} actorName={actor[1].ActorName} showID={ShowID}/>
+                {bubbleSortActors(actors, actors.length)}
+                {actors.length > 0 && set
+                    ? actors.map((actor, n) => 
+                        <div key={actor[ActorID]}>
+                            {/* {console.log("toggle", actor[ActorID])} */}
+                            <ShowRoleToggle actorID={actor[ActorID]}
+                                            actorName={actor[ActorName]}
+                                            showID={id}
+                                            flag={flag}
+                                            user={user}
+                                            myList={myList}/>
                         </div>
-                    )  
+                    )
                     : <>
-                        {console.log(actors)}
-                        <p>{actors}</p>        
+                        <p>Failed to load from API :(</p>        
                       </>
                 }
             </div>
         </>
     );
+
+    function getToggles() {
+        console.log("called toggles")
+        let arr = [];
+        for (let i in actors) {
+            let actor = actors[i];
+            console.log(actor);
+            arr.push(<ShowRoleToggle actorID={actor[ActorID]}
+                                     actorName={actor[ActorName]}
+                                     showID={id}/>)
+        } 
+        return arr;
+    }
 }
  
 export default ShowInfo;
