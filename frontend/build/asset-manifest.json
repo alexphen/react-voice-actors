@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.css": "/static/css/main.1dede4f5.css",
-    "main.js": "/static/js/main.252c6e1d.js",
-    "index.html": "/index.html",
-    "main.1dede4f5.css.map": "/static/css/main.1dede4f5.css.map",
-    "main.252c6e1d.js.map": "/static/js/main.252c6e1d.js.map"
+    "main.css": "/who-seiyu/static/css/main.1dede4f5.css",
+    "main.js": "/who-seiyu/static/js/main.252c6e1d.js",
+    "index.html": "/who-seiyu/index.html",
+    "main.1dede4f5.css.map": "/who-seiyu/static/css/main.1dede4f5.css.map",
+    "main.252c6e1d.js.map": "/who-seiyu/static/js/main.252c6e1d.js.map"
   },
   "entrypoints": [
     "static/css/main.1dede4f5.css",

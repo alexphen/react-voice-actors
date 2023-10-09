@@ -21,6 +21,7 @@
     "requests": "^0.3.0"
   },
   "devDependencies": {
-    "dotenv-webpack": "^8.0.1"
+    "dotenv-webpack": "^8.0.1",
+    "gh-pages": "^6.0.0"
   }
 }
