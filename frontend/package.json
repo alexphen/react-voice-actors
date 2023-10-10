@@ -1,7 +1,7 @@
 {
   "name": "react-voice-actors",
   "version": "0.1.0",
-  "homepage": "https://alexphen.github.io/who-seiyu",
+  "homepage": "https://alexphen.github.io/",
   "private": true,
   "proxy": "http://localhost:5000/",
   "scripts": {

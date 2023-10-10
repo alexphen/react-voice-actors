@@ -130,15 +130,16 @@ const { config }    = require('process');
 //       dbOperation   = require('./dbFiles/dbOperation'),
 //       cors          = require('cors'); 
 
-const API_PORT = process.env.PORT || 5000;
+const API_PORT = process.env.PORT || 1433;
 const app = express();
 let client;
 let session;
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(cors());
+app.use(express.static('build'))
 
-app.post('/actor', async(req, res) => {
+app.post('/api/actor', async(req, res) => {
     try {
         console.log('Called actor', req.body);
         const result = await dbOperation.getActor(req.body.ActorID)
@@ -150,7 +151,7 @@ app.post('/actor', async(req, res) => {
     }
 })
 
-app.post('/actorFull', async(req, res) => {
+app.post('/api/actorFull', async(req, res) => {
     try {
         console.log('Called actorFull', req.body);
         const result = await dbOperation.getActorFull(req.body.ActorID, req.body.flag)
@@ -162,7 +163,7 @@ app.post('/actorFull', async(req, res) => {
     }
 })
 
-app.post('/home', async(req, res) => {
+app.post('/api/home', async(req, res) => {
     try {
         console.log('Called home', req.body);
         const result = await dbOperation.getHomeData(req.body.ActorID)
@@ -174,7 +175,7 @@ app.post('/home', async(req, res) => {
     }
 })
 
-app.post('/list', async(req, res) => {
+app.post('/api/list', async(req, res) => {
     try {
         console.log('Called list', req.body);
         const result = await dbOperation.setList(req.body.ids)
@@ -186,7 +187,7 @@ app.post('/list', async(req, res) => {
     }
 })
 
-app.post('/mal', async(req, res) => {
+app.post('/api/mal', async(req, res) => {
     try {
         console.log('Called mal', req.body);
         const result = await dbOperation.getMAL(req.body.Username)
@@ -198,7 +199,7 @@ app.post('/mal', async(req, res) => {
     }
 })
 
-app.post('/roles', async(req, res) => {
+app.post('/api/roles', async(req, res) => {
     try {
         console.log('Called roles', req.body);
         const result = await dbOperation.getRoles(req.body.ActorID, req.body.flag)
@@ -211,7 +212,7 @@ app.post('/roles', async(req, res) => {
     }
 })
 
-app.post('/search', async(req, res) => {
+app.post('/api/search', async(req, res) => {
     try {
         console.log('Called search', req.body);
         const result = await dbOperation.getSearchData(req.body.Title, req.body.flag)
@@ -224,7 +225,7 @@ app.post('/search', async(req, res) => {
     }
 })
 
-app.post('/searchActor', async(req, res) => {
+app.post('/api/searchActor', async(req, res) => {
     try {
         console.log('Called search actor', req.body);
         const result = await dbOperation.getSearchActorData(req.body.Title, req.body.flag)
@@ -237,7 +238,7 @@ app.post('/searchActor', async(req, res) => {
     }
 })
 
-app.post('/show', async(req, res) => {
+app.post('/api/show', async(req, res) => {
     try {
         console.log('Called show', req.body);
         const result = await dbOperation.getShowActors(req.body.ShowID)

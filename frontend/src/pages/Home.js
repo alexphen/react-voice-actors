@@ -54,8 +54,8 @@ const Home = ({user, myList}) => {
     // console.log(actor)
 
     const getData = async(actID) => {
-        // console.log(actor.actorID)
-        const actorData = await fetch ('/actor', {
+        console.log('actID', actID)
+        const actorData = await fetch('/api/actor', {
           method: 'POST',
           headers: {
             'content-type': 'application/json',
@@ -110,6 +110,7 @@ const Home = ({user, myList}) => {
             setIndex(Math.trunc(Math.random() * actorsLeft.length - 1));
             nextActor();
         }
+        console.log('temp', temp)
         getData(temp);
         // getRoleData();
     }
@@ -124,7 +125,7 @@ const Home = ({user, myList}) => {
                 <h5>Seiyu is a Japanese word for voice actor</h5>
                 <br></br>
                 <h6>All data obtained from <a href="http://MyAnimeList.net">MyAnimeList.net</a></h6>
-                {/* <p>{user}</p> */}
+                {/* <p>{label}</p> */}
                
             </div>
             <div className="viewer">

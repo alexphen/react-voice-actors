@@ -40,7 +40,7 @@ export default function Show({user, myList}) {
             var idRes = [];
             var tRes = [];
 
-            const searchData = await fetch ('/search', {
+            const searchData = await fetch ('/api/search', {
                 method: 'POST',
                 headers: {
                   'content-type': 'application/json',

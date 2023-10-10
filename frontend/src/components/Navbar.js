@@ -15,7 +15,7 @@ const Navbar = ({ username }) => {
 
     const getMALData = async() => {
         console.log("getting MAL data")
-        const malData = await fetch ('/mal', {
+        const malData = await fetch ('/api/mal', {
           method: 'POST',
           headers: {
             'content-type': 'application/json',
@@ -35,7 +35,7 @@ const Navbar = ({ username }) => {
 
     
     const setDBList = async() => {
-        const lister = await fetch('/list', {
+        const lister = await fetch('/api/list', {
             method: 'POST',
             headers: {
               'content-type': 'application/json',

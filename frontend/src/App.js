@@ -27,7 +27,7 @@ function App() {
 	const getMALData = async() => {
 		console.log("getting MAL data")
 		try {
-			const malData = await fetch ('/mal', {
+			const malData = await fetch ('/api/mal', {
 				method: 'POST',
 				headers: {
 					'content-type': 'application/json',
@@ -56,14 +56,14 @@ function App() {
 
 	const setDBList = async() => {
 		if (myList.length > 0) {
-			const lister = await fetch('/list', {
+			const lister = await fetch('/api/list', {
 				method: 'POST',
 				headers: {
 				'content-type': 'application/json',
 				'Accept': 'application/json'
 				},
 				body: JSON.stringify({
-				ids: myList
+					ids: myList
 				})
 			})
 		}
@@ -105,7 +105,6 @@ function App() {
 		setUser("")
 		setMyList([])
 		setEntry("")
-
 	}
 }
 export default App

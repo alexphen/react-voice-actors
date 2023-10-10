@@ -18,7 +18,7 @@ const ShowInfo = ({ user, myList, flag }) => {
     const [showSelected, setShowSelected] = useState([id || 0, Title || ""])
     const [actors, setActors] = useState([]);
     const getShowActors = async() => {
-        const showData = await fetch ('/show', {
+        const showData = await fetch ('/api/show', {
           method: 'POST',
           headers: {
             'content-type': 'application/json',

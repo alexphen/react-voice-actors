@@ -227,9 +227,9 @@
 
 
 
-const   {poolPromise}          = require('./dbConfig'),
-        MAL                             = require('myanimelist-api-wrapper'),
-        sql                             = require('mssql');
+const   {poolPromise} = require('./dbConfig'),
+        MAL           = require('myanimelist-api-wrapper'),
+        sql           = require('mssql');
 
 
 const getAnime = async(title) => {
@@ -258,10 +258,9 @@ const addAnime = async(Anime) => {
 }
 const getActor = async(actID) => {
     try {        
+        console.log(actID);
         let pool = await poolPromise;
-        // let res = pool.request().query(`SELECT * FROM Anime WHERE Anime.Title='${title}'`);
         let res = await pool.request().query(`SELECT * FROM Actors WHERE Actors.ActorID='${actID}'`);
-        // console.log(res);
         return res;
     }
     catch(error) {

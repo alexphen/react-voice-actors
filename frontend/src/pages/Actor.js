@@ -27,7 +27,7 @@ export default function Actor({user}) {
 
     const getData = async() => {
         // console.log(actor.actorID)
-        const actorData = await fetch ('/actorFull', {
+        const actorData = await fetch ('/api/actorFull', {
           method: 'POST',
           headers: {
             'content-type': 'application/json',
@@ -58,7 +58,7 @@ export default function Actor({user}) {
             var idRes = [];
             var nRes = [];
 
-            const searchData = await fetch ('/searchActor', {
+            const searchData = await fetch ('/api/searchActor', {
                 method: 'POST',
                 headers: {
                   'content-type': 'application/json',

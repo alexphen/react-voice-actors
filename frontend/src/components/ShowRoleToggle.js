@@ -55,7 +55,7 @@ const ShowRoleToggle = ({actorID, actorName, showID, flag, user, myList}) => {
     
     const getRoles = async(actID) => {
         // console.log("ID sent to roles ", actID)
-        const roleData = await fetch ('/roles', {
+        const roleData = await fetch ('/api/roles', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json',
