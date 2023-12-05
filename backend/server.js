@@ -73,7 +73,7 @@ app.post('/api/actor', async(req, res) => {
 
 app.post('/api/actorFull', async(req, res) => {
     try {
-        console.log('Called actorFull', req.body);
+        console.log('Called actorFull', req.body.ActorID);
         const result = await dbOperation.getActorFull(req.body.ActorID, req.body.myList, req.body.flag)
         console.log(result)
         res.send(result.rows);  
@@ -121,20 +121,19 @@ app.post('/api/mal', async(req, res) => {
 
 app.post('/api/roles', async(req, res) => {
     try {
-        console.log('Called roles');//, req.body);
+        console.log('Called roles', req.body.ActorID);
         const result = await dbOperation.getRoles(req.body.ActorID, req.body.myList, req.body.flag)
         // console.log(result.rows)
         res.send(result.rows);  
         
     } catch (error) {
         console.log(error)
-        
     }
 })
 
 app.post('/api/search', async(req, res) => {
     try {
-        console.log('Called search', req.body);
+        console.log('Called search', req.body.Title);
         const result = await dbOperation.getSearchData(req.body.Title, req.body.myList, req.body.flag)
         // console.log(result.rows)
         res.send(result.rows);  
@@ -147,8 +146,8 @@ app.post('/api/search', async(req, res) => {
 
 app.post('/api/searchActor', async(req, res) => {
     try {
-        console.log('Called search actor', req.body);
-        const result = await dbOperation.getSearchActorData(req.body.Title, req.body.myList, req.body.flag)
+        console.log('Called search actor', req.body.name);
+        const result = await dbOperation.getSearchActorData(req.body.name, req.body.myList, req.body.flag)
         // console.log(result.rows)
         res.send(result.rows);  
         
