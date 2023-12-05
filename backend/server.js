@@ -128,7 +128,6 @@ app.post('/api/roles', async(req, res) => {
         
     } catch (error) {
         console.log(error)
-        
     }
 })
 
