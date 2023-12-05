@@ -9,7 +9,7 @@ const exp           = require('constants'),
       dbConfig      = require('./dbFiles/dbConfig');
 const { config }    = require('process');
 
-const API_PORT = process.env.PORT || 5000;
+const API_PORT = process.env.PORT || 3000;
 const app = express();
 let client;
 let session;
