@@ -1,0 +1,4 @@
+cd backend
+nohup node server.js
+bg
+

@@ -66,7 +66,7 @@ export default function Actor({user, myList}) {
                   'Accept': 'application/json'
                 },
                 body: JSON.stringify({
-                  Title: keyword,
+                  name: keyword,
                   flag: filterFlag
                 })
             })
