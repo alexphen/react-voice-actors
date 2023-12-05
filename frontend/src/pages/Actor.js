@@ -13,7 +13,7 @@ const   actorName   = 0,
         title       = 8,
         aFavs       = 9;
 
-export default function Actor({user}) {
+export default function Actor({user, myList}) {
     
     const {id, name} = useParams();
     const [actor, setActor] = useState([id || 0, name || "", "", 0]);
@@ -35,6 +35,7 @@ export default function Actor({user}) {
           },
           body: JSON.stringify({
             ActorID: id,
+            myList: myList,
             flag: filterFlag
           })
         })
@@ -103,7 +104,12 @@ export default function Actor({user}) {
     return (
         <div className="actorPage">
             {actor[0] > 0
-                ? <> {combineRoles()} {bubbleSort()} {console.log(actor)}
+                ? <> 
+                {console.log(roles)}
+                {combineRoles()}
+                {console.log(roles)}
+                {bubbleSort()} 
+                {console.log(actor)}
                 <div className="actorRoles">
                     {roles.map((role, n) => 
                         <div className="actorRole">
@@ -169,11 +175,11 @@ export default function Actor({user}) {
     )
 
     function combineRoles() {
-        // console.log(roles)
+        console.log(roles, roles.length)
         var currRoleShowIDs = [];
         var currRoleTitles = [];
-        // console.log(roles)
         for (let i = 0; i < roles.length; i++) {
+            console.log(roles[i][title])
             if (typeof roles[i][title] == 'string') {
                 currRoleShowIDs = [roles[i][showID]];
                 currRoleTitles = [roles[i][title]];
@@ -187,7 +193,7 @@ export default function Actor({user}) {
             for (let p = i + 1; p < roles.length; p++) {
                 if(roles[i][charID] === roles[p][charID]) {
                     // console.log(currRoleShowIDs)
-                    currRoleShowIDs.push(roles[p][showID]);
+                    currRoleShowIDs.push(roles[p][showID].value);
                     currRoleTitles.push(roles[p][title]);
                     // console.log(currRoleTitles)
                     roles.splice(p, 1);

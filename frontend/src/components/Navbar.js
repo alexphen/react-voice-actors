@@ -62,7 +62,7 @@ const Navbar = ({ username }) => {
                     value={user} 
                     onChange={(e) => setUser(e.target.value)}></input>
                 <button onClick={() => getMALData({user})}>api test</button> */}
-                <CustomLink to="/Show/">Show Search</CustomLink>
+                <CustomLink to="/Anime/">Anime Search</CustomLink>
                 <CustomLink to="/Actor/">Actor Search</CustomLink>
                 {/* <h3>Sign in to Filter List</h3> */}
                 {/* <input placeholder='Sign in to Filter'></input> */}

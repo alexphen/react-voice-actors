@@ -15,9 +15,9 @@ function App() {
   	const [user, setUser]     	= useState(cookies.acc || "");
 	
 
-	useEffect(() => {
-		setDBList();
-	}, [myList])
+	// useEffect(() => {
+	// 	setDBList();
+	// }, [myList])
 
 	useEffect(() => {
 		getMALData()
@@ -38,13 +38,19 @@ function App() {
 				})
 			})
 			.then(res => res.json());
-			let temp = [];
+			// instead of array we're turning the list into a comma separated string
+			// let temp = [];
+			// for (let i in malData.data) {
+			// 	temp[i] = malData.data[i].node.id;
+			// }
+			let str = "("
 			for (let i in malData.data) {
-				temp[i] = malData.data[i].node.id;
+				str += malData.data[i].node.id + ","
 			}
-			console.log(temp)
-			setMyList(temp)
-			if (temp.length > 0) {
+			str = str.slice(0, str.length - 1) + ")"
+			console.log(str)
+			setMyList(str)
+			if (str.length > 0) {
 				setUser(entry)
 				setCookies('acc', user, {path: '/'})
 			}
@@ -54,23 +60,23 @@ function App() {
 	}
 
 
-	const setDBList = async() => {
-		if (myList.length > 0) {
-			const lister = await fetch('/api/list', {
-				method: 'POST',
-				headers: {
-				'content-type': 'application/json',
-				'Accept': 'application/json'
-				},
-				body: JSON.stringify({
-					ids: myList
-				})
-			})
-		}
-	}
+	// const setDBList = async() => {
+	// 	if (myList.length > 0) {
+	// 		const myListString = await fetch('/api/list', {
+	// 			method: 'POST',
+	// 			headers: {
+	// 			'content-type': 'application/json',
+	// 			'Accept': 'application/json'
+	// 			},
+	// 			body: JSON.stringify({
+	// 				ids: myList
+	// 			})
+	// 		})
+	// 	}
+	// }
 
 	return (
-		<>
+		<div className="app">
 		{console.log(user, "in APP")}
 			{/* <h6>{cookies.acc}</h6> */}
 			<div className="userSearchArea">
@@ -92,12 +98,12 @@ function App() {
 			<div className="container">
 			<Routes>
 				<Route path="/" element={<Home user={user} myList={myList}/>} />
-				<Route path="/Show/:id?/:title?" element={<Show user={user} myList={myList}/>} />
+				<Route path="/Anime/:id?/:title?" element={<Show user={user} myList={myList}/>} />
 				<Route path="/Actor/:id?" element={<Actor user={user} myList={myList}/>} />
 			</Routes>
 			</div>
 			{/* <button onClick={getData}>Click</button> */}
-		</>
+		</div>
 	
 	);
 
