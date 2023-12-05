@@ -10,7 +10,7 @@ const showsList = (shows) => {
     return ( 
         <div className="showsList">
                 {showsList.map((show) => (
-                    <div key={show.showID}>
+                    <div key={show.showID} id="altTitle" >
                         <ShowInfo show={show}/>
                     </div>
             ))}

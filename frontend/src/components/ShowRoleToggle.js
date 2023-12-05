@@ -11,7 +11,7 @@ const ShowID    = 5;
 const Title     = 7;
 const rank      = 8;
 
-const ShowRoleToggle = ({actorID, actorName, showID, flag, user, myList}) => {
+const ShowRoleToggle = ({actorID, actorName, actorImg, showID, flag, user, myList}) => {
 
     // console.log("actorID received ", actorID)
     
@@ -39,8 +39,7 @@ const ShowRoleToggle = ({actorID, actorName, showID, flag, user, myList}) => {
 
     useEffect(() => {
         if (myList.length > 0) {
-            sleep(5000)
-            console.log(myList)
+            sleep(10000)
             getRoles(actorID);
         }
     }, [myList])
@@ -63,17 +62,28 @@ const ShowRoleToggle = ({actorID, actorName, showID, flag, user, myList}) => {
             },
             body: JSON.stringify({
                 ActorID: actID,
+                myList: myList,
                 flag: filterFlag
             })
         }).then(res => res.json())
-        // console.log(roleData)
-        if (roleData[0].CharName) {
-            for (let i in roleData) {
-                roleData[i] = Object.values(roleData[i])
+        let attempt = 0;
+        while (attempt < 20) {
+            try {
+                // console.log(roleData)
+                if (roleData[0].CharName) {
+                    for (let i in roleData) {
+                        roleData[i] = Object.values(roleData[i])
+                    }
+                }
+                setRoleReturn(Object.values(roleData));
             }
+            catch (error) {
+                console.log(error)
+            }
+            attempt++;
+            sleep(5000)
         }
-        setRoleReturn(Object.values(roleData));
-        console.log("rd", Object.values(roleData))
+        // console.log("rd", Object.values(roleData))
         // actors[actors.length] = roleData;
     }
 
@@ -168,7 +178,7 @@ function next() {
                             {roleReturn[pos][Title] ?
                             <>
                             {roleReturn[pos][Title].map((title, n) => 
-                                <div key={n}>
+                                <div className="altTitles" key={n}>
                                     {n > 0
                                         ?<Link to={`/Show/${roleReturn[pos][ShowID][n]}/${title}`}>{title}</Link>
                                         :<></>
@@ -181,7 +191,9 @@ function next() {
                         : <></>
                     }
                     </>
-                    : <></>
+                    : <>
+                        {/* <img src={actorImg} alt={actorName}></img> */}
+                    </>
                 }
                 
             </div>
@@ -235,7 +247,7 @@ function next() {
                     break
                 }
             }
-            console.log(currRoleTitles, currRoleRanks)
+            // console.log(currRoleTitles, currRoleRanks)
 
             var swapped, temp;
             for (let k = 0; k < currRoleShowIDs.length; k++) {

@@ -4,10 +4,15 @@
 * {
   margin: 0;
   font-family: "Quicksand";
+  /* background-color: #202025; */
   color: #f2f1f1;
+}
+html {
+  background-color: #202025;
 }
 a {
   text-decoration: none;
+  /* background-color: #44444c; */
 }
 .container {
   position: relative;
@@ -60,7 +65,7 @@ a {
 }
 .nav .site-title {
   align-items: center;
-  font-size: 2vw;
+  font-size: 1.5vw;
   padding: 0 2vw;
   font-weight: bold;
 }
@@ -79,7 +84,7 @@ a {
   position: fixed;
   align-items: stretch;
   height: 3vw;
-  left: 15%;
+  left: 25%;
   display: flex;
   z-index: 11;
   flex-direction: column;
@@ -97,8 +102,9 @@ a {
 }
 .nav a {
   /* margin-left: 16px; */
+  align-items: center;
   text-decoration: none;
-  font-size: 2vw;
+  font-size: 1.5vw;
   height: 100%;
   padding: .11vw 2vw;
   display: flex;
@@ -230,7 +236,7 @@ a {
   display: flex;
   flex-direction: column;
   right: 0px;
-  top: 4vw;
+  top: 3vw;
   z-index: 1;
 }
 #Search {
@@ -245,7 +251,14 @@ a {
   color: white;
   margin: 0 1vw;
   padding-left: 1vw;
-  
+}
+#filterInput {
+  position: relative;
+  width: 15em;
+  left: 100px;
+  border-radius: .5vw;
+  padding-left: .75vw;
+  font-size: 1vw;
 }
 .results {
   /* position: absolute; */
@@ -284,7 +297,7 @@ a {
   padding-top: 50px;
   gap: 0;
   max-width: 90%;
-  padding-bottom: 0px;
+  padding-bottom: 200px;
   justify-content: space-between;
 }
 .roleTogglePrev {
@@ -519,7 +532,7 @@ input::-webkit-search-cancel-button{
 #userSearch {
   position: fixed;
   display: flex;
-  left: 30%;
+  left: 38%;
   z-index: 11;
   font-size: 2vw;
   height: 2vw;
@@ -530,10 +543,37 @@ input::-webkit-search-cancel-button{
 #userSearchButton {
   position: fixed;
   z-index: 11;
-  font-size: 2vw;
-  left: 52%;
+  font-size: 1.5vw;
+  left: 60%;
   background-color: rgb(105, 105, 105);  
   height: 3vw;
   border-width: .3vw;
   padding: 0 1vw 0 1vw;
+}
+#prevPage {
+  position: fixed;
+  background-color: darkslategrey;
+  height: fit-content;
+  font-size: 1.2vw;
+  bottom: 0px;
+  right: 12%;
+  padding: .1vw;
+  border-width: .1vw;
+}
+#prevPage:disabled {
+  background-color: #202025;
+}
+#nextPage {
+  position: fixed;
+  background-color: darkslategrey;
+  height: fit-content;
+  font-size: 1.2vw;
+  bottom: 0px;
+  right: 5%;
+  /* bottom: 2%; */
+  border-width: .1vw;
+  padding: .1vw;
+}
+#nextPage:disabled {
+  background-color: #202025;
 }
