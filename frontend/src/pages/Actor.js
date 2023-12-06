@@ -118,7 +118,7 @@ export default function Actor({user, myList}) {
                                 <h3>{role[charName] + " (" + role[favorites] + " Favorites)"}</h3>
                                 {role[title].map((title, n) =>
                                     <div key={n}>
-                                        <Link to={`/Show/${role[showID][n]}/${title}`}>{title}</Link>
+                                        <Link to={`/Anime/${role[showID][n]}/${title}`}>{title}</Link>
                                     </div>
                                 )}
                             </div>
