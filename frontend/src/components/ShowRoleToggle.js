@@ -180,7 +180,7 @@ function next() {
                             {roleReturn[pos][Title].map((title, n) => 
                                 <div className="altTitles" key={n}>
                                     {n > 0
-                                        ?<Link to={`/Show/${roleReturn[pos][ShowID][n]}/${title}`}>{title}</Link>
+                                        ?<Link to={`/Anime/${roleReturn[pos][ShowID][n]}/${title}`}>{title}</Link>
                                         :<></>
                                     }
                                 </div>
