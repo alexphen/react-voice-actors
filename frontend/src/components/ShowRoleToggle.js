@@ -170,7 +170,7 @@ function next() {
                     </div>
                     <h4>{roleReturn[String(pos)][CharName]}</h4>
                     <div id="topTitle">
-                        <Link to={`/Show/${roleReturn[pos][ShowID][0]}/${roleReturn[pos][Title][0]}`}>{roleReturn[pos][Title][0]}</Link>
+                        <Link to={`/Anime/${roleReturn[pos][ShowID][0]}/${roleReturn[pos][Title][0]}`}>{roleReturn[pos][Title][0]}</Link>
                     </div>
                     {roleReturn[pos][Title].length > 1
                         ?<><div id="moreTitles">•••</div>
