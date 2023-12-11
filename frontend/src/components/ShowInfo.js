@@ -11,6 +11,7 @@ const   CharName    = 0,
 const perPage = 18;
 var toggles = [];
 var set = false;
+var cache = {};
 
 const ShowInfo = ({ user, myList, flag }) => {
 
@@ -22,7 +23,7 @@ const ShowInfo = ({ user, myList, flag }) => {
     const [count, setCount] = useState([0]);
     const [page, setPage] = useState(0);
     const [hasPrev, setHasPrev] = useState(false);
-    const [hasNext, setHasNext] = useState(false);
+    const [hasNext, setHasNext] = useState(false); ///////
     const [keyword, setKeyword] = useState('');
     const [dispActors, setDispActors] = useState([]);
     
@@ -39,7 +40,7 @@ const ShowInfo = ({ user, myList, flag }) => {
           })
         })
         .then(res => res.json());
-        console.log(showData)
+        // console.log(showData)
         for (let i in showData) {
             showData[i] = Object.values(showData[i]);
         }
@@ -56,9 +57,11 @@ const ShowInfo = ({ user, myList, flag }) => {
 
     useEffect(() => {
         // console.log(id)
+        cache = {}
         if (id > 0) {
             setShowSelected([id, Title])
             getShowActors();
+            setPage(0);
             set = true;
         }
     }, [id]);
@@ -110,7 +113,7 @@ const ShowInfo = ({ user, myList, flag }) => {
     }
 
     useEffect(() => {
-        console.log(count, page*perPage)
+        // console.log(count, page*perPage)
         if (page == 0)
             setHasPrev(false)
         if ((page+1)*perPage > count)
@@ -123,8 +126,10 @@ const ShowInfo = ({ user, myList, flag }) => {
     }
 
     function nextPage() {
-        setPage(page + 1)
-        setHasPrev(true)
+        if (hasNext) {
+            setPage(page + 1)
+            setHasPrev(true)
+        }
     }
 
     function filterBy(arr, query) {
@@ -146,21 +151,22 @@ const ShowInfo = ({ user, myList, flag }) => {
             {/* {console.log("rendered")} */}
             {/* <h1 className="showTitle">{Title}</h1> */}
             {/* <h1>{page}</h1> */}
-            {console.log("page", page)}
+            {console.log("cache", cache)}
             <div className="showInfo">
                 {removeDups()}
                 {bubbleSortActors(actors, actors.length)}
                 {actors.length > 0 && set
                     ? dispActors.slice(perPage*page, perPage*page + perPage).map((actor, n) => 
                         <div key={actor[ActorID]}>
-                            {/* {console.log("toggle", actor[ActorID])} */}
+                            {/* {console.log("creating", actor[ActorName], n)} */}
                             <ShowRoleToggle actorID={actor[ActorID]}
                                             actorName={actor[ActorName]}
                                             actorImg={actor[ImageURL]}
                                             showID={id}
                                             flag={flag}
                                             user={user}
-                                            myList={myList}/>
+                                            myList={myList}
+                                            cache={cache}/>
                         </div>
                     )
                     

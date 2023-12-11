@@ -8,7 +8,6 @@ import { useState, useEffect, useCallback } from "react";
 
 
 function App() {
-	console.log("app renders")
 	const [cookies, setCookies] = useCookies(["acc"])
 	const [entry, setEntry]  	= useState(cookies.acc || "");
 	const [myList, setMyList] 	= useState([]);
@@ -25,37 +24,39 @@ function App() {
 
 
 	const getMALData = async() => {
-		console.log("getting MAL data")
-		try {
-			const malData = await fetch ('/api/mal', {
-				method: 'POST',
-				headers: {
-					'content-type': 'application/json',
-					'Accept': 'application/json'
-				},
-				body: JSON.stringify({
-					Username: entry
+		if (entry != "") {
+			console.log("getting MAL data")
+			try {
+				const malData = await fetch ('/api/mal', {
+					method: 'POST',
+					headers: {
+						'content-type': 'application/json',
+						'Accept': 'application/json'
+					},
+					body: JSON.stringify({
+						Username: entry
+					})
 				})
-			})
-			.then(res => res.json());
-			// instead of array we're turning the list into a comma separated string
-			// let temp = [];
-			// for (let i in malData.data) {
-			// 	temp[i] = malData.data[i].node.id;
-			// }
-			let str = "("
-			for (let i in malData.data) {
-				str += malData.data[i].node.id + ","
+				.then(res => res.json());
+				// instead of array we're turning the list into a comma separated string
+				// let temp = [];
+				// for (let i in malData.data) {
+				// 	temp[i] = malData.data[i].node.id;
+				// }
+				let str = "("
+				for (let i in malData.data) {
+					str += malData.data[i].node.id + ","
+				}
+				str = str.slice(0, str.length - 1) + ")"
+				console.log(str)
+				setMyList(str)
+				if (str.length > 0) {
+					setUser(entry)
+					setCookies('acc', user, {path: '/'})
+				}
+			} catch (error) {
+				console.log(error)
 			}
-			str = str.slice(0, str.length - 1) + ")"
-			console.log(str)
-			setMyList(str)
-			if (str.length > 0) {
-				setUser(entry)
-				setCookies('acc', user, {path: '/'})
-			}
-		} catch (error) {
-			console.log(error)
 		}
 	}
 
@@ -77,7 +78,6 @@ function App() {
 
 	return (
 		<div className="app">
-		{console.log(user, "in APP")}
 			{/* <h6>{cookies.acc}</h6> */}
 			<div className="userSearchArea">
 					<input id="userSearch"

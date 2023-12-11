@@ -11,7 +11,7 @@ const ShowID    = 5;
 const Title     = 7;
 const rank      = 8;
 
-const ShowRoleToggle = ({actorID, actorName, actorImg, showID, flag, user, myList}) => {
+const ShowRoleToggle = ({actorID, actorName, actorImg, showID, flag, user, myList, cache}) => {
 
     // console.log("actorID received ", actorID)
     
@@ -38,11 +38,8 @@ const ShowRoleToggle = ({actorID, actorName, actorImg, showID, flag, user, myLis
 
 
     useEffect(() => {
-        if (myList.length > 0) {
-            sleep(10000)
-            getRoles(actorID);
-        }
-    }, [myList])
+        getRoles(actorID);
+    }, [user])
 
     useEffect(() => {
         restart();
@@ -54,35 +51,49 @@ const ShowRoleToggle = ({actorID, actorName, actorImg, showID, flag, user, myLis
     
     const getRoles = async(actID) => {
         // console.log("ID sent to roles ", actID)
-        const roleData = await fetch ('/api/roles', {
-            method: 'POST',
-            headers: {
-                'content-type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify({
-                ActorID: actID,
-                myList: myList,
-                flag: filterFlag
-            })
-        }).then(res => res.json())
-        let attempt = 0;
-        while (attempt < 20) {
-            try {
-                // console.log(roleData)
-                if (roleData[0].CharName) {
-                    for (let i in roleData) {
-                        roleData[i] = Object.values(roleData[i])
-                    }
-                }
-                setRoleReturn(Object.values(roleData));
-            }
-            catch (error) {
-                console.log(error)
-            }
-            attempt++;
-            sleep(5000)
+        if (cache && cache[actID]) {
+            setRoleReturn(cache[actID])
         }
+        else {
+            const roleData = await fetch ('/api/roles', {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    ActorID: actID,
+                    myList: myList,
+                    flag: filterFlag
+                })
+            }).then(res => res.json())
+            // console.log(roleData)
+            for (let i in roleData) {
+                roleData[i] = Object.values(roleData[i])
+            }
+            setRoleReturn(Object.values(roleData));
+            // console.log(Object.values(roleData))
+            cache[actorID] = Object.values(roleData)
+        }
+
+        // let attempt = 0; 
+        // while (attempt < 20) {
+        //     try {
+        //         // console.log(roleData)
+        //         if (roleData[0].CharName) {
+        //             for (let i in roleData) {
+        //                 roleData[i] = Object.values(roleData[i])
+        //             }
+        //         }
+        //         setRoleReturn(Object.values(roleData));
+        //     }
+        //     catch (error) {
+        //         console.log(error)
+        //     }
+        //     attempt++;
+        //     sleep(5000)
+        // }
+
         // console.log("rd", Object.values(roleData))
         // actors[actors.length] = roleData;
     }

@@ -1,11 +1,10 @@
 
 import json
 import requests
-# import voiceactors as VA
-# import opartist as OP
 import time
-import pyodbc
 import oracledb
+from PIL import Image
+import urllib.request
 
 # myList = VA.VoiceActorsWrapper()
 # masterList = VA.VoiceActorsWrapper()
@@ -227,7 +226,7 @@ def topListUpdate(start, max) :
     count = 1
     starttime = time.localtime()
 
-    # scrape user anime list, calls vaParse for each show
+    # collect data on each entry, calls vaParse
     while count < int(max) + 1 :
         print(count)
         if count > int(start) :
@@ -459,6 +458,88 @@ def addShowFavs() :
     #                                VALUES({})''')
     # f.write(f'Added {title}\n\n')
 
+def updateCharImgs() :
+
+    cursor.execute('''SELECT CharID, CharImg, CharName, Favorites FROM Roles
+                        ORDER BY Favorites DESC''')
+    res = cursor.fetchall()
+    for i in res :
+        trying = True
+        attempts = 0
+        url = f'''https://api.jikan.moe/v4/characters/{i[0]}'''
+        while trying :
+            try :
+                response = requests.get(url, headers = {
+                    'X-MAL-CLIENT-ID': CLIENT_ID
+                    })
+                response.raise_for_status()
+                character = response.json()
+                response.close()
+            except :
+                # print("Exception at gui.vaParse")
+                if attempts == 20 :
+                    character = dict()
+                    trying = False
+                else :
+                    time.sleep(0.1)
+                attempts+= 1
+            else :
+                trying = False
+        
+        imgurl = character["data"]["images"]["jpg"]["image_url"]
+        # print(imgurl)
+        if i[1] != imgurl :
+            cursor.execute(f'''UPDATE Roles
+                                Set CharImg = '{imgurl}'
+                                WHERE CharID = {i[0]}''')
+            conn.commit()
+            print(f'''updated {i[2]}'s img''')
+
+# checks for error 404
+def fixCharImgs() :
+    cursor.execute('''SELECT CharID, CharImg, CharName, Roles.ShowID, Anime.Title, Roles.Favorites FROM Roles
+                        INNER JOIN Anime ON Anime.ShowID=Roles.ShowID
+                        ORDER BY Favorites DESC''')
+    res = cursor.fetchall()
+    for i in res :
+        response = requests.get(i[1])
+        # print (response.status_code)
+        if (response.status_code == 404) :
+            print ('404', i[2], i[4])
+            url = f'''https://api.jikan.moe/v4/characters/{i[0]}/pictures'''
+            trying = True
+            attempts = 0
+            while trying :
+                try :
+                    response = requests.get(url, headers = {
+                        'X-MAL-CLIENT-ID': CLIENT_ID
+                        })
+                    response.raise_for_status()
+                    character = response.json()
+                    response.close()
+                except :
+                    # print("Exception at gui.vaParse")
+                    if attempts == 20 :
+                        character = dict()
+                        trying = False
+                    else :
+                        time.sleep(0.1)
+                    attempts+= 1
+                else :
+                    trying = False
+            num = 0
+            while True :
+                curr = character["data"][num]["jpg"]["image_url"]
+                if (requests.get(curr).status_code == 200) :
+                    cursor.execute(f'''UPDATE Roles
+                                Set CharImg = '{curr}'
+                                WHERE CharID = {i[0]}''')
+                    conn.commit()
+                    print(f'''updated {i[2]}'s img''')
+                    break
+                else :
+                    num =+ 1
+        
 
 def fixActorImg() :
     cursor.execute('''SELECT ActorID FROM Actors
@@ -496,11 +577,16 @@ def fixActorImg() :
             else :
                 trying = False
 
+
+
+# RUNNERS
+
+
 # makeList()
 
 # topList()
 
-topListUpdate(101,500)
+#topListUpdate(101,500)
 
 # addShowFavs()
 
@@ -508,115 +594,32 @@ topListUpdate(101,500)
 
 # f.close()
 
+# updateCharImgs()
+
 # print(noQuote("house's"))
 
-# cursor.execute('SELECT CharID FROM Roles WHERE ShowID = 1')
-# roles = cursor.fetchall()
-# print(roles)
+fixCharImgs()
+
+# cursor.execute(f'''UPDATE Roles
+#                     Set CharImg = 'https://cdn.myanimelist.net/images/characters/15/339171.jpg'
+#                     WHERE CharID = 45627''')
+# conn.commit()
+
+
+# url = f'''https://api.jikan.moe/v4/characters/46494/pictures'''
+# response = requests.get(url, headers = {
+#     'X-MAL-CLIENT-ID': CLIENT_ID
+# })
+# response.raise_for_status()
+# character = response.json()
+# response.close()
+
+# print(character["data"][0]["jpg"]["image_url"])
 
 
 
+# cursor.execute('SELECT CharID, CharImg FROM Roles WHERE CharID = 79513')
+# res = cursor.fetchall()
+# print(res)
 
 
-
-
-# def search(self) :
-#     print("Searching Show: ", showA.get())
-#     searchURL = 'https://api.jikan.moe/v4/anime?q=' + showA.get()
-#     response = requests.get(searchURL, headers = {
-#         'X-MAL-CLIENT-ID': CLIENT_ID
-#         })
-#     response.raise_for_status()
-#     global animeSearch
-#     animeSearch = response.json()
-
-#     for i in animeSearch["data"] :
-#         if i["title_english"] != None :
-#             currAnime = i["title_english"]
-#         else :
-#             currAnime = i["title"]
-#         # searchResult.set(currAnime)
-#     # if there are any search results
-#     if len(animeSearch["data"]) > 0 :
-#         setPrompt()
-#     else :
-#         resetPrompt()
-#         nosuch.grid(padx = 150, pady = 100)
-#     response.close()
-
-
-# def characterSearch(char) :
-#     print("Searching Character: ", char)
-#     charURL = 'https://api.jikan.moe/v4/characters?q=' + char
-#     response = requests.get(charURL, headers = {
-#         'X-MAL-CLIENT-ID': CLIENT_ID
-#         })
-#     response.raise_for_status()
-#     charSearch = response.json()
-
-#     options.delete(0, 'end')
-#     for i in charSearch["data"] :
-#         curr = i["name"]
-#         charID = i["mal_id"]
-#         actorIDs = []
-#         ############### add try timer
-#         trying = True
-#         attempts = 0
-        
-#         while trying :
-#             try :
-#                 print("Getting show info for each character")
-#                 charAnimeURL = 'https://api.jikan.moe/v4/characters/' + str(charID) + '/full'
-#                 response2 = requests.get(charAnimeURL, headers = {
-#                     'X-MAL-CLIENT-ID': CLIENT_ID
-#                     })
-#                 response2.raise_for_status()
-#                 charAnimeResults = response2.json()
-#             except :
-#                 # print("Exception at gui.vaParse")
-#                 if attempts == 20 :
-#                     trying = False
-#                 else :
-#                     time.sleep(0.1)
-#                 attempts+= 1
-#             else :
-#                 trying = False
-#                 success = True
-#         if success :
-#             currTitle = charAnimeResults["data"]["anime"][0]["anime"]["title"]
-#             options.insert('end', curr + " from " + currTitle)
-#             for g in charAnimeResults["data"]["voices"] :
-#                 if g["language"] == "Japanese" :
-#                     actorIDs.append(g["person"]["mal_id"])
-#     # if there are any search results
-#     if len(charSearch["data"]) > 0 :
-#         setCharPrompt()
-#     else :
-#         resetPrompt()
-#         nosuch.grid(padx = 10)
-#     response.close()
-
-
-
-# def addShow() :
-#     # parse the show if not in list already
-#     tempID = animeSearch["data"][index]["mal_id"]
-#     tempImg = animeSearch["data"][index]["images"]["jpg"]["image_url"]
-#     tempTitle = options.get(index)
-#     if tempID not in myList.showIDs :
-#         showAdded = vaParse(tempID, CLIENT_ID, tempTitle, tempImg)
-#         # print("adding")
-#         myList.titles.append(tempTitle)
-#         myList.showIDs.append(tempID)
-#         myString = "Added: " + tempTitle
-#         addVar.set(myString)
-#         added.grid(padx = 150, pady = 100)
-#     else :
-#         already.pack(padx = 10)
-#         return
-#     # print (myList.actors)
-#     # print (OPList)
-#     return showAdded
-
-# def favFunc(e) :
-#     return e.fav
