@@ -1,2 +1,2 @@
 cd backend
-nohup node server.js
+nohup node server.js &
