@@ -39,6 +39,7 @@ const ShowRoleToggle = ({actorID, actorName, actorImg, showID, flag, user, myLis
 
     useEffect(() => {
         getRoles(actorID);
+        cache = {};
     }, [user])
 
     useEffect(() => {
