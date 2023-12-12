@@ -16,7 +16,7 @@ let session;
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(cors());
-app.use(express.static('build'))
+// app.use(express.static('build'))
 
 
 // OracleDB Initialization
@@ -71,22 +71,10 @@ app.post('/api/actor', async(req, res) => {
     }
 })
 
-app.post('/api/actorFull', async(req, res) => {
+app.post('/api/homeActor', async(req, res) => {
     try {
-        console.log('Called actorFull', req.body.ActorID);
-        const result = await dbOperation.getActorFull(req.body.ActorID, req.body.myList, req.body.flag)
-        console.log(result)
-        res.send(result.rows);  
-        
-    } catch (error) {
-        console.log(error)
-    }
-})
-
-app.post('/api/home', async(req, res) => {
-    try {
-        console.log('Called home', req.body);
-        const result = await dbOperation.getHomeData(req.body.ActorID)
+        console.log('Called home actors', req.body.flag);
+        const result = await dbOperation.getHomeActors(req.body.flag, req.body.myList)
         // console.log(result.rows)
         res.send(result.rows);  
         
@@ -95,12 +83,12 @@ app.post('/api/home', async(req, res) => {
     }
 })
 
-app.post('/api/list', async(req, res) => {
+app.post('/api/actorFull', async(req, res) => {
     try {
-        console.log('Called list', req.body);
-        const result = await dbOperation.setList(req.body.ids)
-        console.log(result)
-        res.send(result);
+        console.log('Called actorFull', req.body.ActorID, req.body.flag);
+        const result = await dbOperation.getActorFull(req.body.ActorID, req.body.myList, req.body.flag)
+        // console.log(result.rows)
+        res.send(result.rows);  
         
     } catch (error) {
         console.log(error)
@@ -111,7 +99,7 @@ app.post('/api/mal', async(req, res) => {
     try {
         console.log('Called mal', req.body);
         const result = await dbOperation.getMAL(req.body.Username)
-        // console.log(result)
+        console.log(result.data.length)
         res.send(result); 
         
     } catch (error) {

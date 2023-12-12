@@ -9,7 +9,7 @@ const Navbar = ({ username }) => {
 
 
     useEffect(() => {
-        setDBList();
+        // setDBList();
     }, [myList])
 
 
@@ -34,18 +34,18 @@ const Navbar = ({ username }) => {
     }
 
     
-    const setDBList = async() => {
-        const lister = await fetch('/api/list', {
-            method: 'POST',
-            headers: {
-              'content-type': 'application/json',
-              'Accept': 'application/json'
-            },
-            body: JSON.stringify({
-              ids: myList
-            })
-          })
-    }
+    // const setDBList = async() => {
+    //     const lister = await fetch('/api/list', {
+    //         method: 'POST',
+    //         headers: {
+    //           'content-type': 'application/json',
+    //           'Accept': 'application/json'
+    //         },
+    //         body: JSON.stringify({
+    //           ids: myList
+    //         })
+    //       })
+    // }
 
 
     return (

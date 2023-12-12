@@ -1,5 +1,4 @@
-const   {poolPromise} = require('./dbConfig'),
-        MAL           = require('myanimelist-api-wrapper'),
+const   MAL           = require('myanimelist-api-wrapper'),
         oracledb      = require('oracledb');
 
 
@@ -29,6 +28,38 @@ const addAnime = async(Anime) => {
         (${Anime.ShowID}, '${Anime.Title}', '${Anime.ImageURL}')`);
         // console.log(anime);
         return anime;
+    }
+    catch(error) {
+        console.log(error);
+    } finally {
+        if (connection) {
+          try {
+            await connection.close(); // Put the connection back in the pool
+          } catch (err) {
+              throw (err);
+          }
+        }
+    }
+}
+const getHomeActors = async(flag, myList) => {
+    let connection;
+    let res;
+    try {
+        connection = await oracledb.getConnection();
+        if (flag) {
+            res = connection.execute(`SELECT DISTINCT Actors.ActorID FROM Actors
+                                        INNER JOIN Roles ON Roles.ActorID=Actors.ActorID
+                                        WHERE Roles.ShowID IN ${myList}
+                                        ORDER BY Actors.aFavs DESC
+                                        FETCH FIRST 20 ROWS ONLY`)
+        }
+        else {
+            res = connection.execute(`SELECT DISTINCT Actors.ActorID FROM Actors
+                                        INNER JOIN Roles ON Roles.ActorID=Actors.ActorID
+                                        ORDER BY Actors.aFavs DESC
+                                        FETCH FIRST 20 ROWS ONLY`)
+        }
+        return res;
     }
     catch(error) {
         console.log(error);
@@ -154,15 +185,28 @@ const getRoles = async(actID, myList, flag) => {
     }
 }
 
-const getHomeData = async(actID) => {
+const getHomeData = async(flag, myList) => {
     try {        
         connection = await oracledb.getConnection();
-        let res = pool.execute(`SELECT Roles.*, Actors.ActorName, Actors.ImageURL, Anime.Title FROM Roles
+        if (flag) {
+            let res = connection.execute(`SELECT Roles.*, Actors.ActorName, Actors.ImageURL, Actors.aFavs, Anime.Title FROM Roles
                                         INNER JOIN Actors ON Roles.ActorID=Actors.ActorID
                                         INNER JOIN Anime ON Roles.ShowID=Anime.ShowID
-                                        WHERE Roles.ActorID=${actID}`);
-        // console.log(res);
-        return res;
+                                        WHERE Anime.ShowID IN ${myList}
+                                        ORDER BY Actors.aFavs
+                                        FETCH FIRST 20 ROWS ONLY`);
+            return res;
+        } else {
+            let res = connection.execute(`SELECT * FROM Actors
+                                            ORDER BY Actors.aFavs DESC
+                                            FETCH FIRST 20 ROWS ONLY`)
+            // let res = connection.execute(`SELECT Roles.*, Actors.ActorName, Actors.ImageURL, Actors.aFavs, Anime.Title FROM Roles
+            //                             INNER JOIN Actors ON Roles.ActorID=Actors.ActorID
+            //                             INNER JOIN Anime ON Roles.ShowID=Anime.ShowID
+            //                             ORDER BY Actors.aFavs
+            //                             FETCH FIRST 20 ROWS ONLY`);
+            return res;
+        }
     }
     catch(error) {
         console.log(error);
@@ -273,7 +317,7 @@ const setList = async(ids) => {
         for (let i in ids) {
             str += ids[i] + ","
         }
-        str = str.slice(0, str.length - 1) + ")"
+        str = str + ") done"
         // console.log(str)
         
         // let res = connection.execute(`SELECT * FROM Anime WHERE ShowID IN ${str}`);
@@ -326,6 +370,7 @@ module.exports = {
     getActor,
     getActorFull,
     getAnime,
+    getHomeActors,
     getHomeData,
     getMAL,
     getSearchActorData,

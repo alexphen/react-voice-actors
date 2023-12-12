@@ -25,6 +25,27 @@ export default function Actor({user, myList}) {
     // console.log(actor)
 
 
+    useEffect(() => {
+        if (id > 0)
+            getData();
+    }, [])
+
+    useEffect(() => {
+        if (id > 0) {
+            setKeyword("")
+            getSearchData("")
+            getData();
+        }
+    }, [id])
+
+    useEffect(() => {
+        if (id > 0) {
+            setKeyword("")
+            getSearchData("")
+            getData();
+        }
+    }, [myList])
+
     const getData = async() => {
         // console.log(actor.actorID)
         const actorData = await fetch ('/api/actorFull', {
@@ -43,7 +64,7 @@ export default function Actor({user, myList}) {
         for (let i in actorData) {
             actorData[i] = Object.values(actorData[i])
         }
-        // console.log(actorData[0][actorID], actorData[0][actorName], actorData[0][actorImg])
+        console.log(actorData[0][actorID], actorData[0][actorName], actorData[0][actorImg])
         setActor([actorData[0][actorID], actorData[0][actorName], actorData[0][actorImg], actorData[0][aFavs]]);
         setRoles(actorData)
         // console.log(actorData);
@@ -71,7 +92,7 @@ export default function Actor({user, myList}) {
                 })
             })
             .then(res => res.json());
-            console.log("SD", searchData)
+            // console.log("SD", searchData)
 
             // console.log("RD", returnedData)
             for (let i in searchData) {
@@ -88,28 +109,15 @@ export default function Actor({user, myList}) {
         }
     }
 
-    useEffect(() => {
-        if (id > 0)
-            getData();
-    }, [])
-
-    useEffect(() => {
-        if (id > 0) {
-            setKeyword("")
-            getSearchData("")
-            getData();
-        }
-    }, [id])
-
     return (
         <div className="actorPage">
             {actor[0] > 0
                 ? <> 
-                {console.log(roles)}
+                {/* {console.log(roles)} */}
                 {combineRoles()}
-                {console.log(roles)}
+                {/* {console.log(roles)} */}
                 {bubbleSort()} 
-                {console.log(actor)}
+                {/* {console.log(actor)} */}
                 <div className="actorRoles">
                     {roles.map((role, n) => 
                         <div className="actorRole">
@@ -136,7 +144,7 @@ export default function Actor({user, myList}) {
                             value={keyword} />
                         <div className="results">
                             {/* Display 10 filtered results. Change Show on click */}
-                            {console.log(names)}
+                            {/* {console.log(names)} */}
                             {names.slice(0,10).map((name, index) => (
                                 <Link to={`/Actor/${ids[index]}/`} className="resBox">{name}</Link>
                             ))}
@@ -175,11 +183,11 @@ export default function Actor({user, myList}) {
     )
 
     function combineRoles() {
-        console.log(roles, roles.length)
+        // console.log(roles, roles.length)
         var currRoleShowIDs = [];
         var currRoleTitles = [];
         for (let i = 0; i < roles.length; i++) {
-            console.log(roles[i][title])
+            // console.log(roles[i][title])
             if (typeof roles[i][title] == 'string') {
                 currRoleShowIDs = [roles[i][showID]];
                 currRoleTitles = [roles[i][title]];

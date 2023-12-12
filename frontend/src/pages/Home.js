@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import ShowRoleToggle from "../components/ShowRoleToggle";
 import ls from 'local-storage';
 import axios from "axios";
+import { type } from "os";
 // import { getMAL } from "../../../backend/dbFiles/dbOperation";
 // require('dotenv').config();
 // console.log('Your environment variable MAL_CLIENT_ID has the value: ', process.env.MAL_CLIENT_ID);
@@ -17,44 +18,76 @@ const ImageURL  = 3;
 
 // export const myList = text;
 // const actors = myList.actors;
-const topActors = [118, 185, 65, 672, 869, 34785, 212, 2, 270, 591, 99, 11817, 8, 87]
-var actorsLeft = [];
-resetLeft();
+//const topActors = [118, 185, 65, 672, 869, 34785, 212, 2, 270, 591, 99, 11817, 8, 87]
+// var actorsLeft = [];
 var started = false;
+var cache;
 
 const Home = ({user, myList}) => {
     
-    var firstIndex;
-    started ? firstIndex = Math.trunc(Math.random() * topActors.length)
-            : firstIndex = 0;
+    // var firstIndex;
+    // started ? firstIndex = Math.trunc(Math.random() * topActors.length)
+    //         : firstIndex = 0;
+
     // const firstActor = actors[topActors[firstIndex]];
-    const [actorID, setActorID] = useState(0)//topActors[firstIndex]);
     const loading = [ 0, "Loading", 0, "https://media.istockphoto.com/id/1360005202/vector/loon-gavia.jpg?s=612x612&w=0&k=20&c=y6ZnKz2hLqGnFjNWuQpxwGCuqT3NYk4vz0MOtEyM3Bc="]
     // const loadingRoles = {ActorID: 0, ActorName: "Loading", Favorites: 0, ImageURL: "https://media.istockphoto.com/id/1360005202/vector/loon-gavia.jpg?s=612x612&w=0&k=20&c=y6ZnKz2hLqGnFjNWuQpxwGCuqT3NYk4vz0MOtEyM3Bc="}
     // const [prev, setPrev] = useState();
-    const [index, setIndex] = useState(firstIndex);
-    const [actor, setActor] = useState(loading);
+    const [index, setIndex] = useState(0);//firstIndex);
+    const [topActors, setTopActors] = useState([]);
+    const [actor, setActor] = useState([]);
+    const [actorID, setActorID] = useState(0)//topActors[firstIndex]);
     var filterFlag = user.length > 0;
-    // const {loadedID} = useParams();
-    // console.log(actor)
-
-    // console.log("actor", actor)
-    // console.log("actorID", actorID)
-
+    // console.log("topActors", topActors)
 
 
     useEffect(() => {
+        getHomeActors();
         started = false;
+        cache = {};
     }, [])
 
+    useEffect(() => {
+        setIndex(0);
+        // console.log('index', index)
+        started = false;
+        getHomeActors()
+        // resetIndex();
+        if (started) {
+            nextActor(0)
+        }
+    }, [myList])
+
+
+
     // useEffect(() => {
+    //     getData()
+    // }, [topActors])
 
-    // }, [user])
-
-    // console.log(actor)
+    const getHomeActors = async() => {
+        const actorData = await fetch('/api/homeActor', {
+            method: 'POST',
+            headers: {
+              'content-type': 'application/json',
+              'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+            //   ActorID: actID
+                flag: filterFlag,
+                myList: myList
+            })
+          })
+          .then(res => res.json());
+          let temp = [];
+          for (let i in actorData) {
+            temp[i] = actorData[i][0]
+          }
+          setTopActors(temp)
+        //   console.log(temp)
+    }
 
     const getData = async(actID) => {
-        console.log('actID', actID)
+        // console.log('actID', actID)
         const actorData = await fetch('/api/actor', {
           method: 'POST',
           headers: {
@@ -66,6 +99,7 @@ const Home = ({user, myList}) => {
           })
         })
         .then(res => res.json());
+        // console.log("actorData", actorData)
         setActor(Object.values(actorData[0]));
         // setActorID(actorData[0][ActorID])
         // console.log(Object.values(actorData[0]));
@@ -73,48 +107,34 @@ const Home = ({user, myList}) => {
         ls.set('actor', actorData[0])
     }
 
-    // const getMALData = async() => {
-    //     console.log("getting MAL data")
-    //     const malData = await fetch ('/mal', {
-    //       method: 'POST',
-    //       headers: {
-    //         'content-type': 'application/json',
-    //         'Accept': 'application/json'
-    //       },
-    //       body: JSON.stringify({
-    //         Username: user
-    //       })
-    //     })
-    //     .then(res => res.json());
-    //     let temp = [];
-    //     console.log(malData.data[0].node)
-    //     for (let i in malData.data) {
-    //         temp[i] = malData.data[i].node.id;
-    //     }
-    //     setMyList(temp)
-    // }
+    function start() {
+        getHomeActors();
+        nextActor(index);
+    }
 
-
-    function nextActor() {
+    function nextActor(pos) {
         // setActor(loading)
         started = true;
-        let temp = 0;
-        setIndex(Math.trunc(Math.random() * actorsLeft.length - 1));
-        if (actorsLeft.length > 0) {
-            temp = actorsLeft.splice(index, 1)[0]
-            // console.log("temp", temp)
-            setActorID(temp);
+        let temp;
+        // console.log("index", index, 'pos', pos)
+        // setIndex(Math.trunc(Math.random() * actorsLeft.length - 1));
+        if (pos < topActors.length) {
+            setIndex(pos + 1);
+            temp = topActors[pos];
         }
         else {
-            resetLeft();
-            setIndex(Math.trunc(Math.random() * actorsLeft.length - 1));
-            nextActor();
+            setIndex(1);
+            temp = topActors[0];
+            // temp = actorsLeft.splice(index, 1)[0];
+            // resetLeft();
+            // setIndex(Math.trunc(Math.random() * actorsLeft.length - 1));
         }
-        console.log('temp', temp)
+        setActorID(temp);
+        console.log(topActors)
+        console.log('index', index, 'temp', temp)
         getData(temp);
         // getRoleData();
     }
-    
 
 
     return ( 
@@ -124,20 +144,26 @@ const Home = ({user, myList}) => {
                 <br></br>
                 <h5>Seiyu is a Japanese word for voice actor</h5>
                 <br></br>
-                <h6>All data obtained from <a href="http://MyAnimeList.net">MyAnimeList.net</a></h6>
+                <h6>All data obtained from <a href="http://MyAnimeList.net" target="_blank">MyAnimeList.net</a></h6>
                 {/* <p>{label}</p> */}
                
             </div>
             <div className="viewer">
                 {/* {console.log("actorID ", actorID)} */}
                 {/* {combineRoles()} */}
-                {actor[0] !== 0
-                    ?<><ShowRoleToggle id="topActor" actorID={actorID} actorName={actor[ActorName]} flag={filterFlag} user={user} myList={myList}/>
+                {started //actor[0] !== 0
+                    ?<><ShowRoleToggle  
+                                id="topActor" 
+                                actorID={actorID} 
+                                actorName={actor[ActorName]} 
+                                flag={filterFlag} user={user} 
+                                myList={myList}
+                                cache={cache}/>
                         <div id="homeRightPane">
                             <img className="homeActorImg" src={actor[ImageURL]} alt={actor[ActorName]}></img>
-                            <button className="nextActor" onClick={nextActor}>View Another!</button>
+                            <button className="nextActor" onClick={() => nextActor(index)}>View Another!</button>
                         </div></>
-                    :<button className="firstActor" onClick={nextActor}>Take a Look!</button>
+                    :<button className="firstActor" onClick={start}>Take a Look!</button>
                 }
                 {/* {console.log("img ", actor.img)} */}
             </div>
@@ -149,10 +175,5 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function resetLeft() {
-    for(let i = 0; i < topActors.length; i++) {
-        actorsLeft[i] = topActors[i];
-    }
-}    
  
 export default Home;
