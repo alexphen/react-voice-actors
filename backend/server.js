@@ -16,7 +16,7 @@ let session;
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(cors());
-// app.use(express.static('build'))
+app.use(express.static('build'))
 
 
 // OracleDB Initialization
@@ -98,9 +98,16 @@ app.post('/api/actorFull', async(req, res) => {
 app.post('/api/mal', async(req, res) => {
     try {
         console.log('Called mal', req.body);
-        const result = await dbOperation.getMAL(req.body.Username)
-        console.log(result.data.length)
-        res.send(result); 
+        try {
+            const result = await dbOperation.getMAL(req.body.Username)
+            console.log(result.data.length)
+            res.send(result);
+        } catch (error) {
+            console.log(error.message)
+            if (error.message.includes("403:")) {
+                res.send(false)
+            }
+        }
         
     } catch (error) {
         console.log(error)
