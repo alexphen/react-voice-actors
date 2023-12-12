@@ -359,10 +359,9 @@ const getMAL = async(Username) => {
         return res;
     }
     catch(error) {
-        console.log(error);
+        console.log(typeof(error));
     }
 }
-
 
 module.exports = {
     addActor,

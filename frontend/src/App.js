@@ -38,21 +38,28 @@ function App() {
 					})
 				})
 				.then(res => res.json());
-				// instead of array we're turning the list into a comma separated string
-				// let temp = [];
-				// for (let i in malData.data) {
-				// 	temp[i] = malData.data[i].node.id;
-				// }
-				let str = "("
-				for (let i in malData.data) {
-					str += malData.data[i].node.id + ","
+				if (malData == false) {
+					console.log("private")
+					alert("Your List is marked as private. Please make it public to use this feature.")
 				}
-				str = str.slice(0, str.length - 1) + ")"
-				console.log(str)
-				setMyList(str)
-				if (str.length > 0) {
-					setUser(entry)
-					setCookies('acc', user, {path: '/'})
+				else {
+
+				// instead of array we're turning the list into a comma separated string
+					// let temp = [];
+					// for (let i in malData.data) {
+					// 	temp[i] = malData.data[i].node.id;
+					// }
+					let str = "("
+					for (let i in malData.data) {
+						str += malData.data[i].node.id + ","
+					}
+					str = str.slice(0, str.length - 1) + ")"
+					console.log(str)
+					setMyList(str)
+					if (str.length > 0) {
+						setUser(entry)
+						setCookies('acc', user, {path: '/'})
+					}
 				}
 			} catch (error) {
 				console.log(error)
