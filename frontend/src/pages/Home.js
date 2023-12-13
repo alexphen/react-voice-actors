@@ -1,15 +1,6 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-// import text from '../data/MasterV3.json'
 import ShowRoleToggle from "../components/ShowRoleToggle";
 import ls from 'local-storage';
-import axios from "axios";
-import { type } from "os";
-// import { getMAL } from "../../../backend/dbFiles/dbOperation";
-// require('dotenv').config();
-// console.log('Your environment variable MAL_CLIENT_ID has the value: ', process.env.MAL_CLIENT_ID);
-// import dbOperation from "../data/dbFiles/dbOperation"
-// import {user, myList} from Navbar
 
 // const ActorID   = 0;
 const ActorName = 1;
@@ -30,8 +21,6 @@ const Home = ({user, myList}) => {
     //         : firstIndex = 0;
 
     // const firstActor = actors[topActors[firstIndex]];
-    const loading = [ 0, "Loading", 0, "https://media.istockphoto.com/id/1360005202/vector/loon-gavia.jpg?s=612x612&w=0&k=20&c=y6ZnKz2hLqGnFjNWuQpxwGCuqT3NYk4vz0MOtEyM3Bc="]
-    // const loadingRoles = {ActorID: 0, ActorName: "Loading", Favorites: 0, ImageURL: "https://media.istockphoto.com/id/1360005202/vector/loon-gavia.jpg?s=612x612&w=0&k=20&c=y6ZnKz2hLqGnFjNWuQpxwGCuqT3NYk4vz0MOtEyM3Bc="}
     // const [prev, setPrev] = useState();
     const [index, setIndex] = useState(0);//firstIndex);
     const [topActors, setTopActors] = useState([]);
@@ -42,7 +31,7 @@ const Home = ({user, myList}) => {
 
 
     useEffect(() => {
-        getHomeActors();
+        // getHomeActors();
         started = false;
         cache = {};
     }, [])
@@ -130,8 +119,8 @@ const Home = ({user, myList}) => {
             // setIndex(Math.trunc(Math.random() * actorsLeft.length - 1));
         }
         setActorID(temp);
-        console.log(topActors)
-        console.log('index', index, 'temp', temp)
+        // console.log(topActors)
+        // console.log('index', index, 'temp', temp)
         getData(temp);
         // getRoleData();
     }
@@ -144,12 +133,11 @@ const Home = ({user, myList}) => {
                 <br></br>
                 <h5>Seiyu is a Japanese word for voice actor</h5>
                 <br></br>
-                <h6>All data obtained from <a href="http://MyAnimeList.net" target="_blank">MyAnimeList.net</a></h6>
+                <h6>All data obtained from <a href="http://MyAnimeList.net" target="_blank" rel="noreferrer">MyAnimeList.net</a></h6>
                 {/* <p>{label}</p> */}
                
             </div>
             <div className="viewer">
-                {/* {console.log("actorID ", actorID)} */}
                 {/* {combineRoles()} */}
                 {started //actor[0] !== 0
                     ?<><ShowRoleToggle  
@@ -170,10 +158,5 @@ const Home = ({user, myList}) => {
         </div>
      );
 }
-
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
  
 export default Home;

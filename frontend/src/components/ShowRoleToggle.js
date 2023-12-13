@@ -18,19 +18,17 @@ const ShowRoleToggle = ({actorID, actorName, actorImg, showID, flag, user, myLis
     const [pos, setPos] = useState(0);
     const [posDot, setPosDot] = useState(pos);
     const [roleReturn, setRoleReturn] = useState([]);
+    const [prevActor, setPrevActor] = useState(0);
     // console.log(user, "in Toggle")
     var filterFlag = user.length > 0;
     // const [roles, setRoles] = useState([]);
     var size;
-    var ext;
-    var prev;
+    // var prevActor;
 
     // 
     useEffect(() => {
-        // console.log(actorID)
-        if (prev != actorID) {
-            prev = actorID;
-            // console.log("getting roles", actorID)
+        if (prevActor !== actorID) {
+            setPrevActor(actorID);
             getRoles(actorID);
             restart();
         }
@@ -38,7 +36,9 @@ const ShowRoleToggle = ({actorID, actorName, actorImg, showID, flag, user, myLis
 
 
     useEffect(() => {
-        getRoles(actorID);
+        // console.log("getting roles 2", actorID)
+        // getRoles(actorID);
+        cache = {};
     }, [user])
 
     useEffect(() => {
@@ -212,9 +212,6 @@ function next() {
         </div>
      );
 
-     function sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    }
 
      function handleRoles() {
         combineRoles();
@@ -260,7 +257,7 @@ function next() {
             }
             // console.log(currRoleTitles, currRoleRanks)
 
-            var swapped, temp;
+            var swapped;
             for (let k = 0; k < currRoleShowIDs.length; k++) {
                 swapped = false
                 for (let m = 0; m < currRoleShowIDs.length; m++) {
@@ -283,7 +280,6 @@ function next() {
             roleReturn[i][rank] = currRoleRanks;
         }
         size = roleReturn.length;
-        ext = size - 10;
         for (let i = 0; i < Math.min(size, 10); i++) {
             if (i === posDot)
                 arr[i] = "⦿"
@@ -304,7 +300,7 @@ function next() {
         // for (var i in roles) {
         //     roleOrder.push(i)
         // }
-        var i, j, temp;
+        var i, j;
         var swapped;
         for (i = 0; i < n - 1; i++) 
         {

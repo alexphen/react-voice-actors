@@ -500,7 +500,8 @@ input::-webkit-search-cancel-button{
   display: none;
   margin: auto;
   padding: 10px;
-  left: 15vh;
+  /* left: 15vh; */
+  top: 23.3vh;
   z-index: 18;
   min-width: 20vh;
   max-width: 40vh;
