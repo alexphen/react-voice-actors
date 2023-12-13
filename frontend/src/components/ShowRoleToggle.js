@@ -27,10 +27,8 @@ const ShowRoleToggle = ({actorID, actorName, actorImg, showID, flag, user, myLis
 
     // 
     useEffect(() => {
-        console.log(actorID, prevActor)
         if (prevActor !== actorID) {
             setPrevActor(actorID);
-            console.log("getting roles 1", actorID)
             getRoles(actorID);
             restart();
         }
