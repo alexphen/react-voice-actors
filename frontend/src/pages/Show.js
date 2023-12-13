@@ -71,7 +71,7 @@ export default function Show({user, myList}) {
             {/* {console.log(myList.shows)} */}
             {/* <SearchBar keyword={keyword} onChange={updateKeyword} /> */}
             <div className="header">
-                {showSelected[0] != 0
+                {showSelected[0] !== 0
                     ? <h1> {showSelected[Title]} </h1>
                     : <></>
                 }
@@ -93,7 +93,7 @@ export default function Show({user, myList}) {
                 </div>
             </div>
             {/* {console.log("showSelected", showSelected)} */}
-            {showSelected[0] != 0 && showSelected[0] != null //!= 0//.length > 1 //
+            {showSelected[0] !== 0 && showSelected[0] != null //!= 0//.length > 1 //
                 ? <>
                     <ShowInfo Show={showSelected} user={user} myList={myList} flag={filterFlag}/>
                 </>

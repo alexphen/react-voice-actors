@@ -54,7 +54,7 @@ function App() {
 						str += malData.data[i].node.id + ","
 					}
 					str = str.slice(0, str.length - 1) + ")"
-					console.log(str)
+					// console.log(str)
 					setMyList(str)
 					if (str.length > 0) {
 						setUser(entry)
