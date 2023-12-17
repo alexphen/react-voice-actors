@@ -8,7 +8,6 @@ const   CharName    = 0,
         ActorName   = 3,
         ImageURL    = 4;
 
-const perPage = 18;
 var toggles = [];
 var set = false;
 var cache = {};
@@ -22,6 +21,7 @@ const ShowInfo = ({ user, myList, flag }) => {
     const [actors, setActors] = useState([]);
     const [count, setCount] = useState([0]);
     const [page, setPage] = useState(0);
+    const [perPage, setPerPage] = useState(16);
     const [hasPrev, setHasPrev] = useState(false);
     const [hasNext, setHasNext] = useState(false); ///////
     const [keyword, setKeyword] = useState('');
@@ -123,6 +123,7 @@ const ShowInfo = ({ user, myList, flag }) => {
     function prevPage() {
         setPage(page - 1)
         setHasNext(true)
+        window.scroll(0, 0);
     }
 
     function nextPage() {
@@ -130,6 +131,7 @@ const ShowInfo = ({ user, myList, flag }) => {
             setPage(page + 1)
             setHasPrev(true)
         }
+        window.scroll(0, 0);
     }
 
     function filterBy(arr, query) {
@@ -157,9 +159,9 @@ const ShowInfo = ({ user, myList, flag }) => {
                 {bubbleSortActors(actors, actors.length)}
                 {actors.length > 0 && set
                     ? dispActors.slice(perPage*page, perPage*page + perPage).map((actor, n) => 
-                        <div key={actor[ActorID]}>
-                            {/* {console.log("creating", actor[ActorName], n)} */}
-                            <ShowRoleToggle actorID={actor[ActorID]}
+                        // <div >
+                            <ShowRoleToggle key={actor[ActorID]}
+                                            actorID={actor[ActorID]}
                                             actorName={actor[ActorName]}
                                             actorImg={actor[ImageURL]}
                                             showID={id}
@@ -167,7 +169,7 @@ const ShowInfo = ({ user, myList, flag }) => {
                                             user={user}
                                             myList={myList}
                                             cache={cache}/>
-                        </div>
+                        // </div>
                     )
                     
                     : <>
