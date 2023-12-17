@@ -103,14 +103,16 @@ const getActorFull = async(actID, myList, flag) => {
                                                     INNER JOIN Roles ON Roles.ActorID=Actors.ActorID
                                                     INNER JOIN Anime ON Roles.ShowID=Anime.ShowID
                                                     WHERE Actors.ActorID='${actID}' 
-                                                        AND Anime.ShowID IN ${myList}`);
+                                                        AND Anime.ShowID IN ${myList}
+                                                    ORDER BY Roles.Favorites`);
             return res;
         }
         else{
             let res = await connection.execute(`SELECT Actors.ActorName, Actors.ImageURL, Roles.*, Anime.Title, Actors.aFavs FROM Actors
                                                 INNER JOIN Roles ON Roles.ActorID=Actors.ActorID
                                                 INNER JOIN Anime ON Roles.ShowID=Anime.ShowID
-                                                WHERE Actors.ActorID='${actID}'`);
+                                                WHERE Actors.ActorID='${actID}'
+                                                ORDER BY Roles.Favorites`);
             return res;
         }
         // console.log(res);

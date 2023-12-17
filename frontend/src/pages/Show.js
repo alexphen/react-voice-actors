@@ -18,7 +18,6 @@ export default function Show({user, myList}) {
     const [titles, setTitles] = useState([]);
     const [showSelected, setShowSelected] = useState([id || 0, title || '']);
     var filterFlag = user.length > 0;
-    console.log(user, "in Show")
     // const [showActors, setShowActors] = useState([]);
     
     // useEffect(() => {
@@ -67,41 +66,39 @@ export default function Show({user, myList}) {
     }
 
     return (   
-        <div className="show">
-            {/* {console.log(myList.shows)} */}
-            {/* <SearchBar keyword={keyword} onChange={updateKeyword} /> */}
-            <div className="header">
-                {showSelected[0] !== 0
-                    ? <h1> {showSelected[Title]} </h1>
-                    : <></>
-                }
-                <div className="searchSide">
-                    <input
-                        id="Search"
-                        type="search"
-                        placeholder="Search Anime"
-                        autoComplete="off"
-                        onChange={(e) => getSearchData(e.target.value)}
-                        value={keyword} />
-                    <div className="results">
-                        {/* Display 10 filtered results. Change Show on click */}
-                        {titles.slice(0,10).map((title, index) => (
-                            <Link to={`/Anime/${shows[index]}/${title}`} className="resBox">{title}</Link>
-                        ))}
-                    </div>
-                    {/* <button onClick={() => fetchList("RufusPeanut")}>Fetch List</button> */}
-                </div>
+        <><div className="animeSearchSide">
+            <input
+                id="animeSearch"
+                className="search"
+                type="search"
+                placeholder="Search Anime"
+                autoComplete="off"
+                onChange={(e) => getSearchData(e.target.value)}
+                value={keyword} />
+            <div className="results">
+                {/* Display 10 filtered results. Change Show on click */}
+                {titles.slice(0,10).map((title, index) => (
+                    <Link to={`/Anime/${shows[index]}/${title}`} className="resBox">{title}</Link>
+                ))}
             </div>
+            {/* <button onClick={() => fetchList("RufusPeanut")}>Fetch List</button> */}
+        </div>
+        <div className="show">
             {/* {console.log("showSelected", showSelected)} */}
             {showSelected[0] !== 0 && showSelected[0] != null //!= 0//.length > 1 //
                 ? <>
+                    {showSelected[0] !== 0
+                        ? <h1 id="animeTitle"> {showSelected[Title]} </h1>
+                        : <></>
+                    }
                     <ShowInfo Show={showSelected} user={user} myList={myList} flag={filterFlag}/>
                 </>
-                : <h2 id="showHeader">Search for a Show in Your List to Begin!</h2>
+                : <h2 id="begin">Search for an Anime to Begin!</h2>
             }
             
             {/* <ShowInfo list={myList} show={myList.shows[51535]} /> */}
-        </div>     
+        </div> 
+        </>    
         // <ShowInfo show={myList.shows[160]} />
         // <ShowInfo show={myList.shows[146]} />
 

@@ -4,7 +4,7 @@ import Home from "./pages/Home";
 import Actor from "./pages/Actor";
 import { Route, Routes } from "react-router-dom";
 import { useCookies } from "react-cookie";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 
 
 function App() {
@@ -58,7 +58,7 @@ function App() {
 					setMyList(str)
 					if (str.length > 0) {
 						setUser(entry)
-						setCookies('acc', user, {path: '/'})
+						setCookies('acc', entry, {path: '/'})
 					}
 				}
 			} catch (error) {
@@ -85,8 +85,9 @@ function App() {
 
 	return (
 		<div className="app">
+			{console.log(cookies)}
 			{/* <h6>{cookies.acc}</h6> */}
-			<div className="userSearchArea">
+			<div id="userSearchArea">
 					<input id="userSearch"
 						type="text"
 						placeholder="MAL Username" 
@@ -102,13 +103,11 @@ function App() {
 				</div>
 			</div>
 			<Navbar username={user}/>
-			<div className="container">
 			<Routes>
 				<Route path="/" element={<Home user={user} myList={myList}/>} />
 				<Route path="/Anime/:id?/:title?" element={<Show user={user} myList={myList}/>} />
 				<Route path="/Actor/:id?" element={<Actor user={user} myList={myList}/>} />
 			</Routes>
-			</div>
 			{/* <button onClick={getData}>Click</button> */}
 		</div>
 	
@@ -118,6 +117,7 @@ function App() {
 		setUser("")
 		setMyList([])
 		setEntry("")
+		setCookies('acc', "", {path: '/'})
 	}
 }
 export default App

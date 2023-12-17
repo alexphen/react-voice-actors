@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import ShowRoleToggle from "../components/ShowRoleToggle";
 
 const   actorName   = 0,
         actorImg    = 1,
@@ -21,6 +20,7 @@ export default function Actor({user, myList}) {
     const [names, setNames] = useState([]);
     const [ids, setIds]     = useState([]);
     const [keyword, setKeyword] = useState('');
+    
     var filterFlag = user.length > 0;
     // console.log(actor)
 
@@ -64,7 +64,7 @@ export default function Actor({user, myList}) {
         for (let i in actorData) {
             actorData[i] = Object.values(actorData[i])
         }
-        console.log(actorData[0][actorID], actorData[0][actorName], actorData[0][actorImg])
+        // console.log(actorData[0][actorID], actorData[0][actorName], actorData[0][actorImg])
         setActor([actorData[0][actorID], actorData[0][actorName], actorData[0][actorImg], actorData[0][aFavs]]);
         setRoles(actorData)
         // console.log(actorData);
@@ -110,47 +110,43 @@ export default function Actor({user, myList}) {
     }
 
     return (
+        <><div className="actorSearchSide">
+            <input
+                id="actorSearch"
+                className="search"
+                type="search"
+                placeholder="Search Actor"
+                autoComplete="off"
+                onChange={(e) => getSearchData(e.target.value)}
+                value={keyword} />
+            <div className="results">
+                {/* Display 10 filtered results. Change Show on click */}
+                {names.slice(0,10).map((name, index) => (
+                    <Link to={`/Actor/${ids[index]}/`} className="resBox">{name}</Link>
+                ))}
+            </div>
+        </div>
         <div className="actorPage">
             {actor[0] > 0
                 ? <> 
-                {/* {console.log(roles)} */}
                 {combineRoles()}
-                {/* {console.log(roles)} */}
                 {bubbleSort()} 
-                {/* {console.log(actor)} */}
                 <div className="actorRoles">
                     {roles.map((role, n) => 
                         <div className="actorRole">
                             <img src={role[charImg]}></img>
-                            <div className="info">
-                                <h3>{role[charName] + " (" + role[favorites] + " Favorites)"}</h3>
-                                {role[title].map((title, n) =>
-                                    <div key={n}>
-                                        <Link to={`/Anime/${role[showID][n]}/${title}`}>{title}</Link>
-                                    </div>
-                                )}
-                            </div>
+                                <div className="info">
+                                    <h3>{role[charName] + " (" + role[favorites] + " Favorites)"}</h3>
+                                    <Link to={`/Anime/${role[showID][n]}/${role[title][0]}`} className="actorInfoTitle">{role[title][0]}</Link>
+                                    {/* IF MAPPING ALL ROLES ↓ */}
+                                    {/* {role[title].map((title, n) =>
+                                        <Link to={`/Anime/${role[showID][n]}/${title}`} key={n} className="actorInfoTitle">{title}</Link>
+                                    )} */}
+                                </div>
                         </div>
                     )}
                 </div>
                 <div id="actorRightPane">
-                    <div className="searchSide">
-                        <input
-                            id="Search"
-                            type="search"
-                            placeholder="Search Actor"
-                            autoComplete="off"
-                            onChange={(e) => getSearchData(e.target.value)}
-                            value={keyword} />
-                        <div className="results">
-                            {/* Display 10 filtered results. Change Show on click */}
-                            {/* {console.log(names)} */}
-                            {names.slice(0,10).map((name, index) => (
-                                <Link to={`/Actor/${ids[index]}/`} className="resBox">{name}</Link>
-                            ))}
-                        </div>
-                        {/* <button onClick={() => fetchList("RufusPeanut")}>Fetch List</button> */}
-                    </div>
                     <div className="actorInfo">
                         <h1>{actor[1]}</h1>
                         <img className="actorImg" src={actor[2]}></img>
@@ -158,28 +154,10 @@ export default function Actor({user, myList}) {
                     </div>
                 </div>
                 </>
-                : <><div id="actorRightPane">
-                    <div className="searchSide">
-                        <input
-                            id="Search"
-                            type="search"
-                            placeholder="Search Actor"
-                            autoComplete="off"
-                            onChange={(e) => getSearchData(e.target.value)}
-                            value={keyword} />
-                        <div className="results">
-                            {/* Display 10 filtered results. Change Show on click */}
-                            {console.log(names)}
-                            {names.slice(0,10).map((name, index) => (
-                                <Link to={`/Actor/${ids[index]}/`} className="resBox">{name}</Link>
-                            ))}
-                        </div>
-                        {/* <button onClick={() => fetchList("RufusPeanut")}>Fetch List</button> */}
-                    </div>
-                </div>
+                : <><h2 id="begin">Search for an Actor to Begin!</h2>
                 </>
             }
-        </div>
+        </div></>
     )
 
     function combineRoles() {

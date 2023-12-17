@@ -154,13 +154,9 @@ function next() {
     
     return ( 
         
-        <div className="roleGallery">
-            <div className="roleActor">
-                <h3>
-                    <Link to={`/Actor/${actorID}`}>{actorName}</Link>
-                </h3>
-            </div>
-            <div>
+        <div className="roleGallery">          
+            <Link id="roleActor" to={`/Actor/${actorID}`}>{actorName}</Link>
+            <div id="roleInner">
                 {pos < roleReturn.length
                     ? <>{handleRoles()}
                     <img src={roleReturn[pos][ImageURL]} alt={roleReturn[pos][CharName]} />
@@ -180,27 +176,28 @@ function next() {
                         }
                     </div>
                     <h4>{roleReturn[String(pos)][CharName]}</h4>
-                    <div id="topTitle">
-                        <Link to={`/Anime/${roleReturn[pos][ShowID][0]}/${roleReturn[pos][Title][0]}`}>{roleReturn[pos][Title][0]}</Link>
-                    </div>
+                    <Link to={`/Anime/${roleReturn[pos][ShowID][0]}/${roleReturn[pos][Title][0]}`} id="topTitle">{roleReturn[pos][Title][0]}</Link>
+                    <div>
                     {roleReturn[pos][Title].length > 1
                         ?<><div id="moreTitles">•••</div>
                         <div className="showsList">
                             {roleReturn[pos][Title] ?
                             <>
                             {roleReturn[pos][Title].map((title, n) => 
-                                <div className="altTitles" key={n}>
-                                    {n > 0
-                                        ?<Link to={`/Anime/${roleReturn[pos][ShowID][n]}/${title}`}>{title}</Link>
-                                        :<></>
-                                    }
-                                </div>
+                                <Link to={`/Anime/${roleReturn[pos][ShowID][n]}/${title}`} key={n} className="altTitles">{title}</Link>
+                                // <div className="altTitles" key={n}>
+                                //     {n > 0
+                                //         ?<Link to={`/Anime/${roleReturn[pos][ShowID][n]}/${title}`}>{title}</Link>
+                                //         :<></>
+                                //     }
+                                // </div>
                             )}</>
                                 : <></>
                             }
                         </div></>
                         : <></>
                     }
+                    </div>
                     </>
                     : <>
                         {/* <img src={actorImg} alt={actorName}></img> */}
