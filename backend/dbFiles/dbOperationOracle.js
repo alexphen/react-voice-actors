@@ -106,7 +106,7 @@ const getActorFull = async(actID, myList, flag) => {
                                                     INNER JOIN Anime ON Roles.ShowID=Anime.ShowID
                                                     WHERE Actors.ActorID='${actID}' 
                                                         AND Anime.ShowID IN ${myList}
-                                                    ORDER BY Roles.Favorites`);
+                                                    ORDER BY Roles.Favorites DESC, Anime.POPULARITY`);
             return res;
         }
         else{
@@ -114,7 +114,7 @@ const getActorFull = async(actID, myList, flag) => {
                                                 INNER JOIN Roles ON Roles.ActorID=Actors.ActorID
                                                 INNER JOIN Anime ON Roles.ShowID=Anime.ShowID
                                                 WHERE Actors.ActorID='${actID}'
-                                                ORDER BY Roles.Favorites`);
+                                                ORDER BY Roles.Favorites DESC, Anime.POPULARITY`);
             return res;
         }
         // console.log(res);
@@ -197,7 +197,7 @@ const getHomeData = async(flag, myList) => {
                                         INNER JOIN Actors ON Roles.ActorID=Actors.ActorID
                                         INNER JOIN Anime ON Roles.ShowID=Anime.ShowID
                                         WHERE Anime.ShowID IN ${myList}
-                                        ORDER BY Actors.aFavs
+                                        ORDER BY Actors.aFavs DESC
                                         FETCH FIRST 20 ROWS ONLY`);
             return res;
         } else {

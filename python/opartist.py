@@ -2,8 +2,10 @@ import requests
 import json
 import time
 import voiceactors as VA
+from decouple import config
 
-CLIENT_ID = '5dbcd29b3178e6d62ec7ecf17b4daf56'
+CLIENT_ID = config('MAL_CLIENT_ID')
+CLIENT_SECRET = config('MAL_CLIENT_SECRET')
 
 class ArtistsList() :
     def __init__(self) :
