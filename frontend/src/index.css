@@ -960,7 +960,7 @@ a {
 
 /* /////////////////////////////// */
 
-  /* ACTOR PAGE */
+  /* DESKTOP ACTOR PAGE */
 
 .actorPage {
   position: relative;
@@ -1014,6 +1014,7 @@ a {
   position: relative;
   text-align: left;
   right: 0;
+  background-color: #202025;
   border: #f1356d ridge .25vw;
   border-radius: 1vw;
   margin: .1vw;
@@ -1022,12 +1023,15 @@ a {
   cursor: pointer;
   text-decoration: none;
 }
+#actorRightPane {
+  width: 100%;
+}
 .actorInfo {
   position: fixed;
   display: flex;
   flex-direction: column;
-  width: 25%;
-  left: 70% ;
+  width: 30%;
+  right: 1vw;
   top: 30%;
   font-size: 1.6vh;
   text-align: center;
@@ -1039,8 +1043,9 @@ a {
 .actorImg {
   display: flex;
   align-self: center;
-  width: 15vh;
+  width: 50%;
 }
+/* 
 .actorRoles {
   margin-top: 1vh;
   margin-bottom: 30vh;
@@ -1060,15 +1065,35 @@ a {
 .actorRoles img {
   width: 15vh;
   height: 23.3vh;
-  /* width: 225px; */
-  /* height: 350px; */
+} */
+.actorRoles {
+  margin-top: 1vw;
+  margin-bottom: 30vw;
+  margin-left: 2vw;
+  gap: 1vw;
+  width: 200%;
+  display: flex;
+  align-content: flex-start;
+  flex-wrap: wrap;
+}
+.actorRole {
+  /* height: 23.3vh; */
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.actorRoles img {
+  /* width: 15vh;
+  height: 23.3vh; */
+  width: 225px;
+  height: 350px;
 }
 .info {
   display: none;
   margin: auto;
   padding: 10px;
-  top: 23.3vh;
-  min-width: 20vw;
+  top: 350px;
+  /* min-width: 20vw; */
   border-radius: 1vh;
   z-index: 2;
   position: absolute;

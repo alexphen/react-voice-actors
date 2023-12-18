@@ -39,7 +39,7 @@ export default function Show({user, myList}) {
             var tRes = [];
 
             const searchData = await fetch ('/api/search', {
-                method: 'GET',
+                method: 'POST',
                 headers: {
                   'content-type': 'application/json',
                   'Accept': 'application/json'

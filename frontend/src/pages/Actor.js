@@ -67,7 +67,7 @@ export default function Actor({user, myList}) {
         // console.log(actorData[0][actorID], actorData[0][actorName], actorData[0][actorImg])
         setActor([actorData[0][actorID], actorData[0][actorName], actorData[0][actorImg], actorData[0][aFavs]]);
         setRoles(actorData)
-        // console.log(actorData);
+        console.log(actorData);
     }
 
     const getSearchData = async(keyword) => {
@@ -122,7 +122,7 @@ export default function Actor({user, myList}) {
             <div className="results">
                 {/* Display 10 filtered results. Change Show on click */}
                 {names.slice(0,10).map((name, index) => (
-                    <Link to={`/Actor/${ids[index]}/`} className="resBox">{name}</Link>
+                    <Link to={`/Actor/${ids[index]}/`} className="resBox" key={name}>{name}</Link>
                 ))}
             </div>
         </div>
@@ -179,7 +179,7 @@ export default function Actor({user, myList}) {
             for (let p = i + 1; p < roles.length; p++) {
                 if(roles[i][charID] === roles[p][charID]) {
                     // console.log(currRoleShowIDs)
-                    currRoleShowIDs.push(roles[p][showID].value);
+                    currRoleShowIDs.push(roles[p][showID]);
                     currRoleTitles.push(roles[p][title]);
                     // console.log(currRoleTitles)
                     roles.splice(p, 1);
@@ -192,6 +192,7 @@ export default function Actor({user, myList}) {
             }
             roles[i][showID] = currRoleShowIDs;
             roles[i][title] = currRoleTitles;
+            console.log(roles[i])
         }
         // console.log(roles)
     }
