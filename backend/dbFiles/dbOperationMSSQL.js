@@ -1,6 +1,7 @@
 const   {poolPromise} = require('./dbConfig'),
         MAL           = require('myanimelist-api-wrapper'),
-        sql           = require('mssql');
+        sql           = require('mssql'),
+        env           = require('../dotenv.js');
 
 
 const getAnime = async(title) => {
@@ -212,7 +213,7 @@ const getMAL = async(Username) => {
         
     try {
         res = list({
-            client_id: '5dbcd29b3178e6d62ec7ecf17b4daf56',
+            client_id: env.MAL_CLIENT_ID,
             user_name: Username,
             limit: 1000
         }).get_animelist()()

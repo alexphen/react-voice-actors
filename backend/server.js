@@ -7,16 +7,18 @@ const exp           = require('constants'),
       MAL           = require("myanimelist-api-wrapper"),
       sql           = require('mssql'),
       dbConfig      = require('./dbFiles/dbConfig');
-const { config }    = require('process');
 
 const API_PORT = process.env.PORT || 3000;
-const app = express();
+const app = express(),
+      staticServe = express.static('build');
 let client;
 let session;
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(cors());
-app.use(express.static('build'))
+app.use("/", staticServe);
+app.use("*", staticServe);
+// app.use(express.static('build'))
 
 
 // OracleDB Initialization
@@ -56,7 +58,6 @@ async function init() {
 }
 
 init();
-
 
 
 app.post('/api/actor', async(req, res) => {
@@ -164,6 +165,11 @@ app.post('/api/show', async(req, res) => {
         
     }
 })
+
+
+// dbOperation.getMAL("RufusPeanut").then(res => {
+//     console.log("res", res);
+// })
 
 // dbOperation.getActor(1).then(res => {
 //     console.log("manual call")

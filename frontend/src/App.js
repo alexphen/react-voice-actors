@@ -85,8 +85,6 @@ function App() {
 
 	return (
 		<div className="app">
-			{console.log(cookies)}
-			{/* <h6>{cookies.acc}</h6> */}
 			<div id="userSearchArea">
 					<input id="userSearch"
 						type="text"
@@ -104,9 +102,9 @@ function App() {
 			</div>
 			<Navbar username={user}/>
 			<Routes>
-				<Route path="/" element={<Home user={user} myList={myList}/>} />
 				<Route path="/Anime/:id?/:title?" element={<Show user={user} myList={myList}/>} />
 				<Route path="/Actor/:id?" element={<Actor user={user} myList={myList}/>} />
+				<Route path="/" element={<Home user={user} myList={myList}/>} />
 			</Routes>
 			{/* <button onClick={getData}>Click</button> */}
 		</div>

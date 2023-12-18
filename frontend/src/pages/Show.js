@@ -11,7 +11,6 @@ const   ShowID      = 0,
 
 export default function Show({user, myList}) {
     
-    // const CLIENT_ID = '5dbcd29b3178e6d62ec7ecf17b4daf56'
     const { id, title } = useParams();
     const [keyword, setKeyword] = useState('');
     const [shows, setShows] = useState([]);
@@ -40,7 +39,7 @@ export default function Show({user, myList}) {
             var tRes = [];
 
             const searchData = await fetch ('/api/search', {
-                method: 'POST',
+                method: 'GET',
                 headers: {
                   'content-type': 'application/json',
                   'Accept': 'application/json'
