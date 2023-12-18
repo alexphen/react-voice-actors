@@ -1,5 +1,7 @@
 const   MAL           = require('myanimelist-api-wrapper'),
-        oracledb      = require('oracledb');
+        oracledb      = require('oracledb'),
+        process       = require("process"),
+        env        = require('../dotenv.js');
 
 
 const getAnime = async(title) => {
@@ -293,9 +295,9 @@ const getShowActors = async(showID, flag) => {
                                             INNER JOIN Actors ON Roles.ActorID=Actors.ActorID
                                             WHERE Roles.ShowID=${showID}
                                             AND Roles.Favorites IN (SELECT MAX(Roles.Favorites)
-                                                                FROM Roles
-                                                                WHERE ShowID=${showID}
-                                                                GROUP BY ActorID)
+                                                                        FROM Roles
+                                                                        WHERE ShowID=${showID}
+                                                                        GROUP BY ActorID)
                                             ORDER BY Roles.Favorites DESC`);
         return res;
     }
@@ -312,48 +314,49 @@ const getShowActors = async(showID, flag) => {
     }
 }
 
-const setList = async(ids) => {
-    let connection = await oracledb.getConnection();
-    try {
-        let str = "("
-        for (let i in ids) {
-            str += ids[i] + ","
-        }
-        str = str + ") done"
-        // console.log(str)
+// const setList = async(ids) => {
+//     let connection = await oracledb.getConnection();
+//     try {
+//         let str = "("
+//         for (let i in ids) {
+//             str += ids[i] + ","
+//         }
+//         str = str + ") done"
+//         // console.log(str)
         
-        // let res = connection.execute(`SELECT * FROM Anime WHERE ShowID IN ${str}`);
-        return str;
+//         // let res = connection.execute(`SELECT * FROM Anime WHERE ShowID IN ${str}`);
+//         return str;
 
 
-        // connection.execute(`TRUNCATE TABLE MyList`);
-        // for(let i in ids) {
-        //     connection.execute(`INSERT INTO MyList(ListShowID) VALUES (${ids[i]})`);
-        //     connection.commit();
-        // }                   
-        return true;                                                  
-    } catch (error) {
-        console.log(error)
-        return false;
-    } finally {
-        if (connection) {
-          try {
-            await connection.close(); // Put the connection back in the pool
-          } catch (err) {
-              throw (err);
-          }
-        }
-    }
-}
+//         // connection.execute(`TRUNCATE TABLE MyList`);
+//         // for(let i in ids) {
+//         //     connection.execute(`INSERT INTO MyList(ListShowID) VALUES (${ids[i]})`);
+//         //     connection.commit();
+//         // }                   
+//         return true;                                                  
+//     } catch (error) {
+//         console.log(error)
+//         return false;
+//     } finally {
+//         if (connection) {
+//           try {
+//             await connection.close(); // Put the connection back in the pool
+//           } catch (err) {
+//               throw (err);
+//           }
+//         }
+//     }
+// }
 
 const getMAL = async(Username) => {
     const anime = MAL().anime;
     const list = MAL().user_animelist;
     var res;
+    console.log("test", env.MAL_CLIENT_ID)
         
     try {
         res = list({
-            client_id: '5dbcd29b3178e6d62ec7ecf17b4daf56',
+            client_id: env.MAL_CLIENT_ID,
             user_name: Username,
             limit: 1000
         }).get_animelist()()
@@ -361,7 +364,7 @@ const getMAL = async(Username) => {
         return res;
     }
     catch(error) {
-        console.log(typeof(error));
+        // console.log(error);
     }
 }
 
@@ -377,6 +380,5 @@ module.exports = {
     getSearchActorData,
     getSearchData,
     getShowActors,
-    getRoles,
-    setList
+    getRoles
 }

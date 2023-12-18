@@ -9,12 +9,15 @@ import opartist as OP
 import urllib.request
 from PIL import ImageTk, Image
 import time
+from decouple import config
+
+CLIENT_ID = config('MAL_CLIENT_ID')
+CLIENT_SECRET = config('MAL_CLIENT_SECRET')
 
 myList = VA.VoiceActorsWrapper()
 masterList = VA.VoiceActorsWrapper()
 MasterOPs = OP.ArtistsList()
 myList.OPs = OP.ArtistsList()
-CLIENT_ID = '5dbcd29b3178e6d62ec7ecf17b4daf56'
 
 def Window() :
     def __init__(self, master) :

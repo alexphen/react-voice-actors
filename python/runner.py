@@ -3,8 +3,10 @@ import requests
 import voiceactors as VA
 import opartist as OP
 import json
+from decouple import config
 
-CLIENT_ID = '5dbcd29b3178e6d62ec7ecf17b4daf56'
+CLIENT_ID = config('MAL_CLIENT_ID')
+CLIENT_SECRET = config('MAL_CLIENT_SECRET')
 myList = VA.VoiceActorsWrapper()
 myList.OPs = OP.ArtistsList()
 masterList = VA.VoiceActorsWrapper()
@@ -48,62 +50,6 @@ for i in parsed_master["OPs"]["artists"] :
 
 master_json.close()
 
-# for ID in masterList.actors :
-    #  actor = masterList.actors[ID]
-    #  for role in masterList.actors[ID].roles :
-    #       actor.charIDs.append(role.charID)
-
-
-    # actor = masterList.actors[ID]
-    # if actor.img == "" :
-    #     # print (actor)
-    #     trying = True
-    #     attempts = 0
-    #     while trying :
-    #             try :
-    #                 url = 'https://api.jikan.moe/v4/people/' + str(ID)
-    #                 response = requests.get(url, headers = {
-    #                     'X-MAL-CLIENT-ID': CLIENT_ID
-    #                     })
-
-    #                 response.raise_for_status()
-    #                 actJSON = response.json()
-
-    #                 actor.img = actJSON["data"]["images"]["jpg"]["image_url"]
-    #                 print(actor)
-    #                 print(actor.img)
-    #             except :
-    #                 # print("Exception at gui.vaParse")
-    #                 if attempts == 20 :
-    #                     anime = dict()
-    #                     trying = False
-    #                 else :
-    #                     time.sleep(0.1)
-    #                 attempts+= 1
-    #             else :
-    #                 trying = False
-    
-
-
-
-# with open('temp2.json', 'w') as f :
-#         outJSON = json.dumps(masterList, indent=4, cls=VA.ActorEncoder)
-#         f.write(outJSON)
-
-
-
-
-
-# except Exception as err:
-#     print(f"Unexpected {err=}, {type(err)=}")
-#     print("err at master")
-
-# gui.vaParse(30, '5dbcd29b3178e6d62ec7ecf17b4daf56', 'Neon Genesis Evangelion', 'https://cdn.myanimelist.net/images/anime/1314/108941.jpg')
-
-# print(masterList.actors)
-
-# for i in masterList.shows :
-#     print(masterList.shows[i]["title"])
 
 for showID in masterList.showIDs :
     print (masterList.shows[str(showID)])

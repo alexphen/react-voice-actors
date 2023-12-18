@@ -5,12 +5,10 @@ import time
 import oracledb
 from PIL import Image
 import urllib.request
+from decouple import config
 
-# myList = VA.VoiceActorsWrapper()
-# masterList = VA.VoiceActorsWrapper()
-# MasterOPs = OP.ArtistsList()
-# myList.OPs = OP.ArtistsList()
-CLIENT_ID = '5dbcd29b3178e6d62ec7ecf17b4daf56'
+CLIENT_ID = config('MAL_CLIENT_ID')
+CLIENT_SECRET = config('MAL_CLIENT_SECRET')
 
 # conn = pyodbc.connect('Driver={SQL Server};'
 #                       'Server=ALEXPC\SQLEXPRESS;'
@@ -598,7 +596,7 @@ def fixActorImg() :
 
 # print(noQuote("house's"))
 
-fixCharImgs()
+# fixCharImgs()
 
 # cursor.execute(f'''UPDATE Roles
 #                     Set CharImg = 'https://cdn.myanimelist.net/images/characters/15/339171.jpg'
@@ -623,3 +621,38 @@ fixCharImgs()
 # print(res)
 
 
+cursor.execute('''SELECT Roles.CharID, Roles.CharImg, Roles.CharName, Roles.ShowID, Anime.Title FROM Roles
+                  INNER JOIN Anime on Anime.ShowID=Roles.ShowID
+                        WHERE LOWER(Anime.Title) LIKE \'%attack on titan%\'''')
+res = cursor.fetchall()
+for i in res :
+    trying = True
+    attempts = 0
+    url = f'''https://api.jikan.moe/v4/characters/{i[0]}'''
+    while trying :
+        try :
+            response = requests.get(url, headers = {
+                'X-MAL-CLIENT-ID': CLIENT_ID
+                })
+            response.raise_for_status()
+            character = response.json()
+            response.close()
+        except :
+            # print("Exception at gui.vaParse")
+            if attempts == 20 :
+                character = dict()
+                trying = False
+            else :
+                time.sleep(0.1)
+            attempts+= 1
+        else :
+            trying = False
+    
+    imgurl = character["data"]["images"]["jpg"]["image_url"]
+    # print(imgurl)
+    if i[1] != imgurl :
+        cursor.execute(f'''UPDATE Roles
+                            Set CharImg = '{imgurl}'
+                            WHERE CharID = {i[0]}''')
+        conn.commit()
+        print(f'''updated {i[2]}'s img''')
