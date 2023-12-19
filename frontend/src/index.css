@@ -315,6 +315,13 @@ a {
     width: 95%;
     padding: 2vw;
   }
+  .homeInfo {
+    position: relative;
+    top: 6vh;
+  }
+  .tips {
+    display: none;
+  }
   .home .viewer {
     display: flex;
     flex-direction: column-reverse;
