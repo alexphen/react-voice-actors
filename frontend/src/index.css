@@ -50,7 +50,7 @@ a {
   }
   .roleGallery img {
     width: 225px;
-    height: 326px;
+    height: 350px;
     margin: auto;
     align-self: center;
   }
@@ -161,6 +161,8 @@ a {
 
 .results {
   display: none;
+  position: absolute;
+  top: 5vh;
   flex-direction: column;
   font-size: 1.75vh;
   width: 27vh;
@@ -192,15 +194,16 @@ a {
   /* MOBILE NAV BAR COMPONENTS */ 
   .nav {
     position: -webkit-sticky; /* Safari */
-    /* position: sticky; */
+    position: relative;
     background-color: #44444c;
     display: flex;
     justify-content: space-between;
     align-items: stretch;
     z-index: 10;
     height: 7vh;
-    top: 0;
-    border: .2vw solid #f2f2f2;
+    top: 6vh;
+    border-top: .2vw solid #f2f2f2;
+    border-bottom: .2vw solid #f2f2f2;
   }
   .nav a {
     /* margin-left: 16px; */
@@ -244,14 +247,18 @@ a {
   }
   #userSearchArea {
     display: flex;
-    padding: 1vh;
+    top: -6vh;
+    position: absolute;
+    padding: 1vh 0;
     height: 4vh;
+    width: 100%;
     align-items: stretch;
     justify-content: space-between;
   }
   #userSearch {
     position: relative;
     display: flex;
+    width: 18vh;
     z-index: 11;
     font-size: 2vh;
     color: #202025;
@@ -260,6 +267,9 @@ a {
     padding: 0vw 0vw 0vw .75vh;
     border-width: .2vh;
     border-radius: 1vh;
+  }
+  #userSearchInputs {
+    display: flex;
   }
   #userSearchButton {
     position: relative;
@@ -273,21 +283,24 @@ a {
     padding: 0 1vw 0 1vw;
   }
   #filter {
-    font-size: 1vh;
+    font-size: 1.2vh;
   }
   #unfilter {
     /* height: 2vh; */
     border-width: .1vh;
-    font-size: 1vh;
+    font-size: 1.2vh;
     background-color: rgb(105, 105, 105);  
-    padding: .1vh;
+    margin-top: .5vh;
+    padding: .3vh;
   }
   #filterLabel {
     gap: 0;
-    /* position: fixed; */
+    width: 16vh;
     align-items: stretch;
-    height: 3vw;
-    /* left: 25%; */
+    text-align: center;
+    justify-content: center;
+    /* margin-left: 2vh; */
+    margin-right: 1vh;
     display: flex;
     z-index: 11;
     flex-direction: column;
@@ -362,11 +375,12 @@ a {
     height: 100%;
   }
   .animeSearchSide {
-    position: absolute;
+    position: relative;
+    align-self: end;
     display: flex;
     flex-direction: column;
     right: 0px;
-    top: 15vh;
+    /* top: 15vh; */
     z-index: 1;
   }
   #animeSearch {
@@ -374,7 +388,7 @@ a {
     top: 0;
     height: 5vh;
     width: 29vh;
-    margin-right: 1vh;
+    margin: 0 1vh 3vh 0;
     font-size: 3vh;
     border-width: .25vw;
     border-radius: 1vw;
@@ -395,7 +409,7 @@ a {
     /* display: flex; */
     text-align: center;
     padding: 20px;
-    padding-top: 10vh;
+    /* padding-top: 10vh; */
     font-size: 5vh;
     justify-content: center;
   }
@@ -422,7 +436,7 @@ a {
     flex-wrap: wrap;
     margin-left: auto;
     margin-right: auto;
-    padding-top: 50px;
+    padding-top: 20px;
     gap: 0;
     max-width: 90%;
     padding-bottom: 100px;
@@ -465,7 +479,7 @@ a {
   /* justify-content: start; */
   gap: 25px;
   background-color: #202025;
-  top: 0;
+  top: 6vh;
   /* min-height: 100vh; */
   height: 100%;
 }  
@@ -475,7 +489,7 @@ a {
   flex-direction: column;
   align-items: start;
   right: 0px;
-  top: 15vh;
+  top: 2.5vh;
   z-index: 1;
 }
 #actorSearch {
@@ -504,6 +518,10 @@ a {
   /* margin-left: auto;
   margin-right: auto; */
   align-items: center;
+}
+.actorInfoTitle {
+  text-align: center;
+  font-size: 1.5em;
 }
 .actorImg {
   display: flex;
@@ -538,10 +556,6 @@ a {
   flex-direction: column;
   /* max-width: 40vw; */
 }
-.actorInfoTitle {
-  padding: 10px;
-  text-align: end;
-}
 .actorRole img:hover {
   box-shadow: 0vh 0vh 1vh .5vh  #f1356d;
 }
@@ -568,7 +582,7 @@ a {
     background-color: #4b4b52;
   }
   #begin {
-    margin: 5vw;
+    margin: 5vw 5vw 0 5vw;
     font-size: 2.8vw;
   }
   #roleActor {
@@ -633,6 +647,7 @@ a {
     justify-content: space-between;
   }
   .selectionDots {
+    display: flex;
     flex: auto;
     font-size: 25px;
     text-align: center;
@@ -641,9 +656,9 @@ a {
     padding-left: .3vw;
     padding-right: .3vw;
   }
-  .selectionDots .index {
+  .index {
     /* text-align: end; */
-    font-size: 19px;
+    font-size: 14px;
     display: flex;
     flex-direction: row-reverse;
     margin-right: .5vw;
@@ -707,7 +722,7 @@ a {
   .nav ul {
     padding: 0;
     margin: 0;
-    height: 100%;
+    /* height: 100%; */
     list-style: none;
     display: flex;
   }
@@ -738,10 +753,14 @@ a {
   }
   #filterLabel {
     gap: 0;
-    position: fixed;
+    position: relative;
     align-items: stretch;
+    text-align: center;
+    width: fit-content;
     height: 3vw;
-    left: 25%;
+    width: 15vw;
+    margin-right: 2vw;
+    /* left: 25%; */
     display: flex;
     z-index: 11;
     flex-direction: column;
@@ -750,6 +769,12 @@ a {
     display: flex;
     flex-direction: row;
     gap: 4vw;
+    left: 0;
+  }
+  #navPages {
+    right: 0;
+    width: 42vw;
+    align-items: stretch;
   }
   .nav li.active {
     background-color: #555;
@@ -763,48 +788,51 @@ a {
     text-decoration: none;
     font-size: 1.5vw;
     height: 100%;
-    padding: .11vw 2vw;
+    padding: 0 2vw;
     display: flex;
     text-align: center;
   }
   .nav a:hover {
     color: #f1356d;
   }
-
-  
   #userSearchArea {
     display: flex;
     position: relative;
     flex-direction: row;
     padding: 0vh;
-    height: 0vh;
+    width: 100%;
+    /* height: 0vh; */
     align-items: stretch;
     justify-content: space-between;
   }
-  #userSearch {
-    position: fixed;
+  #userSearchInputs {
     display: flex;
-    left: 38%;
+    position: relative;
+    left: 10vw;
+  }
+  #userSearch {
+    /* position: fixed; */
+    display: flex;
+    /* left: 38%; */
     z-index: 11;
     font-size: 2vw;
-    height: 2vw;
+    /* height: 2vw; */
     top: .25vw;
     padding: 0vw 0vw 0vw .25vw;
     border-width: .2vw;
   }
   #userSearchButton {
-    position: fixed;
+    position: relative;
     z-index: 11;
     font-size: 1.5vw;
-    left: 60%;
     background-color: rgb(105, 105, 105);  
-    height: 3vw;
-    border-width: .3vw;
+    border-width: .2vw;
+    /* border-radius: 1vw; */
     padding: 0 1vw 0 1vw;
   }
 
 
-  /* HOME PAGE */
+  /* DESKTOP HOME PAGE */
 
   
   .home {
@@ -812,17 +840,50 @@ a {
     width: 100%;
     padding: 2vw;
   }
+  .homeInfo {
+    display: flex;
+    flex-direction: column;
+  }
+  .tips {
+    margin-top: 100px;
+  }
   .home .viewer {
     display: flex;
-    position: fixed;
-    right: 0;
+    /* position: fixed; */
+    /* right: 0; */
     margin: auto;
     /* align-self: flex-end; */
-    padding: 50px 4vw;
+    padding: 0 4vw 50px 4vw;
+  }
+  .home .roleGallery img {
+    width: 337.5px;
+    height: 525px;
+  }
+  .home .imgNav {
+    align-items: center;
+  }
+  .home .roleGallery h4 {
+    font-size: 50px;
+  }
+  .home #topTitle {
+    font-size: 28px;
+  }
+  .home .selectionDots {
+    font-size: 50px;
+  }
+  .home .index {
+    font-size: 16px;
+  }
+  .home #roleActor {
+    width: 337.5px;
+    font-size: 2em;
+  }
+  .home #roleInner {
+    width: 337.5px;
   }
   .homeActorImg {
-    width: 200px;
-    height: 310px;
+    width: 225px;
+    height: 350px;
     padding: 1vw;
     padding-top: 3vw;
     flex-direction: column-reverse;
@@ -875,11 +936,12 @@ a {
     justify-content: center;
   }
   .animeSearchSide {
-    position: absolute;
+    position: relative;
+    align-self: end;
     display: flex;
     flex-direction: column;
     right: 0px;
-    top: 5vw;
+    /* top: 15vw; */
     z-index: 1;
   }
   #animeSearch {
@@ -889,7 +951,7 @@ a {
     border-width: .25vw;
     border-radius: 1vw;
     color: white;
-    margin: 0 1vw;
+    margin: 0 1vw 1vw 1vw;
     padding-left: 1vw;
   }
   .show .header h1 {
@@ -965,17 +1027,18 @@ a {
 .actorPage {
   position: relative;
   display: flex;
+  /* flex-direction: column; */
   background-color: #202025;
   top: 0;
   /* min-height: 100vh; */
   height: 100%;
 }
 .actorSearchSide {
-  position: absolute;
+  position: fixed;
   display: flex;
   flex-direction: column;
   right: 0px;
-  top: 5vw;
+  top: 11.62vw;
   z-index: 1;
 }
 #actorSearch {
@@ -992,28 +1055,24 @@ a {
   padding: 1vw;
 }
 .results {
-  display: none
+  position: absolute;
+  display: none;
+  margin: 0 1vw;
+  right: 0px;
+  top: 3vw;
+  flex-direction: column;
+  font-size: 1.75vw;
 }
 .search:focus + .results {
-  margin: 0 1vw;
-  right: 0px;
-  top: 0px;
   display: flex;
-  flex-direction: column;
-  font-size: 1.75vw;
 }
 .results:hover {
-  margin: 0 1vw;
-  right: 0px;
-  top: 0px;
   display: flex;
-  flex-direction: column;
-  font-size: 1.75vw;
 }
 .resBox {
-  position: relative;
+  /* position: relative; */
   text-align: left;
-  right: 0;
+  /* right: 0; */
   background-color: #202025;
   border: #f1356d ridge .25vw;
   border-radius: 1vw;
@@ -1024,15 +1083,15 @@ a {
   text-decoration: none;
 }
 #actorRightPane {
-  width: 100%;
+  /* width: 100%; */
 }
 .actorInfo {
   position: fixed;
   display: flex;
   flex-direction: column;
-  width: 30%;
+  width: 25%;
   right: 1vw;
-  top: 30%;
+  top: 18vw;
   font-size: 1.6vh;
   text-align: center;
   /* margin-left: -300px; */
@@ -1043,7 +1102,7 @@ a {
 .actorImg {
   display: flex;
   align-self: center;
-  width: 50%;
+  width: 40%;
 }
 /* 
 .actorRoles {
@@ -1071,7 +1130,7 @@ a {
   margin-bottom: 30vw;
   margin-left: 2vw;
   gap: 1vw;
-  width: 200%;
+  width: 70%;
   display: flex;
   align-content: flex-start;
   flex-wrap: wrap;
@@ -1101,8 +1160,9 @@ a {
   /* max-width: 40vw; */
 }
 .actorInfoTitle {
-  padding: 10px;
+  padding: 1vw;
   text-align: end;
+  font-size: 1.5vw;
 }
 .actorRole img:hover {
   box-shadow: 0vh 0vh 1vh .5vh  #f1356d;

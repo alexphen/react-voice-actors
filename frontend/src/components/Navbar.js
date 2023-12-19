@@ -8,31 +8,6 @@ const Navbar = ({ username }) => {
     const [myList, setMyList]   = useState([]);
 
 
-    useEffect(() => {
-        // setDBList();
-    }, [myList])
-
-
-    const getMALData = async() => {
-        console.log("getting MAL data")
-        const malData = await fetch ('/api/mal', {
-          method: 'POST',
-          headers: {
-            'content-type': 'application/json',
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify({
-            Username: user
-          })
-        })
-        .then(res => res.json());
-        let temp = [];
-        for (let i in malData.data) {
-            temp[i] = malData.data[i].node.id;
-        }
-        setMyList(temp)
-    }
-
     
     // const setDBList = async() => {
     //     const lister = await fetch('/api/list', {
@@ -56,16 +31,8 @@ const Navbar = ({ username }) => {
                 </Link>
             </div>
             <ul>
-                {/* <h6>{user}</h6>
-                <input type="text"
-                    placeholder="MAL Username" 
-                    value={user} 
-                    onChange={(e) => setUser(e.target.value)}></input>
-                <button onClick={() => getMALData({user})}>api test</button> */}
                 <CustomLink to="/Anime/">Anime Search</CustomLink>
                 <CustomLink to="/Actor/">Actor Search</CustomLink>
-                {/* <h3>Sign in to Filter List</h3> */}
-                {/* <input placeholder='Sign in to Filter'></input> */}
             </ul>
         </nav>
     )

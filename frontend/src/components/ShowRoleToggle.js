@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
 import Show from "../pages/Show";
+const _ = require('lodash')
 
 const CharID    = 0;
 const CharName  = 1;
@@ -19,13 +20,39 @@ const ShowRoleToggle = ({actorID, actorName, actorImg, showID, flag, user, myLis
     const [posDot, setPosDot] = useState(pos);
     const [roleReturn, setRoleReturn] = useState([]);
     const [prevActor, setPrevActor] = useState(0);
+    const prevUser = useRef("");
+
     // console.log(user, "in Toggle")
     var filterFlag = user.length > 0;
     // const [roles, setRoles] = useState([]);
     var size;
     // var prevActor;
 
-    // 
+    const usePrevious = (value) => {
+        const ref = useRef()
+        useEffect(() => {
+            console.log("vallue")
+            ref.current = value;
+        }, [value])
+        return ref.current;
+    }
+
+    
+    useEffect(() => {
+        console.log(1, prevUser, 2, user)
+        if (!_.isEqual(prevUser, user)) {
+            console.log("changed")
+            getRoles(actorID)
+            cache = {};
+        }
+        prevUser.current = user
+        // if (!_.isEqual(prevUser, user)) {
+        //     console.log("changed")
+        //     getRoles(actorID)
+        //     cache = {};
+        // }
+    }, [user])
+
     useEffect(() => {
         if (prevActor !== actorID) {
             setPrevActor(actorID);
@@ -36,14 +63,9 @@ const ShowRoleToggle = ({actorID, actorName, actorImg, showID, flag, user, myLis
 
 
     useEffect(() => {
-        // console.log("getting roles 2", actorID)
-        // getRoles(actorID);
-        cache = {};
-    }, [user])
-
-    useEffect(() => {
         restart();
     }, [showID])
+
 
     // useEffect(() => {
     //     getRoles(actorID);
@@ -51,6 +73,7 @@ const ShowRoleToggle = ({actorID, actorName, actorImg, showID, flag, user, myLis
     
     const getRoles = async(actID) => {
         // console.log("ID sent to roles ", actID)
+        // console.log(1, user, 2, prevUser)
         if (cache && cache[actID]) {
             setRoleReturn(cache[actID])
         }
@@ -165,10 +188,11 @@ function next() {
                             ?<button className="roleTogglePrev" onClick={prev}>←</button>
                             :<></>
                         }
-                        <div className="selectionDots">
-                            {arr}
-                            <br></br>
-                            <span className="index"> {pos + 1} of {size} </span>  
+                        <div className="imgNavIndex">
+                            <div className="selectionDots">
+                                {arr}
+                            </div>
+                            <span className="index"> {pos + 1} of {size} </span>
                         </div>
                         {size > 1
                             ?<button className="roleToggleNext" onClick={next}>→</button>

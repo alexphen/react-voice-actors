@@ -23,7 +23,7 @@ const ShowInfo = ({ user, myList, flag }) => {
     const [page, setPage] = useState(0);
     const [perPage, setPerPage] = useState(16);
     const [hasPrev, setHasPrev] = useState(false);
-    const [hasNext, setHasNext] = useState(false); ///////
+    const [hasNext, setHasNext] = useState(true); ///////
     const [keyword, setKeyword] = useState('');
     const [dispActors, setDispActors] = useState([]);
     

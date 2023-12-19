@@ -128,13 +128,15 @@ const Home = ({user, myList}) => {
 
     return ( 
         <div className="home">            
-            <div>
+            <div className="homeInfo">
                 <h2>A tool to display all the works of the voice actors you might know!</h2>
                 <br></br>
                 <h5>Seiyu is a Japanese word for voice actor</h5>
                 <br></br>
                 <h6>All data obtained from <a href="http://MyAnimeList.net" target="_blank" rel="noreferrer">MyAnimeList.net</a></h6>
-                {/* <p>{label}</p> */}
+                <div className="tips">
+                    Tips: <br /> <pre>      To use the site to the fullest, enter your MyAnimeList username above and click "Filter by User" <br></br>      You may navigate the website</pre>
+                </div>
                
             </div>
             <div className="viewer">
