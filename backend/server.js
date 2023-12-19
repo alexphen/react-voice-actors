@@ -76,7 +76,7 @@ app.post('/api/homeActor', async(req, res) => {
     try {
         console.log('Called home actors', req.body.flag);
         const result = await dbOperation.getHomeActors(req.body.flag, req.body.myList)
-        // console.log(result.rows)
+        console.log(result.rows)
         res.send(result.rows);  
         
     } catch (error) {

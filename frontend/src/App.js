@@ -2,15 +2,16 @@ import Navbar from "./components/Navbar";
 import Show from "./pages/Show";
 import Home from "./pages/Home";
 import Actor from "./pages/Actor";
-import { Route, Routes } from "react-router-dom";
+import { Link, useMatch, useResolvedPath } from "react-router-dom"
+import { Route, Routes, useFetcher } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { useState, useEffect } from "react";
 
 
 function App() {
-	const [cookies, setCookies] = useCookies(["acc"])
+	const [cookies, setCookies] = useCookies(["acc", "list"])
 	const [entry, setEntry]  	= useState(cookies.acc || "");
-	const [myList, setMyList] 	= useState([]);
+	const [myList, setMyList] 	= useState(cookies.list || []);
   	const [user, setUser]     	= useState(cookies.acc || "");
 	
 
@@ -18,9 +19,9 @@ function App() {
 	// 	setDBList();
 	// }, [myList])
 
-	useEffect(() => {
-		getMALData()
-	}, [])
+	// useEffect(() => {
+	// 	getMALData()
+	// }, [])
 
 
 	const getMALData = async() => {
@@ -59,6 +60,7 @@ function App() {
 					if (str.length > 0) {
 						setUser(entry)
 						setCookies('acc', entry, {path: '/'})
+						setCookies('list', str, {path: '/'})
 					}
 				}
 			} catch (error) {
@@ -67,6 +69,10 @@ function App() {
 		}
 	}
 
+
+	function userFilter() {
+		getMALData()
+	}
 
 	// const setDBList = async() => {
 	// 	if (myList.length > 0) {
@@ -85,13 +91,26 @@ function App() {
 
 	return (
 		<div className="app">
+			{console.log(cookies)}
+			
+			{/* <Navbar username={user}>
+				<h1>Hello</h1>
+			
+			</Navbar> */}
+			<nav className="nav">
+            <div id='navLeftPane'>
+                <Link to="/" className="site-title">Home</Link>
+            </div>
 			<div id="userSearchArea">
-					<input id="userSearch"
-						type="text"
-						placeholder="MAL Username" 
-						value={entry} 
-						onChange={(e) => setEntry(e.target.value)}></input>
-					<button id="userSearchButton" onClick={() => getMALData()}>Filter by User</button>
+					<div id="userSearchInputs">
+						<input id="userSearch"
+							type="text"
+							placeholder="MAL Username" 
+							value={entry} 
+							onChange={(e) => setEntry(e.target.value)}
+							onKeyDown={(e) => handleKeyDown(e)}></input>
+						<button id="userSearchButton" onClick={userFilter}>Filter by User</button>
+					</div>
 				<div id='filterLabel'>
 					<h6 id='filter'>Filtered by {user.length > 0 ? user : "All Anime"}</h6>
 					{user != ""
@@ -100,7 +119,11 @@ function App() {
 					}
 				</div>
 			</div>
-			<Navbar username={user}/>
+            <ul id="navPages">
+                <CustomLink to="/Anime/">Anime Search</CustomLink>
+                <CustomLink to="/Actor/">Actor Search</CustomLink>
+            </ul>
+        	</nav>
 			<Routes>
 				<Route path="/Anime/:id?/:title?" element={<Show user={user} myList={myList}/>} />
 				<Route path="/Actor/:id?" element={<Actor user={user} myList={myList}/>} />
@@ -110,6 +133,25 @@ function App() {
 		</div>
 	
 	);
+
+	function CustomLink({ to, children, ...props }) {
+        const resolvedPath = useResolvedPath(to)
+        const isActive = useMatch({ path: resolvedPath.pathname, end: true })
+        
+        return (
+            <li className={isActive ? "active" : ""}>
+            <Link to={to} {...props}>
+                {children}
+            </Link>
+            </li>
+        )
+    }
+
+	function handleKeyDown(e) {
+		if (e.key === 'Enter') {
+			userFilter();
+		}
+	}
 
 	function removeFilter() {
 		setUser("")

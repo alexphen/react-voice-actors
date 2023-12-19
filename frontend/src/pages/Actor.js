@@ -88,6 +88,7 @@ export default function Actor({user, myList}) {
                 },
                 body: JSON.stringify({
                   name: keyword,
+                  myList: myList,
                   flag: filterFlag
                 })
             })
@@ -110,27 +111,44 @@ export default function Actor({user, myList}) {
     }
 
     return (
-        <><div className="actorSearchSide">
-            <input
-                id="actorSearch"
-                className="search"
-                type="search"
-                placeholder="Search Actor"
-                autoComplete="off"
-                onChange={(e) => getSearchData(e.target.value)}
-                value={keyword} />
-            <div className="results">
-                {/* Display 10 filtered results. Change Show on click */}
-                {names.slice(0,10).map((name, index) => (
-                    <Link to={`/Actor/${ids[index]}/`} className="resBox" key={name}>{name}</Link>
-                ))}
-            </div>
-        </div>
+        // <><div className="actorSearchSide">
+        //     <input
+        //         id="actorSearch"
+        //         className="search"
+        //         type="search"
+        //         placeholder="Search Actor"
+        //         autoComplete="off"
+        //         onChange={(e) => getSearchData(e.target.value)}
+        //         value={keyword} />
+        //     <div className="results">
+        //         {/* Display 10 filtered results. Change Show on click */}
+        //         {names.slice(0,10).map((name, index) => (
+        //             <Link to={`/Actor/${ids[index]}/`} className="resBox" key={name}>{name}</Link>
+        //         ))}
+        //     </div>
+        // </div>
         <div className="actorPage">
             {actor[0] > 0
                 ? <> 
                 {combineRoles()}
                 {bubbleSort()} 
+                <h2 id="begin" style={{display: 'none'}}>Search for an Actor to Begin!</h2>
+                    <div className="actorSearchSide">
+                    <input
+                        id="actorSearch"
+                        className="search"
+                        type="search"
+                        placeholder="Search Actor"
+                        autoComplete="off"
+                        onChange={(e) => getSearchData(e.target.value)}
+                        value={keyword} />
+                    <div className="results">
+                        {/* Display 10 filtered results. Change Show on click */}
+                        {names.slice(0,10).map((name, index) => (
+                            <Link to={`/Actor/${ids[index]}/`} className="resBox" key={name}>{name}</Link>
+                        ))}
+                    </div>
+                </div>
                 <div className="actorRoles">
                     {roles.map((role, n) => 
                         <div className="actorRole">
@@ -148,16 +166,31 @@ export default function Actor({user, myList}) {
                 </div>
                 <div id="actorRightPane">
                     <div className="actorInfo">
-                        <h1>{actor[1]}</h1>
+                        <h1 className="actorInfoTitle">{actor[1]}</h1>
                         <img className="actorImg" src={actor[2]}></img>
                         <p>Favorites: {actor[3]}</p>
                     </div>
                 </div>
                 </>
                 : <><h2 id="begin">Search for an Actor to Begin!</h2>
-                </>
+                    <div className="actorSearchSide">
+                    <input
+                        id="actorSearch"
+                        className="search"
+                        type="search"
+                        placeholder="Search Actor"
+                        autoComplete="off"
+                        onChange={(e) => getSearchData(e.target.value)}
+                        value={keyword} />
+                    <div className="results">
+                        {/* Display 10 filtered results. Change Show on click */}
+                        {names.slice(0,10).map((name, index) => (
+                            <Link to={`/Actor/${ids[index]}/`} className="resBox" key={name}>{name}</Link>
+                        ))}
+                    </div>
+                </div></>
             }
-        </div></>
+        </div>
     )
 
     function combineRoles() {
@@ -192,7 +225,6 @@ export default function Actor({user, myList}) {
             }
             roles[i][showID] = currRoleShowIDs;
             roles[i][title] = currRoleTitles;
-            console.log(roles[i])
         }
         // console.log(roles)
     }

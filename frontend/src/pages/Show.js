@@ -65,23 +65,7 @@ export default function Show({user, myList}) {
     }
 
     return (   
-        <><div className="animeSearchSide">
-            <input
-                id="animeSearch"
-                className="search"
-                type="search"
-                placeholder="Search Anime"
-                autoComplete="off"
-                onChange={(e) => getSearchData(e.target.value)}
-                value={keyword} />
-            <div className="results">
-                {/* Display 10 filtered results. Change Show on click */}
-                {titles.slice(0,10).map((title, index) => (
-                    <Link to={`/Anime/${shows[index]}/${title}`} className="resBox">{title}</Link>
-                ))}
-            </div>
-            {/* <button onClick={() => fetchList("RufusPeanut")}>Fetch List</button> */}
-        </div>
+        <>
         <div className="show">
             {/* {console.log("showSelected", showSelected)} */}
             {showSelected[0] !== 0 && showSelected[0] != null //!= 0//.length > 1 //
@@ -90,9 +74,41 @@ export default function Show({user, myList}) {
                         ? <h1 id="animeTitle"> {showSelected[Title]} </h1>
                         : <></>
                     }
+                    <div className="animeSearchSide">
+                        <input
+                            id="animeSearch"
+                            className="search"
+                            type="search"
+                            placeholder="Search Anime"
+                            autoComplete="off"
+                            onChange={(e) => getSearchData(e.target.value)}
+                            value={keyword} />
+                        <div className="results">
+                            {/* Display 10 filtered results. Change Show on click */}
+                            {titles.slice(0,10).map((title, index) => (
+                                <Link to={`/Anime/${shows[index]}/${title}`} className="resBox">{title}</Link>
+                            ))}
+                        </div>
+                    </div>
                     <ShowInfo Show={showSelected} user={user} myList={myList} flag={filterFlag}/>
                 </>
-                : <h2 id="begin">Search for an Anime to Begin!</h2>
+                : <><h2 id="begin">Search for an Anime to Begin!</h2>
+                <div className="animeSearchSide">
+                        <input
+                            id="animeSearch"
+                            className="search"
+                            type="search"
+                            placeholder="Search Anime"
+                            autoComplete="off"
+                            onChange={(e) => getSearchData(e.target.value)}
+                            value={keyword} />
+                        <div className="results">
+                            {/* Display 10 filtered results. Change Show on click */}
+                            {titles.slice(0,10).map((title, index) => (
+                                <Link to={`/Anime/${shows[index]}/${title}`} className="resBox">{title}</Link>
+                            ))}
+                        </div>
+                    </div></>
             }
             
             {/* <ShowInfo list={myList} show={myList.shows[51535]} /> */}

@@ -194,11 +194,11 @@ const getHomeData = async(flag, myList) => {
         connection = await oracledb.getConnection();
         if (flag) {
             let res = connection.execute(`SELECT Roles.*, Actors.ActorName, Actors.ImageURL, Actors.aFavs, Anime.Title FROM Roles
-                                        INNER JOIN Actors ON Roles.ActorID=Actors.ActorID
-                                        INNER JOIN Anime ON Roles.ShowID=Anime.ShowID
-                                        WHERE Anime.ShowID IN ${myList}
-                                        ORDER BY Actors.aFavs DESC
-                                        FETCH FIRST 20 ROWS ONLY`);
+                                            INNER JOIN Actors ON Roles.ActorID=Actors.ActorID
+                                            INNER JOIN Anime ON Roles.ShowID=Anime.ShowID
+                                            WHERE Anime.ShowID IN ${myList}
+                                            ORDER BY Actors.aFavs DESC
+                                            FETCH FIRST 20 ROWS ONLY`);
             return res;
         } else {
             let res = connection.execute(`SELECT * FROM Actors
@@ -254,12 +254,22 @@ const getSearchData = async(title, myList, flag) => {
     }
 }
 
-const getSearchActorData = async(name) => {
+const getSearchActorData = async(name, myList, flag) => {
     try {        
         connection = await oracledb.getConnection();
-        let res = connection.execute(`SELECT * FROM Actors WHERE UPPER(Actors.ActorName) LIKE UPPER('%${name}%')
-                                        ORDER BY Actors.aFavs DESC`);
-        return res;
+        if (flag) {
+            let res = connection.execute(`SELECT DISTINCT Actors.* FROM Actors 
+                                            INNER JOIN ROLES ON ROLES.ACTORID=Actors.ACTORID                            
+                                            WHERE UPPER(Actors.ActorName) LIKE UPPER('%${name}%')
+                                            AND Roles.ShowID in ${myList}
+                                            ORDER BY Actors.aFavs DESC`);
+            return res;
+        } else {
+            let res = connection.execute(`SELECT Actors.* FROM Actors 
+                                            WHERE UPPER(Actors.ActorName) LIKE UPPER('%${name}%')
+                                            ORDER BY Actors.aFavs DESC`);
+            return res;
+        }
 
         // if (flag) {
         //     let res = pool.execute(`SELECT * FROM Actors 
@@ -349,11 +359,10 @@ const getShowActors = async(showID, flag) => {
 // }
 
 const getMAL = async(Username) => {
+    debugger;
     const anime = MAL().anime;
     const list = MAL().user_animelist;
     var res;
-    console.log("test", env.MAL_CLIENT_ID)
-        
     try {
         res = list({
             client_id: env.MAL_CLIENT_ID,
@@ -364,7 +373,7 @@ const getMAL = async(Username) => {
         return res;
     }
     catch(error) {
-        // console.log(error);
+        console.log(error);
     }
 }
 
