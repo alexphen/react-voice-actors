@@ -99,6 +99,7 @@ function App() {
 			</Navbar> */}
 			<nav className="nav">
             <div id='navLeftPane'>
+				{/* <CustomLink to="/" className="site-title" end="true">Home</CustomLink> */}
                 <Link to="/" className="site-title">Home</Link>
             </div>
 			<div id="userSearchArea">
@@ -134,9 +135,9 @@ function App() {
 	
 	);
 
-	function CustomLink({ to, children, ...props }) {
+	function CustomLink({ to, children, ...props }, end) {
         const resolvedPath = useResolvedPath(to)
-        const isActive = useMatch({ path: resolvedPath.pathname, end: false })
+        const isActive = useMatch({ path: resolvedPath.pathname, end: end })
         
         return (
             <li className={isActive ? "active" : ""}>
