@@ -1060,7 +1060,7 @@ a {
   }  
   .pageButton {
     background-color: darkslategrey;
-    height: 3vw;
+    height: 5vh;
     font-size: 1.2vw;
     bottom: 0px;
     padding: 0 1vw;
@@ -1074,8 +1074,8 @@ a {
   }
   .show #toTop {
     /* position: fixed; */
-    width: 3vw;
-    height: 3vw;
+    width: 5vh;
+    height: 5vh;
     margin-right: 1vw;
     bottom: 0;
     right: 0;
