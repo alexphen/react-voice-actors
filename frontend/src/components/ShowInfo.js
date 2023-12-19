@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import ShowRoleToggle from "./ShowRoleToggle";
 import { useParams } from "react-router-dom";
+const _ = require('lodash')
 
 const   CharName    = 0,
         Favorites   = 1,
@@ -26,6 +27,7 @@ const ShowInfo = ({ user, myList, flag }) => {
     const [hasNext, setHasNext] = useState(true); ///////
     const [keyword, setKeyword] = useState('');
     const [dispActors, setDispActors] = useState([]);
+    const prevID = useRef(0);
     
 
     const getShowActors = async() => {
@@ -49,22 +51,40 @@ const ShowInfo = ({ user, myList, flag }) => {
 
     useEffect(() => {
         setCount(actors.length)
-        if (count > perPage) {
+        if (actors.length > perPage) {
             setHasNext(true);
+        }
+        else {
+            setHasNext(false);
         }
         setDispActors(actors)
     }, [actors])
 
     useEffect(() => {
-        // console.log(id)
-        cache = {}
-        if (id > 0) {
-            setShowSelected([id, Title])
-            getShowActors();
-            setPage(0);
-            set = true;
+        console.log(id)
+        // if ID actually changed
+        if(!_.isEqual(prevID.current, id)) {
+            cache = {}
+            if (id > 0) {
+                setShowSelected([id, Title])
+                getShowActors();
+                console.log("called show")
+                setPage(0);
+                set = true;
+            }
         }
+        prevID.current = id
     }, [id]);
+
+    useEffect(() => {
+        setCount(dispActors.length)
+        if (dispActors.length > perPage) {
+            setHasNext(true);
+        }
+        else {
+            setHasNext(false);
+        }
+    }, [dispActors])
 
 
     function bubbleSortActors(acts, n) {
@@ -120,6 +140,8 @@ const ShowInfo = ({ user, myList, flag }) => {
             setHasNext(false)
     }, [page])
 
+    
+
     function prevPage() {
         setPage(page - 1)
         setHasNext(true)
@@ -141,6 +163,20 @@ const ShowInfo = ({ user, myList, flag }) => {
         || el[ActorName].toLowerCase().includes(query.toLowerCase())));
     }
 
+    function handlePerPage(num) {
+        // debugger
+        let pageTracker = page;
+        while(pageTracker*num > count) {
+            pageTracker--;
+        }
+        setPerPage(num);
+        setPage(pageTracker)
+    }
+    
+    function toTop() {
+        window.scroll({top: 0, left: 0, behavior: "smooth"})
+    }
+
     return (  
         <>
             <input
@@ -150,16 +186,16 @@ const ShowInfo = ({ user, myList, flag }) => {
                 autoComplete="off"
                 onChange={(e) => filterBy(actors, e.target.value)}
                 value={keyword} />
-            {/* {console.log("rendered")} */}
+            {/* {console.log("dispActors", dispActors.length, "actors", actors.length, "count", count)} */}
             {/* <h1 className="showTitle">{Title}</h1> */}
             {/* <h1>{page}</h1> */}
-            {console.log("cache", cache)}
+            {/* {console.log("cache", cache)} */}
             <div className="showInfo">
                 {removeDups()}
                 {bubbleSortActors(actors, actors.length)}
-                {actors.length > 0 && set
+                {dispActors.length > 0 && set
                     ? dispActors.slice(perPage*page, perPage*page + perPage).map((actor, n) => 
-                        // <div >
+                            <> {console.log("toggle for ", actor[ActorID])}
                             <ShowRoleToggle key={actor[ActorID]}
                                             actorID={actor[ActorID]}
                                             actorName={actor[ActorName]}
@@ -168,16 +204,26 @@ const ShowInfo = ({ user, myList, flag }) => {
                                             flag={flag}
                                             user={user}
                                             myList={myList}
-                                            cache={cache}/>
-                        // </div>
+                                            cache={cache}/></>
                     )
                     
-                    : <>
-                        <p>Failed to load from API :(</p>  
-                      </>
+                    : <>{actors.length > 0
+                        ? <p>No characters to show</p>
+                        : <p>Failed to load from API :(</p> 
+                    }</>
                 }
-                <button id="prevPage" disabled={!hasPrev} onClick={prevPage}>Prev Page</button>
-                <button id="nextPage" disabled={!hasNext} onClick={nextPage}>Next Page</button>
+                <div id="animeFoot">
+                    <h2>Per Page:</h2>
+                    <select name="pageCount" id="perPageSelector" onChange={(e) => handlePerPage(e.target.value)}>
+                        <option value={16}>16</option>
+                        <option value={32}>32</option>
+                        <option value={48}>48</option>
+                    </select>
+                    <h2>Page {page+1}/{Math.ceil(count/perPage)}</h2>
+                    <button id="prevPage" className="pageButton" disabled={!hasPrev} onClick={prevPage}>Prev Page</button>
+                    <button id="nextPage" className="pageButton" disabled={!hasNext} onClick={nextPage}>Next Page</button>
+                    <img id="toTop" src={require("../toTop.png")} onClick={toTop}></img>
+                </div>
             </div>
         </>
     );

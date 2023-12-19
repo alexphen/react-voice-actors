@@ -114,8 +114,5 @@ export default function Show({user, myList}) {
             {/* <ShowInfo list={myList} show={myList.shows[51535]} /> */}
         </div> 
         </>    
-        // <ShowInfo show={myList.shows[160]} />
-        // <ShowInfo show={myList.shows[146]} />
-
     )
 }

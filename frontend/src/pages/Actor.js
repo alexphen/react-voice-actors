@@ -128,67 +128,76 @@ export default function Actor({user, myList}) {
         //     </div>
         // </div>
         <div className="actorPage">
+            {/* actor is set */}
             {actor[0] > 0
                 ? <> 
                 {combineRoles()}
                 {bubbleSort()} 
-                <h2 id="begin" style={{display: 'none'}}>Search for an Actor to Begin!</h2>
+                <div id="actorTopPane">
+                    <h2 id="actorTitle">{actor[1]}</h2>
                     <div className="actorSearchSide">
-                    <input
-                        id="actorSearch"
-                        className="search"
-                        type="search"
-                        placeholder="Search Actor"
-                        autoComplete="off"
-                        onChange={(e) => getSearchData(e.target.value)}
-                        value={keyword} />
-                    <div className="results">
-                        {/* Display 10 filtered results. Change Show on click */}
-                        {names.slice(0,10).map((name, index) => (
-                            <Link to={`/Actor/${ids[index]}/`} className="resBox" key={name}>{name}</Link>
-                        ))}
-                    </div>
-                </div>
-                <div className="actorRoles">
-                    {roles.map((role, n) => 
-                        <div className="actorRole">
-                            <img src={role[charImg]}></img>
-                                <div className="info">
-                                    <h3>{role[charName] + " (" + role[favorites] + " Favorites)"}</h3>
-                                    <Link to={`/Anime/${role[showID][n]}/${role[title][0]}`} className="actorInfoTitle">{role[title][0]}</Link>
-                                    {/* IF MAPPING ALL ROLES ↓ */}
-                                    {/* {role[title].map((title, n) =>
-                                        <Link to={`/Anime/${role[showID][n]}/${title}`} key={n} className="actorInfoTitle">{title}</Link>
-                                    )} */}
-                                </div>
+                        <input
+                            id="actorSearch"
+                            className="search"
+                            type="search"
+                            placeholder="Search Actor"
+                            autoComplete="off"
+                            onChange={(e) => getSearchData(e.target.value)}
+                            value={keyword} />
+                        <div className="results">
+                            {/* Display 10 filtered results. Change Show on click */}
+                            {names.slice(0,10).map((name, index) => (
+                                <Link to={`/Actor/${ids[index]}/`} className="resBox" key={name}>{name}</Link>
+                            ))}
                         </div>
-                    )}
-                </div>
-                <div id="actorRightPane">
-                    <div className="actorInfo">
-                        <h1 className="actorInfoTitle">{actor[1]}</h1>
-                        <img className="actorImg" src={actor[2]}></img>
-                        <p>Favorites: {actor[3]}</p>
                     </div>
                 </div>
+                <div id="actorMain">
+                    <div className="actorRoles">
+                        {roles.map((role, n) => 
+                            <div className="actorRole">
+                                <img src={role[charImg]}></img>
+                                    <div className="info">
+                                        <h3>{role[charName]}</h3>
+                                        <p>{"(" + role[favorites] + " Favorites)"}</p>
+                                        <Link to={`/Anime/${role[showID][n]}/${role[title][0]}`} className="actorInfoTitle">{role[title][0]}</Link>
+                                        {/* IF MAPPING ALL ROLES ↓ */}
+                                        {/* {role[title].map((title, n) =>
+                                            <Link to={`/Anime/${role[showID][n]}/${title}`} key={n} className="actorInfoTitle">{title}</Link>
+                                        )} */}
+                                    </div>
+                            </div>
+                        )}
+                    </div>
+                    <div id="actorRightPane">
+                        <div className="actorInfo">
+                            <h1 className="actorName">{actor[1]}</h1>
+                            <img className="actorImg" src={actor[2]}></img>
+                            <p>Favorites: {actor[3]}</p>
+                        </div>
+                    </div>
+                </div>
+                <img id="toTop" src={require("../toTop.png")} onClick={toTop}></img>
                 </>
-                : <><h2 id="begin">Search for an Actor to Begin!</h2>
-                    <div className="actorSearchSide">
-                    <input
-                        id="actorSearch"
-                        className="search"
-                        type="search"
-                        placeholder="Search Actor"
-                        autoComplete="off"
-                        onChange={(e) => getSearchData(e.target.value)}
-                        value={keyword} />
-                    <div className="results">
-                        {/* Display 10 filtered results. Change Show on click */}
-                        {names.slice(0,10).map((name, index) => (
-                            <Link to={`/Actor/${ids[index]}/`} className="resBox" key={name}>{name}</Link>
-                        ))}
+                : <div id="actorTopPane">
+                        <h2 id="begin">Search for an Actor to Begin!</h2>
+                        <div className="actorSearchSide">
+                        <input
+                            id="actorSearch"
+                            className="search"
+                            type="search"
+                            placeholder="Search Actor"
+                            autoComplete="off"
+                            onChange={(e) => getSearchData(e.target.value)}
+                            value={keyword} />
+                        <div className="results">
+                            {/* Display 10 filtered results. Change Show on click */}
+                            {names.slice(0,10).map((name, index) => (
+                                <Link to={`/Actor/${ids[index]}/`} className="resBox" key={name}>{name}</Link>
+                            ))}
+                        </div>
                     </div>
-                </div></>
+                </div>
             }
         </div>
     )
@@ -259,5 +268,8 @@ export default function Actor({user, myList}) {
         }
     }
 
+    function toTop() {
+        window.scroll({top: 0, left: 0, behavior: "smooth"})
+    }
 
 }

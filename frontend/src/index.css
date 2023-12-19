@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Rubik+Doodle+Shadow:wght@300;400;500;600;700&display=swap');
 
 /* ALL DISPLAYS */
 * {
@@ -14,6 +14,19 @@ html {
 a {
   text-decoration: none;
   /* background-color: #44444c; */
+}
+#toTop {
+  cursor: pointer;
+}
+.actorInfoTitle {
+  padding: 1vw;
+  text-align: end;
+  font-size: 20px;
+}
+#homeTitle {
+  font-family: "Rubik Doodle Shadow";
+  font-size: 80px;
+  padding-bottom: 40px;
 }
 
 
@@ -82,8 +95,12 @@ a {
     width: 100%;
     height: fit-content;
     /* justify-content: ; */
+    justify-content: space-between;
     padding: 1vw 0;
-    /* justify-content: space-between; */
+  }
+  .imgNavIndex {
+    display: flex;
+    flex-direction: column;
   }
   .selectionDots {
     flex: auto;
@@ -94,12 +111,14 @@ a {
     padding-left: .3vw;
     padding-right: .3vw;
   }
-  .selectionDots .index {
+  .index {
     /* text-align: end; */
+    right: 0;
+    position: relative;
     font-size: 16px;
-    display: flex;
-    flex-direction: row-reverse;
-    margin-right: 2vh;
+    align-self: end;
+    text-align: end;
+    /* margin-right: 2vh; */
   }
   .roleGallery h4 {
     color: #6598ea;
@@ -120,11 +139,6 @@ a {
     text-align: center;
     margin-top: 1em;
   }
-  .showsList {
-    display: none;
-    /* gap: 20px; */
-    text-align: end;
-  }
   .altTitles {
     text-align: center;
     cursor: pointer;
@@ -134,10 +148,10 @@ a {
     padding: 15px;
     border-bottom: .1vw solid #f2f2f2;;
   }
-  #moreTitles:hover + .showsList {
-    /* position: absolute; */
+  .showsList {
+    display: none;
+    text-align: end;
     margin: auto;
-    display: flex;
     flex-direction: column;
     text-align: left;
     border-radius: 1em;
@@ -145,16 +159,11 @@ a {
     padding: 1em;
     padding-top: 0;
   }
-  .showsList:hover {
-    /* position: absolute; */
-    margin: auto;
+  #moreTitles:hover + .showsList {
     display: flex;
-    flex-direction: column;
-    text-align: left;
-    border-radius: 1em;
-    background-color: #44444c;
-    padding: 1em;
-    padding-top: 0;
+  }
+  .showsList:hover {
+    display: flex;
   }
 
   /* MOBILE SEARCH COMPONENTS */
@@ -162,7 +171,7 @@ a {
 .results {
   display: none;
   position: absolute;
-  top: 5vh;
+  top: 6.2vh;
   flex-direction: column;
   font-size: 1.75vh;
   width: 27vh;
@@ -310,16 +319,19 @@ a {
   /* MOBILE HOME SCREEN */
 
   .home {
-    /* display: flex;
-    flex-direction: column; */
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    top: 6vh;
     width: 95%;
     padding: 2vw;
   }
   .homeInfo {
     position: relative;
-    top: 6vh;
+    /* top: 6vh; */
   }
   .tips {
+    /* order: 3; */
     display: none;
   }
   .home .viewer {
@@ -377,7 +389,7 @@ a {
     display: flex;
     flex-direction: column;
     background-color: #202025;
-    top: 0;
+    top: 6vh;
     min-height: 100vh;
     height: 100%;
   }
@@ -387,15 +399,15 @@ a {
     display: flex;
     flex-direction: column;
     right: 0px;
-    /* top: 15vh; */
+    /* top: 8vh; */
     z-index: 1;
   }
   #animeSearch {
     align-self: flex-end;
-    top: 0;
+    margin-top: 1vh;
     height: 5vh;
     width: 29vh;
-    margin: 0 1vh 3vh 0;
+    margin: 1vh 1vh 3vh 0;
     font-size: 3vh;
     border-width: .25vw;
     border-radius: 1vw;
@@ -404,10 +416,11 @@ a {
     padding-left: 1vw;
   }
   #begin {
-    position:absolute;
+    position: relative;
     margin: 10px;
-    top: 6vh;
-    text-align: center;
+    margin-bottom: 3vh;
+    top: 1vh;
+    /* text-align: center; */
     justify-self: start;
     font-size: 3vh;
   }
@@ -475,6 +488,12 @@ a {
   #nextPage:disabled {
     background-color: #202025;
   }
+  .show #toTop {
+    position: fixed;
+    width: 50px;
+    bottom: 10vh;
+    right: 0;
+  }
 
 /* /////////// END ANIME /////////// */
 
@@ -483,6 +502,7 @@ a {
 .actorPage {
   position: relative;
   display: flex;
+  flex-direction: column;
   /* justify-content: start; */
   gap: 25px;
   background-color: #202025;
@@ -490,21 +510,51 @@ a {
   /* min-height: 100vh; */
   height: 100%;
 }  
+#actorMain {
+  display: flex;
+}
+#actorTopPane {
+  display: flex;
+  flex-direction: column;
+}
+#actorTitle {
+  position: relative;
+  margin: 10px;
+  margin-bottom: 3vh;
+  top: 1vh;
+  text-align: center;
+  justify-self: start;
+  font-size: 4vh;
+}
+/* #actorRightPane {
+  margin-top: 5vh;
+} */
 .actorSearchSide {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-self: end;
+  /* top: 8.08vh; */
+  right: 0px;
+  width: fit-content;
+  z-index: 1;
+}
+/* .actorSearchSide {
   position: absolute;
   display: flex;
   flex-direction: column;
-  align-items: start;
+  align-self: end;
+  top: 8.08vh;
   right: 0px;
-  top: 2.5vh;
+  width: fit-content;
   z-index: 1;
-}
+} */
 #actorSearch {
   align-self: flex-end;
   top: 0;
   height: 5vh;
   width: 29vh;
-  margin-right: 1vh;
+  margin: 1vh 1vh 3vh 0;
   font-size: 3vh;
   border-width: .25vw;
   border-radius: 1vw;
@@ -526,9 +576,10 @@ a {
   margin-right: auto; */
   align-items: center;
 }
-.actorInfoTitle {
-  text-align: center;
-  font-size: 1.5em;
+.actorName {
+  padding: 1vw;
+  text-align: end;
+  font-size: 1.5vh;
 }
 .actorImg {
   display: flex;
@@ -536,7 +587,7 @@ a {
   width: 15vh;
 }
 .actorRoles {
-  margin-top: 10vh;
+  /* margin-top: 3vh; */
   margin-bottom: 30vh;
   margin-left: 2vh;
   gap: 1vw;
@@ -553,10 +604,11 @@ a {
 }
 .info {
   display: none;
-  margin: auto;
+  /* margin: auto; */
   padding: 10px;
   /* top: 23.3vh; */
-  min-width: 30vh;
+  /* min-width: 30vh; */
+  width: 205px;
   border-radius: 1vh;
   z-index: 2;
   position: absolute;
@@ -576,9 +628,16 @@ a {
   display: flex;
   box-shadow: 0vh 0vh 1vh .3vh  #f1356d;
 }
-
-
+.actorPage #toTop {
+  position: fixed;
+  width: 50px;
+  margin: 1vw;
+  bottom: 5vh;
+  right: 0;
 }
+
+
+} /* //////////// END MOBILE ////////////////*/
 
 
 
@@ -650,6 +709,7 @@ a {
     /* width: 225px; */
     height: fit-content;
     /* justify-content: ; */
+    align-items: center;
     padding: 1vw 0;
     justify-content: space-between;
   }
@@ -693,6 +753,7 @@ a {
     margin: auto;
     border-radius: 1em;
     background-color: #44444c;
+    z-index: 5;
     padding: 0 1em 1em 1em;
   }
   #moreTitles:hover + .showsList {
@@ -824,6 +885,7 @@ a {
     z-index: 11;
     font-size: 2vw;
     /* height: 2vw; */
+    background-color: rgb(63, 80, 80);
     top: .25vw;
     padding: 0vw 0vw 0vw .25vw;
     border-width: .2vw;
@@ -853,6 +915,7 @@ a {
   }
   .tips {
     margin-top: 100px;
+    display: none;
   }
   .home .viewer {
     display: flex;
@@ -865,9 +928,6 @@ a {
   .home .roleGallery img {
     width: 337.5px;
     height: 525px;
-  }
-  .home .imgNav {
-    align-items: center;
   }
   .home .roleGallery h4 {
     font-size: 50px;
@@ -912,7 +972,7 @@ a {
   .firstActor {
     background-color: darkslategrey;
     height: fit-content;
-    font-size: 3vh;
+    font-size: 3vw;
     /* align-self: auto; */
     /* margin-top: auto; */
     /* margin-bottom: auto; */
@@ -993,38 +1053,63 @@ a {
     /* padding-top: 50px; */
     gap: 0;
     max-width: 90%;
-    padding-bottom: 200px;
+    min-height: 100vh;
+    height: max-content;
+    padding-bottom: 1000px;
     justify-content: space-between;
   }  
-  #prevPage {
-    position: fixed;
+  .pageButton {
     background-color: darkslategrey;
-    height: fit-content;
+    height: 3vw;
     font-size: 1.2vw;
     bottom: 0px;
-    right: 12%;
-    padding: .1vw;
-    border-width: .1vw;
+    padding: 0 1vw;
+    border: .4vh outset #202025;
   }
-  #prevPage:disabled {
+  /* #prevPage {
+  } */
+  .pageButton:disabled {
     background-color: #202025;
+    border-style: inset;
   }
-  #nextPage {
+  .show #toTop {
+    /* position: fixed; */
+    width: 3vw;
+    height: 3vw;
+    margin-right: 1vw;
+    bottom: 0;
+    right: 0;
+  }
+  #perPageSelector {
+    /* position: fixed; */
+    bottom: 0;
+    right: 19%;
+    color: #202025;
+    font-size: 1.5vh;
+    width: 3vw;
+  }
+  option {
+    color: #202025;
+    font-size: 1.5vh;
+  }
+  #animeFoot {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 1vw;
+    width: 100%;
     position: fixed;
-    background-color: darkslategrey;
-    height: fit-content;
-    font-size: 1.2vw;
-    bottom: 0px;
-    right: 5%;
-    /* bottom: 2%; */
-    border-width: .1vw;
-    padding: .1vw;
+    left: 0;
+    bottom: 0;
+    z-index: 0;
+    background-color:#44444c;    
+    border-top: .3vh solid #f2f2f2;
   }
-  #nextPage:disabled {
-    background-color: #202025;
+  #animeFoot h2 {
+    font-size: 1.5vh;
   }
 
-  /* //////////////// END ANIME ///////////////// */
+  /* //////////////// END DESKTOP ANIME ///////////////// */
 
 
 /* /////////////////////////////// */
@@ -1089,8 +1174,8 @@ a {
   cursor: pointer;
   text-decoration: none;
 }
-#actorRightPane {
-  /* width: 100%; */
+#actorTitle {
+  display: none;
 }
 .actorInfo {
   position: fixed;
@@ -1159,6 +1244,7 @@ a {
   margin: auto;
   padding: 10px;
   top: 350px;
+  width: 205px;
   /* min-width: 20vw; */
   border-radius: 1vh;
   z-index: 2;
@@ -1166,7 +1252,7 @@ a {
   flex-direction: column;
   /* max-width: 40vw; */
 }
-.actorInfoTitle {
+.actorName {
   padding: 1vw;
   text-align: end;
   font-size: 1.5vw;
@@ -1187,6 +1273,13 @@ a {
   box-shadow: 0vh 0vh 1vh .3vh  #f1356d;
   /* gap: 10px; */
   /* left: 15vh; */
+}
+.actorPage #toTop {
+  position: fixed;
+  width: 50px;
+  margin: 1vw;
+  bottom: 0;
+  right: 0;
 }
 
 /* /////////// END ACTOR /////////// */
