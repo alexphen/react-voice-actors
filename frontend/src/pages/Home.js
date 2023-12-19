@@ -129,9 +129,10 @@ const Home = ({user, myList}) => {
     return ( 
         <div className="home">            
             <div className="homeInfo">
+                <h1 id="homeTitle">Who Seiyu?</h1>
                 <h2>A tool to display all the works of the voice actors you might know!</h2>
                 <br></br>
-                <h5>Seiyu is a Japanese word for voice actor</h5>
+                <h5>(Seiyu is a Japanese word for voice actor)</h5>
                 <br></br>
                 <h6>All data obtained from <a href="http://MyAnimeList.net" target="_blank" rel="noreferrer">MyAnimeList.net</a></h6>
                 <div className="tips">

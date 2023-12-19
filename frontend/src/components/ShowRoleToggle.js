@@ -12,6 +12,8 @@ const ShowID    = 5;
 const Title     = 7;
 const rank      = 8;
 
+var started;
+
 const ShowRoleToggle = ({actorID, actorName, actorImg, showID, flag, user, myList, cache}) => {
 
     // console.log("actorID received ", actorID)
@@ -19,8 +21,8 @@ const ShowRoleToggle = ({actorID, actorName, actorImg, showID, flag, user, myLis
     const [pos, setPos] = useState(0);
     const [posDot, setPosDot] = useState(pos);
     const [roleReturn, setRoleReturn] = useState([]);
-    const [prevActor, setPrevActor] = useState(0);
-    const prevUser = useRef("");
+    const prevActor = useRef(0);
+    const prevUser = useRef(user);
 
     // console.log(user, "in Toggle")
     var filterFlag = user.length > 0;
@@ -28,22 +30,30 @@ const ShowRoleToggle = ({actorID, actorName, actorImg, showID, flag, user, myLis
     var size;
     // var prevActor;
 
-    const usePrevious = (value) => {
-        const ref = useRef()
-        useEffect(() => {
-            console.log("vallue")
-            ref.current = value;
-        }, [value])
-        return ref.current;
-    }
+    // const usePrevious = (value) => {
+    //     const ref = useRef()
+    //     useEffect(() => {
+    //         console.log("vallue")
+    //         ref.current = value;
+    //     }, [value])
+    //     return ref.current;
+    // }
 
+    useEffect(() => {
+        // debugger
+        console.log(cache)
+        if (!(cache && cache[actorID])) {
+            console.log("roles []")
+            getRoles(actorID);
+        }
+    }, [])
     
     useEffect(() => {
-        console.log(1, prevUser, 2, user)
-        if (!_.isEqual(prevUser, user)) {
-            console.log("changed")
-            getRoles(actorID)
+        // console.log(1, prevUser, 2, user)
+        if (!_.isEqual(prevUser.current, user)) {
+            // console.log("roles [user]")
             cache = {};
+            getRoles(actorID);
         }
         prevUser.current = user
         // if (!_.isEqual(prevUser, user)) {
@@ -54,11 +64,12 @@ const ShowRoleToggle = ({actorID, actorName, actorImg, showID, flag, user, myLis
     }, [user])
 
     useEffect(() => {
-        if (prevActor !== actorID) {
-            setPrevActor(actorID);
+        if (!_.isEqual(prevUser.current, user)) {
+            // console.log("roles [actorID]")
             getRoles(actorID);
             restart();
         }
+        prevActor.current = actorID;
     }, [actorID]);
 
 
