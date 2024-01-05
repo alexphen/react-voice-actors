@@ -243,7 +243,7 @@ const ShowInfo = ({ user, myList, flag }) => {
                     <h2>Page {page+1}/{Math.ceil(count/perPage)}</h2>
                     <button id="prevPage" className="pageButton" disabled={!hasPrev} onClick={prevPage}>Prev Page</button>
                     <button id="nextPage" className="pageButton" disabled={!hasNext} onClick={nextPage}>Next Page</button>
-                    <img id="toTop" src={require("../toTop.png")} onClick={toTop}></img>
+                    <img id="toTop" src={require("../assets/toTop.png")} onClick={toTop}></img>
                 </div>
             </div>
         </>

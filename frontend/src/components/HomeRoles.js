@@ -28,7 +28,7 @@ const HomeRoles = ({actorID, actorName, actorImg, showID, flag, user, myList, ca
     const [direction, setDirection] = useState(1);
     const [scrolling, setScrolling] = useState(false);
     // const [scroller, setScroller] = useState();
-    const prevActor = useRef(0);
+    const prevActor = useRef(actorID);
     const prevUser = useRef(user);
 
 
@@ -36,53 +36,17 @@ const HomeRoles = ({actorID, actorName, actorImg, showID, flag, user, myList, ca
     // console.log(actorID)
     // console.log(user, "in Toggle")
     var filterFlag = user.length > 0;
-    // const [roles, setRoles] = useState([]);
-    var size;
-    // var prevActor;
 
-    // const usePrevious = (value) => {
-    //     const ref = useRef()
-    //     useEffect(() => {
-    //         console.log("vallue")
-    //         ref.current = value;
-    //     }, [value])
-    //     return ref.current;
-    // }
-
-
-    const rolesContainerWidth = 600;
     const rolesContainer = document.getElementById("rolesContainer");
     
-    // useEffect(() => {
-    //     console.log("changed dir");
-    // }, [direction])
-
-    // useEffect(() => {
-    //     // intID = window.self.setInterval(() => {
-    //     //     console.log("speed change")
-    //     //     if (rolesContainer) {
-    //     //         console.log(speed)
-    //     //         // if (direction > 0 && rolesContainer.scrollLeft !== rolesContainer.scrollWidth) {
-    //     //             // console.log(rolesContainer.scrollLeft)
-    //     //             rolesContainer.scrollBy({
-    //     //                 top: 0,
-    //     //                 left: speed,
-    //     //                 behavior: "smooth"
-    //     //             })
-    //     //         // }
-    //     //     }
-    //     // }, 100);
-    // }, [speed]);
 
     useEffect(() => {
-        console.log("[] getting ", actorID)
         getRoles(actorID);
     }, [])
     
     useEffect(() => {
         // console.log(1, prevUser, 2, user)
         if (!_.isEqual(prevUser.current, user)) {
-            console.log("roles [user]")
             cache = {};
             getRoles(actorID);
         }
@@ -95,18 +59,21 @@ const HomeRoles = ({actorID, actorName, actorImg, showID, flag, user, myList, ca
     }, [user])
 
     useEffect(() => {
-        console.log(started)
         let tempDir = direction;
         setTimeout(() => {
+            // console.log("rolescontainer")
             resumeScroll(tempDir);
+            // console.log(started)
         }, 1000) 
     }, [rolesContainer]);
 
     useEffect(() => {
         // debugger
         if (!_.isEqual(prevActor.current, actorID)) {
-            console.log("roles [actorID]")
-            stopScroll();
+            // console.log("roles [actorID]")
+            if (started) {
+                stopScroll();
+            }
             setDirection(1);
             getRoles(actorID);
             if (rolesContainer) {
@@ -129,7 +96,7 @@ const HomeRoles = ({actorID, actorName, actorImg, showID, flag, user, myList, ca
     // }, []);
     
     const getRoles = async(actID) => {
-        console.log("rioling")
+        // console.log("rioling")
         if (cache && cache[actID]) {
             setRoleReturn(cache[actID])
         }
@@ -171,7 +138,7 @@ const HomeRoles = ({actorID, actorName, actorImg, showID, flag, user, myList, ca
                 {handleRoles()}
                 {/* <- Cycling Roles -> */}
                     <img className="homeScrollArrow" 
-                        src={require("../back.png")} 
+                        src={require("../assets/left.png")} 
                         onClick={jumpBack} 
                         // onMouseEnter={() => resumeScroll(-1)}
                         onMouseEnter={scrollBack}
@@ -181,7 +148,7 @@ const HomeRoles = ({actorID, actorName, actorImg, showID, flag, user, myList, ca
                         id="rolesContainer"
                         className="homeRoleCarousel"
                         onMouseOver={stopScroll}
-                        
+                        onTouchStart={stopScroll}
                         // onMouseOut={resumeScroll}
                         >
                     {roleReturn.map((role, i) =>
@@ -203,14 +170,14 @@ const HomeRoles = ({actorID, actorName, actorImg, showID, flag, user, myList, ca
                     </div> */}
                     </div>
                     <img className="homeScrollArrow" 
-                        src={require("../next.png")} 
+                        src={require("../assets/right.png")} 
                         onClick={jumpForward} 
                         // onMouseEnter={() => resumeScroll(1)}>
                         onMouseEnter={scrollForward}
                     ></img> 
                     {/*</>onMouseDown={scrollForward} onMouseUp={stopScroll}>*/}
             </div>
-            <img src={scrolling ? require('../pause.png') : require('../play.png')} id="homePlayButton" onClick={pausePlay}></img>
+            <img src={scrolling ? require('../assets/pause.png') : require('../assets/play.png')} id="homePlayButton" onClick={pausePlay}></img>
         </>
      );
 
@@ -292,9 +259,9 @@ const HomeRoles = ({actorID, actorName, actorImg, showID, flag, user, myList, ca
     }
 
     function stopScroll() {
-    // console.log("stop")
-    clearInterval(intID);
-    setScrolling(false);
+        console.log("stop")
+        clearInterval(intID);
+        setScrolling(false);
     }
 
     function resumeScroll(dir) {
@@ -412,7 +379,6 @@ const HomeRoles = ({actorID, actorName, actorImg, showID, flag, user, myList, ca
             roleReturn[i][Title] = currRoleTitles;
             roleReturn[i][rank] = currRoleRanks;
         }
-        size = roleReturn.length;
     }
 
     function swap(arr, i1, i2) {

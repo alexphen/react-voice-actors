@@ -45,7 +45,7 @@ const Home = ({user, myList}) => {
     // }
 
     useEffect(() => {
-        console.log("HA from []")
+        // console.log("HA from []")
         getHomeActors();
         started = false;
         cache = {};
@@ -57,7 +57,7 @@ const Home = ({user, myList}) => {
             setIndex(0);
             // console.log('index', index)
             started = false;
-            console.log("HA from [myList]")
+            // console.log("HA from [myList]")
             getHomeActors()
             // resetIndex();
             if (started) {
@@ -173,6 +173,9 @@ const Home = ({user, myList}) => {
         getData(temp);
     }
 
+    function toTop() {
+        window.scroll({top: 0, left: 0, behavior: "smooth"})
+    }
 
     return ( 
         <div className="home">   
@@ -185,16 +188,16 @@ const Home = ({user, myList}) => {
                                 <h1 id="homeTitle">Who Seiyu?</h1>
                                 <h6>All data obtained from <a href="http://MyAnimeList.net" target="_blank" rel="noreferrer">MyAnimeList.net</a></h6>
                             </div>
-                            {console.log("index", index)}
+                            {/* {console.log("index", index)} */}
                             {/* {console.log(topActors)} */}
                             <div className="homeActorInfo">
                                 {/* Actor Name */}
                                 <Link id="roleActor" to={`/Actor/${actorID}`}>{actor[ActorName]}</Link>
                                 {/* Actor Image and Nav*/}
                                 <div id="homeActorNav">
-                                    <button className="homeActorButton" onClick={() => prevActor()}>{"←"}</button>
+                                    <img src={require("../assets/prev.png")} className="homeActorButton" onClick={() => prevActor()}></img>
                                     <img className="homeActorImg" src={actor[ImageURL]} alt={actor[ActorName]}></img>
-                                    <button className="homeActorButton" onClick={() => nextActor()}>{"→"}</button>
+                                    <img src={require("../assets/next.png")} className="homeActorButton" onClick={() => nextActor()}></img>
                                 </div>
                             </div>
                             <div style={{"width":"558px"}}></div>
@@ -208,11 +211,12 @@ const Home = ({user, myList}) => {
                             myList={myList}
                             cache={cache}/>
                     </div>
+                    {/* <img id="toTop" src={require("../toTop.png")} onClick={toTop}></img> */}
                 </>
                 // not started
                 : <>
                     <div className="homeInfo">
-                        <h1 id="homeTitle" style={{"fontSize":"200px"}}>Who Seiyu?</h1>
+                        <h1 id="homeTitle" style={{"fontSize":"10vh"}}>Who Seiyu?</h1>
                         <h2>A tool to display all the works of the voice actors you might know!</h2>
                         <br></br>
                         <h5>(Seiyu is a Japanese word for voice actor)</h5>
