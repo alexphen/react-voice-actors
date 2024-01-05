@@ -17,8 +17,8 @@ var started;
 
 const ShowRoleToggle = ({actorID, actorName, actorImg, showID, flag, user, myList, cache}) => {
 
-    console.log("actorID received ", actorID)
-    console.log(cache)
+    // console.log("actorID received ", actorID)
+    // console.log(cache)
     
     const [pos, setPos] = useState(0);
     const [posDot, setPosDot] = useState(pos);
