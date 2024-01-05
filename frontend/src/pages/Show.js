@@ -26,6 +26,7 @@ export default function Show({user, myList}) {
         setShowSelected([id, title]);
         setKeyword("");
         getSearchData("");
+        window.scroll({top: 0, left: 0, behavior: "smooth"})
     }, [id, title])
     
     const getSearchData = async(keyword) => {

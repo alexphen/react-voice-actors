@@ -177,7 +177,7 @@ export default function Actor({user, myList}) {
                         </div>
                     </div>
                 </div>
-                <img id="toTop" src={require("../toTop.png")} onClick={toTop}></img>
+                <img id="toTop" src={require("../assets/toTop.png")} onClick={toTop}></img>
                 </>
                 : <div id="actorTopPane">
                         <h2 id="begin">Search for an Actor to Begin!</h2>
