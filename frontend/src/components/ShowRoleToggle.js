@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
 import Show from "../pages/Show";
+import { active } from "requests";
 const _ = require('lodash')
 
 const CharID    = 0;
@@ -16,7 +17,8 @@ var started;
 
 const ShowRoleToggle = ({actorID, actorName, actorImg, showID, flag, user, myList, cache}) => {
 
-    // console.log("actorID received ", actorID)
+    console.log("actorID received ", actorID)
+    console.log(cache)
     
     const [pos, setPos] = useState(0);
     const [posDot, setPosDot] = useState(pos);
@@ -28,6 +30,7 @@ const ShowRoleToggle = ({actorID, actorName, actorImg, showID, flag, user, myLis
     var filterFlag = user.length > 0;
     // const [roles, setRoles] = useState([]);
     var size;
+    var actors = [];
     // var prevActor;
 
     // const usePrevious = (value) => {
@@ -41,9 +44,9 @@ const ShowRoleToggle = ({actorID, actorName, actorImg, showID, flag, user, myLis
 
     useEffect(() => {
         // debugger
-        console.log(cache)
+        // console.log(cache)
         if (!(cache && cache[actorID])) {
-            console.log("roles []")
+            // console.log("roles []")
             getRoles(actorID);
         }
     }, [])
@@ -53,6 +56,7 @@ const ShowRoleToggle = ({actorID, actorName, actorImg, showID, flag, user, myLis
         if (!_.isEqual(prevUser.current, user)) {
             // console.log("roles [user]")
             cache = {};
+            actors = [];
             getRoles(actorID);
         }
         prevUser.current = user
@@ -64,7 +68,7 @@ const ShowRoleToggle = ({actorID, actorName, actorImg, showID, flag, user, myLis
     }, [user])
 
     useEffect(() => {
-        console.log(1, prevUser, 2, user)
+        // console.log(1, prevUser, 2, user)
         if (!_.isEqual(prevActor.current, actorID)) {
             // console.log("roles [actorID]")
             getRoles(actorID);
@@ -86,29 +90,34 @@ const ShowRoleToggle = ({actorID, actorName, actorImg, showID, flag, user, myLis
     const getRoles = async(actID) => {
         // console.log("ID sent to roles ", actID)
         // console.log(1, user, 2, prevUser)
-        if (cache && cache[actID]) {
-            setRoleReturn(cache[actID])
+        if (!actors.includes(actID)) {
+            if (cache && cache[actID]) {
+                setRoleReturn(cache[actID])
+            }
+            else {
+                actors.push(actID)
+                const roleData = await fetch ('/api/roles', {
+                    method: 'POST',
+                    headers: {
+                        'content-type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        ActorID: actID,
+                        myList: myList,
+                        flag: filterFlag
+                    })
+                }).then(res => res.json())
+                // console.log(roleData)
+                for (let i in roleData) {
+                    roleData[i] = Object.values(roleData[i])
+                }
+                setRoleReturn(Object.values(roleData));
+                // console.log(Object.values(roleData))
+                cache[actorID] = Object.values(roleData)
+            }
         }
         else {
-            const roleData = await fetch ('/api/roles', {
-                method: 'POST',
-                headers: {
-                    'content-type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify({
-                    ActorID: actID,
-                    myList: myList,
-                    flag: filterFlag
-                })
-            }).then(res => res.json())
-            // console.log(roleData)
-            for (let i in roleData) {
-                roleData[i] = Object.values(roleData[i])
-            }
-            setRoleReturn(Object.values(roleData));
-            // console.log(Object.values(roleData))
-            cache[actorID] = Object.values(roleData)
         }
 
         // let attempt = 0; 
@@ -189,8 +198,10 @@ function next() {
     
     return ( 
         
-        <div className="roleGallery">          
-            <Link id="roleActor" to={`/Actor/${actorID}`}>{actorName}</Link>
+        <div className="roleGallery">   
+            <div className="roleHeader">
+                <Link id="roleActor" to={`/Actor/${actorID}`}>{actorName}</Link>
+            </div>       
             <div id="roleInner">
                 {pos < roleReturn.length
                     ? <>{handleRoles()}
@@ -198,7 +209,7 @@ function next() {
                     <div className="imgNav">
                         {size > 1
                             ?<button className="roleTogglePrev" onClick={prev}>←</button>
-                            :<></>
+                            :<div></div>
                         }
                         <div className="imgNavIndex">
                             <div className="selectionDots">
@@ -208,12 +219,12 @@ function next() {
                         </div>
                         {size > 1
                             ?<button className="roleToggleNext" onClick={next}>→</button>
-                            :<></>
+                            :<div></div>
                         }
                     </div>
                     <h4>{roleReturn[String(pos)][CharName]}</h4>
                     <Link to={`/Anime/${roleReturn[pos][ShowID][0]}/${roleReturn[pos][Title][0]}`} id="topTitle">{roleReturn[pos][Title][0]}</Link>
-                    <div>
+                    <div style={{"display":"flex", "flexDirection":"column"}}>
                     {roleReturn[pos][Title].length > 1
                         ?<><div id="moreTitles">•••</div>
                         <div className="showsList">

@@ -3,7 +3,7 @@ import Show from "./pages/Show";
 import Home from "./pages/Home";
 import Actor from "./pages/Actor";
 import { Link, useMatch, useResolvedPath } from "react-router-dom"
-import { Route, Routes, useFetcher } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { useState, useEffect } from "react";
 
@@ -13,6 +13,8 @@ function App() {
 	const [entry, setEntry]  	= useState(cookies.acc || "");
 	const [myList, setMyList] 	= useState(cookies.list || []);
   	const [user, setUser]     	= useState(cookies.acc || "");
+	
+	let location = useLocation();
 	
 
 	// useEffect(() => {
@@ -91,7 +93,7 @@ function App() {
 
 	return (
 		<div className="app">
-			{console.log(cookies)}
+			{/* {console.log(cookies)} */}
 			
 			{/* <Navbar username={user}>
 				<h1>Hello</h1>
@@ -100,7 +102,7 @@ function App() {
 			<nav className="nav">
             <div id='navLeftPane'>
 				{/* <CustomLink to="/" className="site-title" end="true">Home</CustomLink> */}
-                <Link to="/" className="site-title">Home</Link>
+                <CustomLink to="/" id="homeButton" onClick={HomeClick}>Home</CustomLink> {/*className="site-title"*/}
             </div>
 			<div id="userSearchArea">
 					<div id="userSearchInputs">
@@ -113,7 +115,7 @@ function App() {
 						<button id="userSearchButton" onClick={userFilter}>Filter by User</button>
 					</div>
 				<div id='filterLabel'>
-					<h6 id='filter'>Filtered by {user.length > 0 ? user : "All Anime"}</h6>
+					<h6 id='filter'>Filtered by: {user.length > 0 ? user : "All Anime"}</h6>
 					{user != ""
 						? <button id='unfilter' onClick={removeFilter}>Remove Filter</button>
 						: <></>
@@ -147,6 +149,14 @@ function App() {
             </li>
         )
     }
+
+	function HomeClick() {
+		console.log(window.location.href)
+		if (window.location.pathname = '/') {
+			// window.location.replace(window.location.href);
+			console.log(location.pathname)
+		}
+	}
 
 	function handleKeyDown(e) {
 		if (e.key === 'Enter') {

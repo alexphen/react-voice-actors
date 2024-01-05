@@ -22,7 +22,7 @@ const ShowInfo = ({ user, myList, flag }) => {
     const [actors, setActors] = useState([]);
     const [count, setCount] = useState([0]);
     const [page, setPage] = useState(0);
-    const [perPage, setPerPage] = useState(16);
+    const [perPage, setPerPage] = useState(48);
     const [hasPrev, setHasPrev] = useState(false);
     const [hasNext, setHasNext] = useState(true); ///////
     const [keyword, setKeyword] = useState('');
@@ -61,14 +61,14 @@ const ShowInfo = ({ user, myList, flag }) => {
     }, [actors])
 
     useEffect(() => {
-        console.log(id)
+        // console.log(id)
         // if ID actually changed
         if(!_.isEqual(prevID.current, id)) {
             cache = {}
             if (id > 0) {
                 setShowSelected([id, Title])
                 getShowActors();
-                console.log("called show")
+                // console.log("called show")
                 setPage(0);
                 set = true;
             }
@@ -194,17 +194,36 @@ const ShowInfo = ({ user, myList, flag }) => {
                 {removeDups()}
                 {bubbleSortActors(actors, actors.length)}
                 {dispActors.length > 0 && set
-                    ? dispActors.slice(perPage*page, perPage*page + perPage).map((actor, n) => 
-                            <> {console.log("toggle for ", actor[ActorID])}
-                            <ShowRoleToggle key={actor[ActorID]}
-                                            actorID={actor[ActorID]}
-                                            actorName={actor[ActorName]}
-                                            actorImg={actor[ImageURL]}
-                                            showID={id}
-                                            flag={flag}
-                                            user={user}
-                                            myList={myList}
-                                            cache={cache}/></>
+                    ? dispActors.slice(perPage*page, perPage*page + perPage).map((actor, n) =>  
+                            <><ShowRoleToggle key={actor[ActorID]}
+                                                actorID={actor[ActorID]}
+                                                actorName={actor[ActorName]}
+                                                actorImg={actor[ImageURL]}
+                                                showID={id}
+                                                flag={flag}
+                                                user={user}
+                                                myList={myList}
+                                                cache={cache}/>
+                            {/* {console.log(toggles)}
+                                {!toggles.includes(actor[ActorID])
+
+                                    ?   <><ShowRoleToggle key={actor[ActorID]}
+                                                actorID={actor[ActorID]}
+                                                actorName={actor[ActorName]}
+                                                actorImg={actor[ImageURL]}
+                                                showID={id}
+                                                flag={flag}
+                                                user={user}
+                                                myList={myList}
+                                                cache={cache}/>
+                                            {console.log("toggle for ", actor[ActorID])}
+                                            {toggles.push(actor[ActorID])}
+                                        </>
+                                    :   <>{console.log("duplicate", actor[ActorID])}</>
+
+                                } */}
+                                     
+                            </>
                     )
                     
                     : <>{actors.length > 0
@@ -217,7 +236,8 @@ const ShowInfo = ({ user, myList, flag }) => {
                     <select name="pageCount" id="perPageSelector" onChange={(e) => handlePerPage(e.target.value)}>
                         <option value={16}>16</option>
                         <option value={32}>32</option>
-                        <option value={48}>48</option>
+                        <option defaultValue={48}>48</option>
+                        <option value={100}>100</option>
                     </select>
                     <h2>Page {page+1}/{Math.ceil(count/perPage)}</h2>
                     <button id="prevPage" className="pageButton" disabled={!hasPrev} onClick={prevPage}>Prev Page</button>
