@@ -195,7 +195,8 @@ const ShowInfo = ({ user, myList, flag }) => {
                 {bubbleSortActors(actors, actors.length)}
                 {dispActors.length > 0 && set
                     ? dispActors.slice(perPage*page, perPage*page + perPage).map((actor, n) =>  
-                            <><ShowRoleToggle key={actor[ActorID]}
+                            <>
+                            <ShowRoleToggle key={n}
                                                 actorID={actor[ActorID]}
                                                 actorName={actor[ActorName]}
                                                 actorImg={actor[ImageURL]}
@@ -233,10 +234,10 @@ const ShowInfo = ({ user, myList, flag }) => {
                 }
                 <div id="animeFoot">
                     <h2>Per Page:</h2>
-                    <select name="pageCount" id="perPageSelector" onChange={(e) => handlePerPage(e.target.value)}>
+                    <select name="pageCount" id="perPageSelector" defaultValue={48} onChange={(e) => handlePerPage(e.target.value)}>
                         <option value={16}>16</option>
                         <option value={32}>32</option>
-                        <option defaultValue={48}>48</option>
+                        <option value={48} >48</option>
                         <option value={100}>100</option>
                     </select>
                     <h2>Page {page+1}/{Math.ceil(count/perPage)}</h2>
