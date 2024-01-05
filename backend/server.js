@@ -61,14 +61,16 @@ init();
 
 
 app.post('/api/actor', async(req, res) => {
-    try {
-        console.log('Called actor', req.body);
-        const result = await dbOperation.getActor(req.body.ActorID)
-        // console.log(result.rows)
-        res.send(result.rows);  
-        
-    } catch (error) {
-        console.log(error)
+    if (req.body.ActorID) {
+        try {
+            console.log('Called actor', req.body);
+            const result = await dbOperation.getActor(req.body.ActorID)
+            // console.log(result.rows)
+            res.send(result.rows);  
+            
+        } catch (error) {
+            console.log(error)
+        }
     }
 })
 

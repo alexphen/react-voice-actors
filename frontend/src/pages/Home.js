@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
-import ShowRoleToggle from "../components/ShowRoleToggle";
-import ls from 'local-storage';
+import { useState, useEffect, useRef } from "react";
+import HomeRoles from "../components/HomeRoles";
+import { useParams, Link } from "react-router-dom";
+const _ = require('lodash')
 
 // const ActorID   = 0;
 const ActorName = 1;
@@ -22,29 +23,48 @@ const Home = ({user, myList}) => {
 
     // const firstActor = actors[topActors[firstIndex]];
     // const [prev, setPrev] = useState();
+    // var {active} = useParams()
     const [index, setIndex] = useState(0);//firstIndex);
     const [topActors, setTopActors] = useState([]);
     const [actor, setActor] = useState([]);
     const [actorID, setActorID] = useState(0)//topActors[firstIndex]);
+    const prevList = useRef(myList);
     var filterFlag = user.length > 0;
     // console.log("topActors", topActors)
 
+    // let homeButton = document.getElementById("homeButton")
+    // let location = useLocation();
+    // if (homeButton) {
+    //     homeButton.addEventListener("click", () => {
+    //         if (location.pathname = '/Home') {
+    //             setTimeout(() => {
+    //                 window.location.reload();
+    //             }, 10)
+    //         }
+    //     })
+    // }
 
     useEffect(() => {
-        // getHomeActors();
+        console.log("HA from []")
+        getHomeActors();
         started = false;
         cache = {};
     }, [])
 
     useEffect(() => {
-        setIndex(0);
-        // console.log('index', index)
-        started = false;
-        getHomeActors()
-        // resetIndex();
-        if (started) {
-            nextActor(0)
+        // console.log(prevList.current)
+        if (!_.isEqual(prevList.current, myList)) {
+            setIndex(0);
+            // console.log('index', index)
+            started = false;
+            console.log("HA from [myList]")
+            getHomeActors()
+            // resetIndex();
+            if (started) {
+                nextActor(0)
+            }
         }
+        prevList.current = myList;
     }, [myList])
 
 
@@ -92,74 +112,163 @@ const Home = ({user, myList}) => {
         setActor(Object.values(actorData[0]));
         // setActorID(actorData[0][ActorID])
         // console.log(Object.values(actorData[0]));
-
-        ls.set('actor', actorData[0])
     }
 
     function start() {
-        getHomeActors();
-        nextActor(index);
+        // active = true;
+        // window.location='/a';
+        // const params = new URLSearchParams(window.location.search);
+        // params.set('active', 'a');
+        // window.location.search = params;
+
+        // getHomeActors();
+        // nextActor(index);
+        setActorID(topActors[0]);
+        getData(topActors[0])
     }
 
-    function nextActor(pos) {
-        // setActor(loading)
+    function nextActor() {
         started = true;
         let temp;
-        // console.log("index", index, 'pos', pos)
-        // setIndex(Math.trunc(Math.random() * actorsLeft.length - 1));
+        let pos = index + 1;
         if (pos < topActors.length) {
-            setIndex(pos + 1);
+            setIndex(pos);
             temp = topActors[pos];
         }
         else {
-            setIndex(1);
+            setIndex(0);
             temp = topActors[0];
-            // temp = actorsLeft.splice(index, 1)[0];
-            // resetLeft();
-            // setIndex(Math.trunc(Math.random() * actorsLeft.length - 1));
         }
         setActorID(temp);
-        // console.log(topActors)
-        // console.log('index', index, 'temp', temp)
         getData(temp);
-        // getRoleData();
+    }
+    // function nextActor(pos) {
+    //     started = true;
+    //     let temp;
+    //     if (pos < topActors.length - 1) {
+    //         setIndex(pos + 1);
+    //         temp = topActors[pos];
+    //     }
+    //     else {
+    //         setIndex(0);
+    //         temp = topActors[0];
+    //     }
+    //     setActorID(temp);
+    //     getData(temp);
+    // }
+
+    function prevActor() {
+        started = true;
+        let temp;
+        let pos = index - 1;
+        if (pos >= 0) {
+            setIndex(pos);
+            temp = topActors[pos];
+        }
+        else {
+            setIndex(topActors.length - 1);
+            temp = topActors[topActors.length - 1];
+        }
+        setActorID(temp);
+        getData(temp);
     }
 
 
     return ( 
-        <div className="home">            
-            <div className="homeInfo">
-                <h1 id="homeTitle">Who Seiyu?</h1>
+        <div className="home">   
+            {actorID > 0
+                // started
+                ? <>
+                    <div className="viewer">
+                        <div id="homeTopHalf">
+                            <div className="homeInfo">
+                                <h1 id="homeTitle">Who Seiyu?</h1>
+                                <h6>All data obtained from <a href="http://MyAnimeList.net" target="_blank" rel="noreferrer">MyAnimeList.net</a></h6>
+                            </div>
+                            {console.log("index", index)}
+                            {/* {console.log(topActors)} */}
+                            <div className="homeActorInfo">
+                                {/* Actor Name */}
+                                <Link id="roleActor" to={`/Actor/${actorID}`}>{actor[ActorName]}</Link>
+                                {/* Actor Image and Nav*/}
+                                <div id="homeActorNav">
+                                    <button className="homeActorButton" onClick={() => prevActor()}>{"←"}</button>
+                                    <img className="homeActorImg" src={actor[ImageURL]} alt={actor[ActorName]}></img>
+                                    <button className="homeActorButton" onClick={() => nextActor()}>{"→"}</button>
+                                </div>
+                            </div>
+                            <div style={{"width":"558px"}}></div>
+                        </div>
+                        
+                        <HomeRoles 
+                            actorID={actorID} 
+                            actorName={actor[ActorName]} 
+                            actorImg={actor[ImageURL]}
+                            flag={filterFlag} user={user} 
+                            myList={myList}
+                            cache={cache}/>
+                    </div>
+                </>
+                // not started
+                : <>
+                    <div className="homeInfo">
+                        <h1 id="homeTitle" style={{"fontSize":"200px"}}>Who Seiyu?</h1>
+                        <h2>A tool to display all the works of the voice actors you might know!</h2>
+                        <br></br>
+                        <h5>(Seiyu is a Japanese word for voice actor)</h5>
+                        <br></br>
+                        <h6>All data obtained from <a href="http://MyAnimeList.net" target="_blank" rel="noreferrer">MyAnimeList.net</a></h6>
+                    </div>
+                    <button className="firstActor" onClick={start}>Take a Look!</button>
+                </>
+            }
+            {/* <div className="homeInfo">
+            <h1 id="homeTitle">Who Seiyu?</h1>
                 <h2>A tool to display all the works of the voice actors you might know!</h2>
                 <br></br>
                 <h5>(Seiyu is a Japanese word for voice actor)</h5>
                 <br></br>
                 <h6>All data obtained from <a href="http://MyAnimeList.net" target="_blank" rel="noreferrer">MyAnimeList.net</a></h6>
-                <div className="tips">
-                    Tips: <br /> <pre>      To use the site to the fullest, enter your MyAnimeList username above and click "Filter by User" <br></br>      You may navigate the website</pre>
-                </div>
                
-            </div>
-            <div className="viewer">
-                {/* {combineRoles()} */}
-                {started //actor[0] !== 0
-                    ?<><ShowRoleToggle  
-                                id="topActor" 
-                                actorID={actorID} 
-                                actorName={actor[ActorName]} 
-                                flag={filterFlag} user={user} 
-                                myList={myList}
-                                cache={cache}/>
-                        <div id="homeRightPane">
-                            <img className="homeActorImg" src={actor[ImageURL]} alt={actor[ActorName]}></img>
-                            <button className="nextActor" onClick={() => nextActor(index)}>View Another!</button>
-                        </div></>
-                    :<button className="firstActor" onClick={start}>Take a Look!</button>
-                }
-                {/* {console.log("img ", actor.img)} */}
-            </div>
+            </div> */}
+            
         </div>
      );
 }
  
 export default Home;
+
+
+// {/* <div className="viewer">
+//                 {/* {combineRoles()} */}
+//                 {actorID > 0 //started //actor[0] !== 0
+//                     ? <>
+//                         {console.log("index", index)}
+//                         {/* {console.log(topActors)} */}
+//                         {/* Actor Name */}
+//                         <Link id="roleActor" to={`/Actor/${actorID}`}>{actor[ActorName]}</Link>
+//                         {/* Actor Image and Nav*/}
+//                         <div id="homeActorNav">
+//                             <button className="homeActorButton" onClick={() => prevActor()}>{"←"}</button>
+//                             <img className="homeActorImg" src={actor[ImageURL]} alt={actor[ActorName]}></img>
+//                             <button className="homeActorButton" onClick={() => nextActor()}>{"→"}</button>
+//                         </div>
+//                         <HomeRoles 
+//                             actorID={actorID} 
+//                             actorName={actor[ActorName]} 
+//                             actorImg={actor[ImageURL]}
+//                             flag={filterFlag} user={user} 
+//                             myList={myList}
+//                             cache={cache}/> 
+//                         {/* <ShowRoleToggle  
+//                                 id="topActor" 
+//                                 actorID={actorID} 
+//                                 actorName={actor[ActorName]} 
+//                                 flag={filterFlag} user={user} 
+//                                 myList={myList}
+//                                 cache={cache}/> */}
+//                         </>
+//                     :<button className="firstActor" onClick={start}>Take a Look!</button>
+//                 }
+//                 {console.log("img ", actor.img)}
+//             </div>
