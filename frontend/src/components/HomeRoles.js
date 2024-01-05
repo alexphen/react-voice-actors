@@ -1,7 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
 import HomeChar from "../components/HomeChar";
-import "./flickity.pkgd.js"
 
 
 const _ = require('lodash')
