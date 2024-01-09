@@ -71,6 +71,7 @@ const ShowRoleToggle = ({actorID, actorName, actorImg, showID, flag, user, myLis
         // console.log(1, prevUser, 2, user)
         if (!_.isEqual(prevActor.current, actorID)) {
             // console.log("roles [actorID]")
+            cache = {};
             getRoles(actorID);
             restart();
         }
@@ -92,7 +93,8 @@ const ShowRoleToggle = ({actorID, actorName, actorImg, showID, flag, user, myLis
         // console.log(1, user, 2, prevUser)
         if (!actors.includes(actID)) {
             if (cache && cache[actID]) {
-                setRoleReturn(cache[actID])
+                handleRoles();
+                setRoleReturn(cache[actID]);
             }
             else {
                 actors.push(actID)
@@ -114,7 +116,7 @@ const ShowRoleToggle = ({actorID, actorName, actorImg, showID, flag, user, myLis
                 }
                 setRoleReturn(Object.values(roleData));
                 // console.log(Object.values(roleData))
-                cache[actorID] = Object.values(roleData)
+                // cache[actorID] = Object.values(roleData)
             }
         }
         else {
@@ -261,6 +263,7 @@ function next() {
         combineRoles();
         bubbleSort(roleReturn, roleReturn.length);
         findPrimary();
+        cache[actorID] = roleReturn;
      }
 
      function combineRoles() {
@@ -301,6 +304,7 @@ function next() {
             }
             // console.log(currRoleTitles, currRoleRanks)
 
+            // sort by anime rank  ?
             var swapped;
             for (let k = 0; k < currRoleShowIDs.length; k++) {
                 swapped = false

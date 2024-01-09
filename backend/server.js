@@ -1,12 +1,13 @@
-const exp           = require('constants'),
-      Anime         = require('./dbFiles/anime'),
+const 
+    //   Anime         = require('./dbFiles/anime'),
       express       = require('express'),
       dbOperation   = require('./dbFiles/dbOperationOracle'),
       cors          = require('cors'),
       oracledb      = require('oracledb'),
-      MAL           = require("myanimelist-api-wrapper"),
-      sql           = require('mssql'),
-      dbConfig      = require('./dbFiles/dbConfig');
+    //   MAL           = require("myanimelist-api-wrapper"),
+    //   sql           = require('mssql'),
+    //   dbConfig      = require('./dbFiles/dbConfig'),
+      { spawn }     = require('child_process');
 
 const API_PORT = process.env.PORT || 3000;
 const app = express(),
@@ -100,16 +101,85 @@ app.post('/api/actorFull', async(req, res) => {
 
 app.post('/api/mal', async(req, res) => {
     try {
-        console.log('Called mal', req.body);
+        console.log('Called mal', req.body.Username);
         try {
             const result = await dbOperation.getMAL(req.body.Username)
-            console.log(result.data.length)
+            // console.log(result.data.length)
             res.send(result);
+            console.log("sent")
         } catch (error) {
             console.log(error.message)
+            // Private Account
             if (error.message.includes("403:")) {
-                res.send(false)
+            
+                let dataToSend = {};
+                // spawn new child process to call the python script 
+                // and pass the variable values to the python script
+                const python = spawn('python', ['auth.py', req.body.Username]);
+                // collect data from script
+                python.stdout.on('data', function (data) {
+                    console.log('Pipe data from python script ...');
+                    data = data.toString();
+                    dataToSend["url"] = data.substring(0,data.indexOf(" "))
+                    dataToSend["veri"] = data.substring(data.indexOf(" ") + 1, data.indexOf("\r\n"))
+                    // console.log(dataToSend)
+                    // res.send(dataToSend);
+                });
+                // in close event we are sure that stream from child process is closed
+                python.on('close', (code) => {
+                    console.log(`child process close all stdio with code ${code}`);
+                    // send data to browser
+                    res.send(dataToSend)
+                });
+                // res.send(false)
             }
+        }
+        
+    } catch (error) {
+        console.log(error)
+    }
+})
+
+app.post('/api/malA', async(req, res) => {
+    try {
+        console.log('Called mal authd', req.body.Username);
+        try {
+            const result = await dbOperation.getMAL(req.body.Username, req.body.auth_token)
+            console.log(result.data.length)
+            res.send(result);
+            console.log("sent")
+        } catch (error) {
+            console.log(error.message)
+        }
+        
+    } catch (error) {
+        console.log(error)
+    }
+})
+
+app.post('/api/auth', async(req, res) => {
+    try {
+        console.log('Called auth');
+        try {
+            let dataToSend = {};
+                // spawn new child process to call the python script 
+                // and pass the variable values to the python script
+                const python = spawn('python', ['auth2.py', req.body.code, req.body.veri]);
+                // collect data from script 
+                python.stdout.on('data', function (data) {
+                    console.log('Pipe data from python script ...');
+                    dataToSend = JSON.parse(data.toString().replaceAll("\'", "\""));
+                    // res.send(dataToSend);
+                });
+                // in close event we are sure that stream from child process is closed
+                python.on('close', (code) => {
+                    console.log(`child process close all stdio with code ${code}`);
+                    // console.log(dataToSend)
+                    // send data to browser
+                    res.send(dataToSend)
+                });
+        } catch (error) {
+            console.log(error.message)
         }
         
     } catch (error) {

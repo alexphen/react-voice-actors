@@ -60,6 +60,7 @@ const HomeRoles = ({actorID, actorName, actorImg, showID, flag, user, myList, ca
 
     useEffect(() => {
         let tempDir = direction;
+        started = true;
         setTimeout(() => {
             // console.log("rolescontainer")
             resumeScroll(tempDir);
@@ -71,6 +72,7 @@ const HomeRoles = ({actorID, actorName, actorImg, showID, flag, user, myList, ca
         // debugger
         if (!_.isEqual(prevActor.current, actorID)) {
             // console.log("roles [actorID]")
+            console.log(started)
             if (started) {
                 stopScroll();
             }
@@ -265,12 +267,12 @@ const HomeRoles = ({actorID, actorName, actorImg, showID, flag, user, myList, ca
     }
 
     function resumeScroll(dir) {
-    // console.log(started)
-    setScrolling(true);
-    let tempDir = dir;
-    setDirection(dir);
-    clearInterval(intID);
-    intID = window.self.setInterval(() => {
+        // console.log(started)
+        setScrolling(true);
+        let tempDir = dir;
+        setDirection(dir);
+        clearInterval(intID);
+        intID = window.self.setInterval(() => {
         if (rolesContainer && rolesContainer.scrollWidth > 0) {
             // console.log(SPEED, tempDir, rolesContainer.scrollLeft, (rolesContainer.scrollWidth - rolesContainer.clientWidth))
             // move right

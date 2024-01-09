@@ -324,56 +324,37 @@ const getShowActors = async(showID, flag) => {
     }
 }
 
-// const setList = async(ids) => {
-//     let connection = await oracledb.getConnection();
-//     try {
-//         let str = "("
-//         for (let i in ids) {
-//             str += ids[i] + ","
-//         }
-//         str = str + ") done"
-//         // console.log(str)
-        
-//         // let res = connection.execute(`SELECT * FROM Anime WHERE ShowID IN ${str}`);
-//         return str;
-
-
-//         // connection.execute(`TRUNCATE TABLE MyList`);
-//         // for(let i in ids) {
-//         //     connection.execute(`INSERT INTO MyList(ListShowID) VALUES (${ids[i]})`);
-//         //     connection.commit();
-//         // }                   
-//         return true;                                                  
-//     } catch (error) {
-//         console.log(error)
-//         return false;
-//     } finally {
-//         if (connection) {
-//           try {
-//             await connection.close(); // Put the connection back in the pool
-//           } catch (err) {
-//               throw (err);
-//           }
-//         }
-//     }
-// }
-
-const getMAL = async(Username) => {
-    debugger;
-    const anime = MAL().anime;
+const getMAL = async(Username, auth) => {
     const list = MAL().user_animelist;
     var res;
-    try {
-        res = list({
-            client_id: env.MAL_CLIENT_ID,
-            user_name: Username,
-            limit: 1000
-        }).get_animelist()()
-        // .then((data) => console.log(data))
-        return res;
+    if (auth) {
+        console.log("authed")
+        try {
+            res = list({
+                client_id: env.MAL_CLIENT_ID,
+                user_name: "@me",
+                auth_token: auth,
+                limit: 1000
+            }).get_animelist()()
+            return res;
+        }
+        catch(error) {
+            console.log(error);
+        }
     }
-    catch(error) {
-        console.log(error);
+    else {
+        console.log("new")
+        try {
+            res = list({
+                client_id: env.MAL_CLIENT_ID,
+                user_name: Username,
+                limit: 1000
+            }).get_animelist()()
+            return res;
+        }
+        catch(error) {
+            console.log("error");
+        }
     }
 }
 
