@@ -2,20 +2,37 @@ import Navbar from "./components/Navbar";
 import Show from "./pages/Show";
 import Home from "./pages/Home";
 import Actor from "./pages/Actor";
-import { Link, useMatch, useResolvedPath } from "react-router-dom"
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Link, useMatch, useResolvedPath, useSearchParams } from "react-router-dom"
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { useState, useEffect } from "react";
-
+import OAuth from "./pages/OAuth";
 
 function App() {
-	const [cookies, setCookies] = useCookies(["acc", "list"])
+
+	const [cookies, setCookie, removeCookie] = useCookies(["list", "acc", "veri", "token", "auth"])
 	const [entry, setEntry]  	= useState(cookies.acc || "");
 	const [myList, setMyList] 	= useState(cookies.list || []);
   	const [user, setUser]     	= useState(cookies.acc || "");
-	
+	const [searchParams, setSearchParams] = useSearchParams();
+	const navigate = useNavigate();
+	// const code = searchParams.get('code')
+	var code;
+	const [veri, setVeri]		= useState(cookies.veri || "");
+	const [token, setToken] 	= useState(cookies.token || {});
+
+	var authPopup;
+	var authorized = false;
+
 	let location = useLocation();
 	
+	useEffect(() => {
+		removeCookie("veri")
+		removeCookie("token")
+	}, []);
+
+	// setInterval(() => {
+	// }, 1000)
 
 	// useEffect(() => {
 	// 	setDBList();
@@ -25,33 +42,121 @@ function App() {
 	// 	getMALData()
 	// }, [])
 
+	// useEffect(() => {
+	// 	console.log(window.location)
+	// }, [window.location]);
 
 	const getMALData = async() => {
+		if (entry != "" && entry != user) {
+			if (cookies.token && cookies.token["access_token"]) {
+				console.log("getting MAL authorized data")
+				try {
+					const malData = await fetch ('/api/malA', {
+						method: 'POST',
+						headers: {
+							'content-type': 'application/json',
+							'Accept': 'application/json'
+						},
+						body: JSON.stringify({
+							Username: entry,
+							auth_token: cookies.token["access_token"]
+						})
+					})
+					.then(res => res.json());
+					if (malData["data"]) {
+						let str = "("
+						for (let i in malData.data) {
+							str += malData.data[i].node.id + ","
+						}
+						str = str.slice(0, str.length - 1) + ")"
+						// console.log(str)
+						setMyList(str)
+						if (str.length > 0) {
+							setUser(entry)
+							setCookie('acc', entry, {path: '/'})
+							setCookie('list', str, {path: '/'})
+						}
+					}
+				}
+				catch (error) {
+					console.log(error)
+				}
+			}
+			else {
+				console.log("getting MAL data")
+				try {
+					const malData = await fetch ('/api/mal', {
+						method: 'POST',
+						headers: {
+							'content-type': 'application/json',
+							'Accept': 'application/json'
+						},
+						body: JSON.stringify({
+							Username: entry
+						})
+					})
+					.then(res => res.json());
+					if (!malData["data"]) {
+						try {
+							console.log(malData)
+							let authURL = malData["url"];
+							setVeri(malData["veri"]);
+							console.log(malData["veri"])
+							setCookie("veri", malData["veri"]);
+							// navigate("/OAuth");
+							authPopup = window.open(authURL, "", `left=${window.screenLeft},top=${window.screenTop},width=600,height=800`);
+							// alert("Your List is marked as private. Please make it public to use this feature.")
+						} catch (error) {
+							console.log("failed to authorize")
+						}
+					}
+					else {
+						let str = "("
+						for (let i in malData.data) {
+							str += malData.data[i].node.id + ","
+						}
+						str = str.slice(0, str.length - 1) + ")"
+						// console.log(str)
+						setMyList(str)
+						if (str.length > 0) {
+							setUser(entry)
+							setCookie('acc', entry, {path: '/'})
+							setCookie('list', str, {path: '/'})
+						}
+					}
+				}
+				catch (error) {
+					console.log(error)
+				}
+			}
+		}
+	}
+
+	const getMALDataAuthd = async() => {
 		if (entry != "") {
-			console.log("getting MAL data")
+			console.log("getting MAL authorized data")
 			try {
-				const malData = await fetch ('/api/mal', {
+				const malData = await fetch ('/api/malA', {
 					method: 'POST',
 					headers: {
 						'content-type': 'application/json',
 						'Accept': 'application/json'
 					},
 					body: JSON.stringify({
-						Username: entry
+						Username: entry,
+						auth_token: cookies.token["access_token"]
 					})
 				})
 				.then(res => res.json());
-				if (malData == false) {
-					console.log("private")
-					alert("Your List is marked as private. Please make it public to use this feature.")
+				if (!malData["data"]) {
+					try {
+						console.log(malData)
+						alert("Your List is marked as private. Please make it public to use this feature.")
+					} catch (error) {
+						console.log("failed to authorize")
+					}
 				}
 				else {
-
-				// instead of array we're turning the list into a comma separated string
-					// let temp = [];
-					// for (let i in malData.data) {
-					// 	temp[i] = malData.data[i].node.id;
-					// }
 					let str = "("
 					for (let i in malData.data) {
 						str += malData.data[i].node.id + ","
@@ -61,8 +166,8 @@ function App() {
 					setMyList(str)
 					if (str.length > 0) {
 						setUser(entry)
-						setCookies('acc', entry, {path: '/'})
-						setCookies('list', str, {path: '/'})
+						setCookie('acc', entry, {path: '/'})
+						setCookie('list', str, {path: '/'})
 					}
 				}
 			} catch (error) {
@@ -76,24 +181,13 @@ function App() {
 		getMALData()
 	}
 
-	// const setDBList = async() => {
-	// 	if (myList.length > 0) {
-	// 		const myListString = await fetch('/api/list', {
-	// 			method: 'POST',
-	// 			headers: {
-	// 			'content-type': 'application/json',
-	// 			'Accept': 'application/json'
-	// 			},
-	// 			body: JSON.stringify({
-	// 				ids: myList
-	// 			})
-	// 		})
-	// 	}
-	// }
+	useEffect(() => {
+		if(authorized)
+			getMALDataAuthd();
+	}, [cookies.auth]);
 
 	return (
 		<div className="app">
-			{/* {console.log(cookies)} */}
 			
 			{/* <Navbar username={user}>
 				<h1>Hello</h1>
@@ -131,8 +225,8 @@ function App() {
 				<Route path="/Anime/:id?/:title?" element={<Show user={user} myList={myList}/>} />
 				<Route path="/Actor/:id?" element={<Actor user={user} myList={myList}/>} />
 				<Route path="/" element={<Home user={user} myList={myList}/>} />
+				<Route path="/OAuth/:code?" element={<OAuth cookies={cookies} setCookie={setCookie} authorized={authorized}/>} />
 			</Routes>
-			{/* <button onClick={getData}>Click</button> */}
 		</div>
 	
 	);
@@ -168,12 +262,14 @@ function App() {
 		setUser("")
 		setMyList([])
 		setEntry("")
-		setCookies('acc', "", {path: '/'})
+		setCookie('acc', "", {path: '/'})
+		setCookie('list', "", {path: '/'})
 	}
+
 }
 export default App
 
-  
+
   
   
 

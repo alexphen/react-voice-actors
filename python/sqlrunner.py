@@ -146,7 +146,6 @@ def topList() :
             else :
                 title = entry["node"]["alternative_titles"]["en"]
             img = entry["node"]["main_picture"]["medium"]
-            # if id is not yet in myList, append
             id = entry["node"]["id"]
             popularity = entry["node"]["popularity"]
             cursor.execute('SELECT * FROM Anime WHERE ShowID = ' + str(id))
@@ -154,6 +153,7 @@ def topList() :
             #     print(i)
             res = cursor.fetchall()
             print(res)
+            # if id is not yet in myList, append
             if not res :
                 print('Adding ' + title)
                 cursor.execute(f'''INSERT INTO Anime(ShowID, Title, ImageURL, Popularity)
@@ -190,7 +190,7 @@ def topListUpdate(start, max) :
     # max = input("Top x = ")
     print("Fetching top ", max, " anime...")
 
-    url = 'https://api.myanimelist.net/v2/anime/ranking?ranking_type=all&fields={title,related_anime,id,popularity,alternative_titles=en}&limit=5'# + str(max)
+    url = 'https://api.myanimelist.net/v2/anime/ranking?ranking_type=all&fields={title,related_anime,id,popularity,alternative_titles=en}'#&limit=5'# + str(max)
    
     # trying = True
     # attempts = 0
@@ -226,8 +226,7 @@ def topListUpdate(start, max) :
 
     # collect data on each entry, calls vaParse
     while count < int(max) + 1 :
-        print(count)
-        if count > int(start) :
+        if count >= int(start) :
         # loop thru current page. print english title if available
             for entry in anime["data"]:
                 # use english title if exists
@@ -584,7 +583,7 @@ def fixActorImg() :
 
 # topList()
 
-#topListUpdate(101,500)
+topListUpdate(1,2000)
 
 # addShowFavs()
 
@@ -621,38 +620,39 @@ def fixActorImg() :
 # print(res)
 
 
-cursor.execute('''SELECT Roles.CharID, Roles.CharImg, Roles.CharName, Roles.ShowID, Anime.Title FROM Roles
-                  INNER JOIN Anime on Anime.ShowID=Roles.ShowID
-                        WHERE LOWER(Anime.Title) LIKE \'%attack on titan%\'''')
-res = cursor.fetchall()
-for i in res :
-    trying = True
-    attempts = 0
-    url = f'''https://api.jikan.moe/v4/characters/{i[0]}'''
-    while trying :
-        try :
-            response = requests.get(url, headers = {
-                'X-MAL-CLIENT-ID': CLIENT_ID
-                })
-            response.raise_for_status()
-            character = response.json()
-            response.close()
-        except :
-            # print("Exception at gui.vaParse")
-            if attempts == 20 :
-                character = dict()
-                trying = False
-            else :
-                time.sleep(0.1)
-            attempts+= 1
-        else :
-            trying = False
+# Manually Update Images
+# cursor.execute('''SELECT Roles.CharID, Roles.CharImg, Roles.CharName, Roles.ShowID, Anime.Title FROM Roles
+#                   INNER JOIN Anime on Anime.ShowID=Roles.ShowID
+#                         WHERE LOWER(Anime.Title) LIKE \'%bakemono%\'''')
+# res = cursor.fetchall()
+# for i in res :
+#     trying = True
+#     attempts = 0
+#     url = f'''https://api.jikan.moe/v4/characters/{i[0]}'''
+#     while trying :
+#         try :
+#             response = requests.get(url, headers = {
+#                 'X-MAL-CLIENT-ID': CLIENT_ID
+#                 })
+#             response.raise_for_status()
+#             character = response.json()
+#             response.close()
+#         except :
+#             # print("Exception at gui.vaParse")
+#             if attempts == 20 :
+#                 character = dict()
+#                 trying = False
+#             else :
+#                 time.sleep(0.1)
+#             attempts+= 1
+#         else :
+#             trying = False
     
-    imgurl = character["data"]["images"]["jpg"]["image_url"]
-    # print(imgurl)
-    if i[1] != imgurl :
-        cursor.execute(f'''UPDATE Roles
-                            Set CharImg = '{imgurl}'
-                            WHERE CharID = {i[0]}''')
-        conn.commit()
-        print(f'''updated {i[2]}'s img''')
+#     imgurl = character["data"]["images"]["jpg"]["image_url"]
+#     # print(imgurl)
+#     if i[1] != imgurl :
+#         cursor.execute(f'''UPDATE Roles
+#                             Set CharImg = '{imgurl}'
+#                             WHERE CharID = {i[0]}''')
+#         conn.commit()
+#         print(f'''updated {i[2]}'s img''')
