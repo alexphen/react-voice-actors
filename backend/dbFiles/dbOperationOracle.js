@@ -43,38 +43,7 @@ const addAnime = async(Anime) => {
         }
     }
 }
-const getHomeActors = async(flag, myList) => {
-    let connection;
-    let res;
-    try {
-        connection = await oracledb.getConnection();
-        if (flag) {
-            res = connection.execute(`SELECT DISTINCT Actors.ActorID FROM Actors
-                                        INNER JOIN Roles ON Roles.ActorID=Actors.ActorID
-                                        WHERE Roles.ShowID IN ${myList}
-                                        ORDER BY Actors.aFavs DESC
-                                        FETCH FIRST 20 ROWS ONLY`)
-        }
-        else {
-            res = connection.execute(`SELECT DISTINCT Actors.ActorID FROM Actors
-                                        INNER JOIN Roles ON Roles.ActorID=Actors.ActorID
-                                        ORDER BY Actors.aFavs DESC
-                                        FETCH FIRST 20 ROWS ONLY`)
-        }
-        return res;
-    }
-    catch(error) {
-        console.log(error);
-    } finally {
-        if (connection) {
-          try {
-            await connection.close(); // Put the connection back in the pool
-          } catch (err) {
-              throw (err);
-          }
-        }
-    }
-}
+
 const getActor = async(actID) => {
     let connection;
     try {        
@@ -151,8 +120,6 @@ const addActor = async(Actor) => {
         }
     }
 }
-
-//  ROLES
 const getRoles = async(actID, myList, flag) => {
     try {        
         connection = await oracledb.getConnection();
@@ -188,7 +155,49 @@ const getRoles = async(actID, myList, flag) => {
         }
     }
 }
-
+const getHomeActors = async(flag, myList) => {
+    let connection;
+    let res;
+    try {
+        connection = await oracledb.getConnection();
+        if (flag) {
+            // res = connection.execute(`SELECT DISTINCT Actors.ActorID FROM Actors
+            //                             INNER JOIN Roles ON Roles.ActorID=Actors.ActorID
+            //                             WHERE Roles.ShowID IN ${myList}
+            //                             ORDER BY Actors.aFavs DESC
+            //                             FETCH FIRST 20 ROWS ONLY`)
+            res = connection.execute(`SELECT Actors.ACTORID, Actors.ActorName, COUNT(Roles.CharID) FROM Roles
+                                        INNER JOIN Actors ON Roles.ActorID=Actors.ActorID
+                                        WHERE Roles.ShowID IN ${myList}
+                                        GROUP BY Actors.ACTORID, Actors.ActorName
+                                        ORDER BY COUNT(Roles.CharID) DESC
+                                        FETCH FIRST 50 ROWS ONLY`)
+        }
+        else {
+            // res = connection.execute(`SELECT DISTINCT Actors.ActorID FROM Actors
+            //                             INNER JOIN Roles ON Roles.ActorID=Actors.ActorID
+            //                             ORDER BY Actors.aFavs DESC
+            //                             FETCH FIRST 20 ROWS ONLY`)
+            res = connection.execute(`SELECT Actors.ACTORID, Actors.ActorName, COUNT(Roles.CharID) FROM Roles
+                                        INNER JOIN Actors ON Roles.ActorID=Actors.ActorID
+                                        GROUP BY Actors.ACTORID, Actors.ActorName
+                                        ORDER BY COUNT(Roles.CharID) DESC
+                                        FETCH FIRST 50 ROWS ONLY`)
+        }
+        return res;
+    }
+    catch(error) {
+        console.log(error);
+    } finally {
+        if (connection) {
+          try {
+            await connection.close(); // Put the connection back in the pool
+          } catch (err) {
+              throw (err);
+          }
+        }
+    }
+}
 const getHomeData = async(flag, myList) => {
     try {        
         connection = await oracledb.getConnection();
@@ -224,7 +233,6 @@ const getHomeData = async(flag, myList) => {
         }
     }
 }
-
 const getSearchData = async(title, myList, flag) => {
     try {        
         connection = await oracledb.getConnection();
@@ -253,7 +261,6 @@ const getSearchData = async(title, myList, flag) => {
         }
     }
 }
-
 const getSearchActorData = async(name, myList, flag) => {
     try {        
         connection = await oracledb.getConnection();
@@ -294,7 +301,6 @@ const getSearchActorData = async(name, myList, flag) => {
         }
     }
 }
-
 const getShowActors = async(showID, flag) => {
     try {        
         connection = await oracledb.getConnection();
@@ -323,7 +329,6 @@ const getShowActors = async(showID, flag) => {
         }
     }
 }
-
 const getMAL = async(Username, auth) => {
     const list = MAL().user_animelist;
     var res;
@@ -357,6 +362,21 @@ const getMAL = async(Username, auth) => {
         }
     }
 }
+const getTop100 = async() => {
+    const anime = MAL().anime;
+    try {
+        let res = anime({
+            client_id: env.MAL_CLIENT_ID,
+            ranking_type: "tv",
+            limit: 100
+        }).anime_ranking()()
+        return res;
+    }
+    catch(error) {
+        console.log(error);
+    }
+}
+
 
 module.exports = {
     addActor,
@@ -370,5 +390,6 @@ module.exports = {
     getSearchActorData,
     getSearchData,
     getShowActors,
+    getTop100,
     getRoles
 }

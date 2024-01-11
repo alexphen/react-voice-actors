@@ -7,10 +7,25 @@
   margin: 0;
   font-family: "Quicksand";
   /* background-color: #202025; */
-  color: #f2f1f1;
+  color: color-contrast(var(--white) vs var(--bg));
+  color: var(--white);
+}
+:root {
+  --bg: #201E1F;
+  /* --bg: #4A4E69; */
+  --trim1: #A31621;
+  --trim2: #4A4E69;
+  --trim3: #6EA4BF;
+  --trim4: #C9ADA7;
+  --trim5: #FFFD82;
+  --white: #f2f2f2;
+  --darkgrey: #44444c;
+  --lightgrey: #777;
+  background-image: url('./assets/bg.png');
+  /* background-image: conic-gradient(var(--bg)0deg, var(--trim2)360deg, var(--bg)180deg); */
 }
 html {
-  background-color: #202025;
+  background-color: var(--bg);
 }
 html::-webkit-scrollbar {
   display: none;
@@ -22,6 +37,7 @@ a {
 ::marker {
   content: "";
   display: none;
+  color: var(--white);
 }
 #toTop {
   cursor: pointer;
@@ -38,6 +54,9 @@ a {
 }
 button {
   cursor: pointer;
+}
+button:hover {
+  opacity: 85%;
 }
 .Auth {
   position: relative;
@@ -56,7 +75,7 @@ button {
   }
   #roleActor:after {
     /* content: '◥'; */
-    color: #f2f1f1;
+    color: var(--white);
     width: 0;
     height: 0;
     /* border-style: solid; */
@@ -95,7 +114,7 @@ button {
     align-self: center;
   }
   .roleTogglePrev {
-    background-color: darkslategrey;
+    background-color: var(--trim1);
     width: 40px;
     height: 40px;
     text-align: center;
@@ -106,7 +125,7 @@ button {
     border-width: .3vh;
   }
   .roleToggleNext {
-    background-color: darkslategrey;
+    background-color: var(--trim1);
     width: 40px;
     height: 40px;
     text-align: center;
@@ -149,7 +168,7 @@ button {
     /* margin-right: 2vh; */
   }
   .roleGallery h4 {
-    color: #6598ea;
+    color: var(--trim5);
     /* font-size: 2em; */
     font-size: 4vh;
   }
@@ -175,7 +194,7 @@ button {
     text-decoration: none;
     gap: .5vw;
     padding: 15px;
-    border-bottom: .1vw solid #f2f2f2;;
+    border-bottom: .1vw solid var(--white);
   }
   .showsList {
     display: none;
@@ -184,7 +203,7 @@ button {
     flex-direction: column;
     text-align: left;
     border-radius: 1em;
-    background-color: #44444c;
+    background-color: var(--darkgrey);
     padding: 1em;
     padding-top: 0;
   }
@@ -214,11 +233,11 @@ button {
 }
 .resBox {
   position: relative;
-  background-color:#202025;
+  background-color: var(--bg);
   font-size: 2vh;
   text-align: left;
   /* right: 0; */
-  border: #f1356d ridge .25vw;
+  border: var(--trim1) ridge .25vw;
   border-radius: 1vw;
   margin: .1vw;
   width: 100%;
@@ -233,15 +252,15 @@ button {
   .nav {
     position: -webkit-sticky; /* Safari */
     position: relative;
-    background-color: #44444c;
+    background-color: var(--darkgrey);
     display: flex;
     justify-content: space-between;
     align-items: stretch;
     z-index: 10;
     height: 7vh;
     top: 6vh;
-    border-top: .2vw solid #f2f2f2;
-    border-bottom: .2vw solid #f2f2f2;
+    border-top: .2vw solid var(--white);
+    border-bottom: .2vw solid var(--white);
   }
   .nav a {
     /* margin-left: 16px; */
@@ -260,12 +279,6 @@ button {
     list-style: none;
     display: flex;
   }
-  .nav h1 {
-    color: #f1356d;
-    text-align: center;
-    font-size: 2.5vw;
-    padding: 1vw;
-  }
   .nav .links {
     margin-left: auto;
   }
@@ -275,13 +288,13 @@ button {
     gap: 4vw;
   }
   .nav li.active {
-    background-color: #555;
+    background-color: var(--trim2);
   }
   .nav li:hover {
-    background-color: #777;
+    background-color: var(--lightgrey);
   }
   .nav a:hover {
-    color: #f1356d;
+    color: var(--trim1);
   }
   #userSearchArea {
     display: flex;
@@ -296,10 +309,11 @@ button {
   #userSearch {
     position: relative;
     display: flex;
-    width: 18vh;
+    width: 16vh;
+    columns: 1;
     z-index: 11;
     font-size: 2vh;
-    color: #202025;
+    color: black;
     /* height: 3vh; */
     /* top: .25vh; */
     padding: 0vw 0vw 0vw .75vh;
@@ -309,25 +323,29 @@ button {
   #userSearchInputs {
     display: flex;
   }
-  #userSearchButton {
+  /* #userSearchButton { */
+  .nav button {
     position: relative;
     z-index: 11;
     font-size: 1.5vh;
     /* left: 60%; */
-    background-color: rgb(105, 105, 105);  
+    background-color: var(--lightgrey);  
     /* height: 3vh; */
     border-width: .3vw;
     border-radius: .5vh;
     padding: 0 1vw 0 1vw;
+    text-wrap: nowrap;
   }
   #filter {
-    font-size: 1.2vh;
+    font-size: 1vh;
+    /* text-wrap: nowrap; */
+    /* word-break: break-all; */
   }
   #unfilter {
     /* height: 2vh; */
     border-width: .1vh;
     font-size: 1.2vh;
-    background-color: rgb(105, 105, 105);  
+    background-color: var(--lightgrey);  
     margin-top: .5vh;
     padding: .3vh;
   }
@@ -372,6 +390,7 @@ button {
   .home .viewer {
     display: flex;
     flex-direction: column;
+    /* height: 100%; */
     /* position: fixed; */
     /* right: 0; */
     /* align-items: center; */
@@ -398,7 +417,7 @@ button {
     /* align-self: right; */
     padding: 1vw;
     padding-top: 3vw;
-  }  
+  }
   .homeRoleCarousel {
     display: flex;
     width: 100%;
@@ -409,7 +428,7 @@ button {
   #homePlayButton {
     position: relative;
     align-self: flex-end;
-    width: 100px;
+    width: 80px;
     right: 5vw;
     /* top: 1000px; */
     cursor: pointer;
@@ -426,14 +445,15 @@ button {
     align-items: center;
   }
   .homeCharImg {
-    width: 225px;
+    width: inherit;
+    height: inherit;
   }
   .homeImgContainer {
-    height: 350px;
-    width: 225px;
+    height: 40vh;
+    width: 25.6vh;
   }
   .homeCharName {
-    color: #6598ea;
+    color: var(--trim5);
     /* font-size: 37.5px; */
     /* max-width: 100%; */
     width: 100%;
@@ -461,7 +481,7 @@ button {
     /* min-height: 2.1em; */
     position: relative;
     scrollbar-width: 0;
-    background-color: #202025;
+    background-color: var(--bg);
     z-index: 10;
   }
   .homeCharName::-webkit-scrollbar {
@@ -474,19 +494,8 @@ button {
     justify-content: space-between;
     width: 225px;
   }
-  .nextActor {
-    background-color: darkslategrey;
-    height: fit-content;
-    font-size: 2vh;
-    width: 40%;
-    align-self: end;
-    /* margin-top: auto; */
-    /* margin-bottom: auto; */
-    /* position: relative; */
-    /* top: 17vw; */
-  }
   .firstActor {
-    background-color: darkslategrey;
+    background-color: var(--trim2);
     height: fit-content;
     font-size: 3vh;
     /* align-self: auto; */
@@ -517,7 +526,7 @@ button {
     position: relative;
     display: flex;
     flex-direction: column;
-    background-color: #202025;
+    background-color: var(--bg);
     top: 6vh;
     min-height: 100vh;
     height: 100%;
@@ -540,7 +549,7 @@ button {
     font-size: 3vh;
     border-width: .25vw;
     border-radius: 1vw;
-    color: #202025;
+    color: black;
     /* margin: 0 3vh; */
     padding-left: 1vw;
   }
@@ -571,7 +580,7 @@ button {
     border-radius: .5vw;
     padding-left: .75vw;
     font-size: 2vh;
-    color: #202025;
+    color: black;
   }
   .showTitle {
     margin-left: auto;
@@ -594,7 +603,7 @@ button {
   }
   #prevPage {
     position: absolute;
-    background-color: darkslategrey;
+    background-color: var(--trim2);
     height: fit-content;
     font-size: 3vh;
     bottom: 0;
@@ -603,11 +612,11 @@ button {
     border-width: .1vh;
   }
   #prevPage:disabled {
-    background-color: #202025;
+    background-color: black;
   }
   #nextPage {
     position: absolute;
-    background-color: darkslategrey;
+    background-color: var(--trim2);
     height: fit-content;
     font-size: 3vh;
     bottom: 0;
@@ -616,7 +625,7 @@ button {
     padding: 1vh;
   }
   #nextPage:disabled {
-    background-color: #202025;
+    background-color: black;
   }
   .show #toTop {
     position: fixed;
@@ -628,7 +637,7 @@ button {
     /* position: fixed; */
     bottom: 0;
     right: 19%;
-    color: #202025;
+    color: black;
     font-size: 2vh;
     width: fit-content;
   }
@@ -655,7 +664,7 @@ button {
   flex-direction: column;
   /* justify-content: start; */
   gap: 25px;
-  background-color: #202025;
+  background-color: var(--bg);
   top: 6vh;
   /* min-height: 100vh; */
   height: 100%;
@@ -708,7 +717,7 @@ button {
   font-size: 3vh;
   border-width: .25vw;
   border-radius: 1vw;
-  color: #202025;
+  color: black;
   /* margin: 0 3vh; */
   padding-left: 1vw;
 }
@@ -765,18 +774,27 @@ button {
   flex-direction: column;
   /* max-width: 40vw; */
 }
+.info h3 {
+  color: var(--trim2);
+}
+.info p {
+  color: var(--bg);
+}
+.info a {
+  color: var(--trim1);
+}
 .actorRole img:hover {
-  box-shadow: 0vh 0vh 1vh .5vh  #f1356d;
+  box-shadow: 0vh 0vh 1vh .5vh  var(--trim3);
 }
 .actorRole img:hover + .info {
-  background-color: #f1356d;
+  background-color: var(--trim5);
   display: flex;
-  box-shadow: 0vh 0vh 1vh .3vh  #53768d;
+  box-shadow: 0vh 0vh 1vh .3vh  var(--trim3);
 }
 .info:hover {
-  background-color: #53768d;
+  background-color: var(--trim5);
   display: flex;
-  box-shadow: 0vh 0vh 1vh .3vh  #f1356d;
+  box-shadow: 0vh 0vh 1vh .3vh  var(--trim1);
 }
 .actorPage #toTop {
   position: fixed;
@@ -795,7 +813,7 @@ button {
 @media screen and (min-width: 600px) {
   /* base styles */
   input {
-    background-color: #4b4b52;
+    background-color: var(--white);
   }
   #begin {
     margin: 5vw 5vw 0 5vw;
@@ -808,8 +826,11 @@ button {
     /* flex-direction: column-reverse; */
     justify-content: center;
     align-items: center;
-    border: 5px outset #efeaea;
-    background-color: #4b4b52;
+    border: 5px outset var(--trim4);
+    background-color: var(--darkgrey);
+  }
+  .roleHeader:has(#roleActor:hover) {
+    background-color: var(--trim3);
   }
   #roleActor {
     width: min-content;
@@ -824,6 +845,11 @@ button {
     /* border-style: solid;
     border-width: 3px 3px 3px 0;
     border-color: white white transparent transparent; */
+  }
+  #roleActor:hover {
+    color: var(--trim5);
+    text-shadow: 0 0 10px black;
+    /* font-weight: bold; */
   }
   /* #roleActor::after {
     content: '';
@@ -861,7 +887,7 @@ button {
     align-self: center;
   }
   .roleTogglePrev {
-    background-color: darkslategrey;
+    background-color: var(--trim2);
     width: 50px;
     height: 50px;
     text-align: center;
@@ -871,7 +897,7 @@ button {
     border-width: .3vh;
   }
   .roleToggleNext {
-    background-color: darkslategrey;
+    background-color: var(--trim2);
     width: 50px;
     height: 50px;
     text-align: center;
@@ -909,7 +935,7 @@ button {
     margin-right: .5vw;
   }
   .roleGallery h4 {
-    color: #6598ea;
+    color: var(--trim3);
     font-size: 35px;
     /* font-size: 1.5vw; */
 
@@ -937,12 +963,15 @@ button {
     /* min-height: 2.1em; */
     position: relative;
     scrollbar-width: 0;
-    background-color: #202025;
+    background-color: var(--bg);
     z-index: 10;
   }
   #topTitle {
     text-align: end;
     padding: 10px;
+  }
+  #topTitle:hover {
+    text-shadow: 3px 3px 3px var(--trim1);
   }
   #moreTitles {
     text-align: center;
@@ -961,9 +990,9 @@ button {
     flex-direction: column;
     justify-content: flex-start;
     margin: auto;
-    border: 1px solid white;
+    border: 1px solid var(--white);
     border-radius: 10px;
-    background-color: #44444c;
+    background-color: var(--darkgrey);
     z-index: 5;
     padding: 0 1em 1em 1em;
   }
@@ -972,17 +1001,18 @@ button {
     right: 5px;
     /* display: none; */
   }
-  .showsList::-webkit-scrollbar-track {
+  /* .showsList::-webkit-scrollbar-track {
     box-shadow: inset 0 0 5px grey;
     border-radius: 10px;
-  }
+  } */
   .showsList::-webkit-scrollbar-track-piece {
     width: 0;
     border-radius: 10px;
-    background: #000000;
+    background: black;
   }
   .showsList::-webkit-scrollbar-thumb {
-    background: #ffffff;
+    background: var(--trim1);
+    border: 2px solid var(--trim5);
     border-radius: 10px;
   }
   .showsList::-webkit-scrollbar-button {
@@ -1001,7 +1031,7 @@ button {
     text-decoration: none;
     gap: .5vw;
     padding: 20px;
-    border-bottom: .1vw solid #f2f2f2;;
+    border-bottom: .1vw solid var(--white);;
   }
   /* ///////////////// */
 
@@ -1009,7 +1039,7 @@ button {
   .nav {
     position: -webkit-sticky; /* Safari */
     position: sticky;
-    background-color: #44444c;
+    background-color: var(--darkgrey);
     display: flex;
     justify-content: space-between;
     align-items: stretch;
@@ -1017,7 +1047,7 @@ button {
     height: 3vw;
     top: 0;
     border: 0vw;
-    border-bottom: .1vw solid #f2f2f2;
+    border-bottom: .1vw solid var(--white);
   }
   .nav ul {
     padding: 0;
@@ -1026,12 +1056,12 @@ button {
     list-style: none;
     display: flex;
   }
-  .nav h1 {
-    color: #f1356d;
+  /* .nav h1 {
+    color: var(--trim1);
     text-align: center;
     font-size: 2.5vw;
     padding: 1vw;
-  }
+  } */
   .nav .links {
     margin-left: auto;
   }
@@ -1048,7 +1078,7 @@ button {
     /* height: 2vh; */
     border-width: .1vw;
     font-size: 1vw;
-    background-color: rgb(105, 105, 105);  
+    background-color: var(--lightgrey);  
     padding: .1vw;
   }
   #filterLabel {
@@ -1070,6 +1100,7 @@ button {
     flex-direction: row;
     gap: 4vw;
     left: 0;
+    /* padding-right: 3vw; */
   }
   #navPages {
     right: 0;
@@ -1077,10 +1108,10 @@ button {
     align-items: stretch;
   }
   .nav li.active {
-    background-color: #555;
+    background-color: var(--trim2);
   }
   .nav li:hover {
-    background-color: #777;
+    background-color: var(--trim2);
   }
   .nav a {
     /* margin-left: 16px; */
@@ -1093,7 +1124,7 @@ button {
     text-align: center;
   }
   .nav a:hover {
-    color: #f1356d;
+    color: var(--trim4);
   }
   #userSearchArea {
     display: flex;
@@ -1108,7 +1139,7 @@ button {
   #userSearchInputs {
     display: flex;
     position: relative;
-    left: 10vw;
+    /* left: 1vw; */
   }
   #userSearch {
     /* position: fixed; */
@@ -1117,20 +1148,23 @@ button {
     z-index: 11;
     font-size: 2vw;
     /* height: 2vw; */
-    background-color: rgb(63, 80, 80);
+    background-color: var(--white);
+    color: black;
     top: .25vw;
     padding: 0vw 0vw 0vw .25vw;
     border-width: .2vw;
   }
-  #userSearchButton {
+  /* #userSearchButton { */
+  .nav button {
     position: relative;
     z-index: 11;
     font-size: 1.5vw;
-    background-color: rgb(105, 105, 105);  
+    background-color: var(--trim4);  
     border-width: .2vw;
     /* border-radius: 1vw; */
     padding: 0 1vw 0 1vw;
   }
+
 
 
   /* DESKTOP HOME PAGE */
@@ -1145,6 +1179,7 @@ button {
     display: flex;
     flex-direction: column;
     /* padding-left: 30px; */
+    width: 50%;
     align-self: flex-start;
   }
   .homeInfo h6 {
@@ -1201,6 +1236,18 @@ button {
     width: 337.5px;
     font-size: 2em;
   }
+  /* .home #roleActor::after {
+    content: '\00bb';
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: -20px;
+    transition: 0.5s;
+  } */
+  .home #roleActor:hover {
+    text-shadow: 0 0 10px var(--trim4);
+    color: var(--white);
+  }
   .home #roleInner {
     width: 337.5px;
   }
@@ -1231,11 +1278,11 @@ button {
     overflow-x: auto;
   }
   .homeScrollArrow {
-    height: 150px;
-    width: 75px;
+    height: 100px;
+    width: 100px;
     cursor: pointer;
     position: relative;
-    top: 100px;
+    top: 125px;
   }
   #homePlayButton {
     position: relative;
@@ -1268,7 +1315,7 @@ button {
     height: 350px;
   }
   .homeCharName {
-    color: #6598ea;
+    color: var(--trim3);
     /* font-size: 37.5px; */
     /* max-width: 100%; */
     width: 100%;
@@ -1296,7 +1343,7 @@ button {
     /* min-height: 2.1em; */
     position: relative;
     scrollbar-width: 0;
-    background-color: #202025;
+    background-color: var(--bg);
     z-index: 10;
   }
   .homeCharName::-webkit-scrollbar {
@@ -1308,20 +1355,10 @@ button {
     width: 100%;
   } */
 
-  .nextActor {
-    background-color: #2f4f4f;
-    height: fit-content;
-    font-size: 1.2vw;
-    /* align-self: auto; */
-    /* margin-top: auto; */
-    /* margin-bottom: auto; */
-    /* position: relative; */
-    top: 17vw;
-  }
   .firstActor {
-    background-color: darkslategrey;
+    background-color: var(--trim2);
     height: fit-content;
-    font-size: 50px;
+    font-size: min(50px, 2vw);
     /* align-self: auto; */
     margin: auto;
     /* margin-bottom: auto; */
@@ -1340,7 +1377,7 @@ button {
     position: relative;
     display: flex;
     flex-direction: column;
-    background-color: #202025;
+    background-color: var(--bg);
     top: 0;
     /* min-height: 100vh; */
     height: 100%;
@@ -1368,7 +1405,7 @@ button {
     font-size: 2vw;
     border-width: .25vw;
     border-radius: 1vw;
-    color: white;
+    color: black;
     margin: 0 1vw 1vw 1vw;
     padding-left: 1vw;
   }
@@ -1385,7 +1422,8 @@ button {
     font-size: 1.5vw;
     border-width: .25vw;
     border-radius: 1vw;
-    color: white;
+    background-color: var(--white);
+    color: black;
     margin: 0 1vw;
     padding-left: 1vw;
   }
@@ -1409,18 +1447,18 @@ button {
 
   }  
   .pageButton {
-    background-color: darkslategrey;
+    background-color: var(--trim2);
     height: 3vh;
     min-height: 20px;
     font-size: 1.2vw;
     bottom: 0px;
     padding: 0 1vw;
-    border: .4vh outset #202025;
+    border: .4vh outset var(--bg);
   }
   /* #prevPage {
   } */
   .pageButton:disabled {
-    background-color: #202025;
+    background-color: var(--bg);
     border-style: inset;
   }
   .show #toTop {
@@ -1435,12 +1473,12 @@ button {
     /* position: fixed; */
     bottom: 0;
     right: 19%;
-    color: #202025;
+    color: var(--bg);
     font-size: 1.5vh;
     width: fit-content;
   }
   option {
-    color: #202025;
+    color: var(--bg);
     font-size: 1.5vh;
   }
   #animeFoot {
@@ -1453,8 +1491,8 @@ button {
     left: 0;
     bottom: 0;
     z-index: 0;
-    background-color:#44444c;    
-    border-top: .3vh solid #f2f2f2;
+    background-color:var(--bg);    
+    border-top: .3vh solid var(--white);
   }
   #animeFoot h2 {
     font-size: 1.5vh;
@@ -1471,7 +1509,7 @@ button {
   position: relative;
   display: flex;
   /* flex-direction: column; */
-  background-color: #202025;
+  background-color: var(--bg);
   top: 0;
   /* min-height: 100vh; */
   height: 100%;
@@ -1516,8 +1554,8 @@ button {
   /* position: relative; */
   text-align: left;
   /* right: 0; */
-  background-color: #202025;
-  border: #f1356d ridge .25vw;
+  background-color: var(--bg);
+  border: var(--trim1) ridge .25vw;
   border-radius: 1vw;
   margin: .1vw;
   width: 20vw;
@@ -1603,25 +1641,34 @@ button {
   flex-direction: column;
   /* max-width: 40vw; */
 }
+.info h3 {
+  color: var(--trim5);
+}
+.info p {
+  color: var(--white);
+}
+.info a {
+  color: var(--trim5);
+}
 .actorName {
   padding: 1vw;
   text-align: end;
   font-size: 1.5vw;
 }
 .actorRole img:hover {
-  box-shadow: 0vh 0vh 1vh .5vh  #f1356d;
+  box-shadow: 0vh 0vh 1vh .75vh  var(--trim2);
 }
 .actorRole img:hover + .info {
-  background-color: #f1356d;
+  background-color: var(--trim3);
   display: flex;
-  box-shadow: 0vh 0vh 1vh .3vh  #53768d;
+  box-shadow: 0vh .5vh 1vh .75vh  var(--trim2);
   /* gap: 10px; */
   /* left: 15vh; */
 }
 .info:hover {
-  background-color: #53768d;
+  background-color: var(--trim2);
   display: flex;
-  box-shadow: 0vh 0vh 1vh .3vh  #f1356d;
+  box-shadow: 0vh 0vh 1vh 1vh var(--trim3);
   /* gap: 10px; */
   /* left: 15vh; */
 }
@@ -1633,54 +1680,6 @@ button {
   right: 0;
 }
 
-/* /////////// END ACTOR /////////// */
-
-
-  /* role previews / list */
-  /* .role-preview {
-    padding: 10px 16px;
-    margin: 20px 0;
-    border-bottom: 1px solid #fafafa;
-    display: grid;
-    gap: 20px;
-    max-width: fit-content;
-    height: 12vw;
-    margin: auto;
-  }
-  .role-preview:hover {
-    box-shadow: 1px 3px 5px rgba(255, 255, 255, 0.477);
-  }
-  .role-preview h2 {
-    font-size: min(2vw, 40px);
-    color: #f1356d;
-    padding-bottom: 8px;
-  }
-  .role-preview a {
-    color: rgb(145, 205, 207);
-    text-decoration: none;
-  }
-  .role-preview p {
-    font-size: 1vw;
-    max-width: 10vw;
-    overflow-wrap: break-word;
-  }
-  .role-preview-text {
-    grid-column: 2;
-    max-width: 60%;
-  }
-  .charImg {
-    max-width: 8vw;
-    grid-column: 1;
-    right: 0;
-  }
-  .roleList {
-    display: flex;
-    flex-wrap: wrap;
-    margin-left: auto;
-    margin-right: auto;
-    gap: 0;
-    max-width: 90%;
-    padding-bottom: 20px;
-  } */
+/* /////////// END DESKTOP ACTOR /////////// */
 
 }

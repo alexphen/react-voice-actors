@@ -25,11 +25,37 @@ function App() {
 	var authorized = false;
 
 	let location = useLocation();
+
 	
 	useEffect(() => {
 		removeCookie("veri")
 		removeCookie("token")
 	}, []);
+
+	useEffect(() => {
+		let topButton = document.getElementById("top100Button");
+		let filterButton = document.getElementById("userSearchButton");
+		if (user) {
+			if (user=="Top 100 Anime") {
+				topButton.style.backgroundColor="#FFFD82";
+				topButton.style.color="black"
+				filterButton.style.backgroundColor="#777";
+				filterButton.style.color="white"
+			}
+			else {
+				topButton.style.backgroundColor="#777";
+				topButton.style.color="white"
+				filterButton.style.backgroundColor="#FFFD82";
+				filterButton.style.color="black"
+			}
+		}
+		else {
+			topButton.style.backgroundColor="#777";
+			filterButton.style.backgroundColor="#777";
+			topButton.style.color="white"
+			filterButton.style.color="white"
+		}
+	}, [user]);
 
 	// setInterval(() => {
 	// }, 1000)
@@ -176,9 +202,44 @@ function App() {
 		}
 	}
 
+	const getTop100 = async() => {
+		console.log("getting top 100")
+		try {
+			const malData = await fetch ('/api/top', {
+				method: 'POST',
+				headers: {
+					'content-type': 'application/json',
+					'Accept': 'application/json'
+				},
+				// body: JSON.stringify({
+				// 	Username: entry,
+				// 	auth_token: cookies.token["access_token"]
+				// })
+			})
+			.then(res => res.json());
+			let str = "("
+			for (let i in malData.data) {
+				str += malData.data[i].node.id + ","
+			}
+			str = str.slice(0, str.length - 1) + ")"
+			setMyList(str)
+			if (str.length > 0) {
+				setUser("Top 100 Anime")
+				// setCookie('acc', entry, {path: '/'})
+				setCookie('list', str, {path: '/'})
+			}
+		} catch (error) {
+			console.log(error)
+		}
+	}
+
 
 	function userFilter() {
 		getMALData()
+	}
+	
+	function topFilter() {
+		getTop100()
 	}
 
 	useEffect(() => {
@@ -189,10 +250,6 @@ function App() {
 	return (
 		<div className="app">
 			
-			{/* <Navbar username={user}>
-				<h1>Hello</h1>
-			
-			</Navbar> */}
 			<nav className="nav">
             <div id='navLeftPane'>
 				{/* <CustomLink to="/" className="site-title" end="true">Home</CustomLink> */}
@@ -207,6 +264,7 @@ function App() {
 							onChange={(e) => setEntry(e.target.value)}
 							onKeyDown={(e) => handleKeyDown(e)}></input>
 						<button id="userSearchButton" onClick={userFilter}>Filter by User</button>
+						<button id="top100Button" onClick={topFilter}>Top 100 Anime</button>
 					</div>
 				<div id='filterLabel'>
 					<h6 id='filter'>Filtered by: {user.length > 0 ? user : "All Anime"}</h6>
