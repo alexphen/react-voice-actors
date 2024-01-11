@@ -75,18 +75,6 @@ app.post('/api/actor', async(req, res) => {
     }
 })
 
-app.post('/api/homeActor', async(req, res) => {
-    try {
-        console.log('Called home actors', req.body.flag);
-        const result = await dbOperation.getHomeActors(req.body.flag, req.body.myList)
-        console.log(result.rows)
-        res.send(result.rows);  
-        
-    } catch (error) {
-        console.log(error)
-    }
-})
-
 app.post('/api/actorFull', async(req, res) => {
     try {
         console.log('Called actorFull', req.body.ActorID, req.body.flag);
@@ -96,6 +84,69 @@ app.post('/api/actorFull', async(req, res) => {
         
     } catch (error) {
         console.log(error)
+    }
+})
+
+app.post('/api/homeActor', async(req, res) => {
+    try {
+        console.log('Called home actors', req.body.flag);
+        const result = await dbOperation.getHomeActors(req.body.flag, req.body.myList)
+        // console.log(result.rows)
+        res.send(result.rows);  
+        
+    } catch (error) {
+        console.log(error)
+    }
+})
+
+app.post('/api/roles', async(req, res) => {
+    try {
+        console.log('Called roles', req.body.ActorID);
+        const result = await dbOperation.getRoles(req.body.ActorID, req.body.myList, req.body.flag)
+        // console.log(result.rows)
+        res.send(result.rows);  
+        
+    } catch (error) {
+        console.log(error)
+    }
+})
+
+app.post('/api/search', async(req, res) => {
+    try {
+        console.log('Called search', req.body.Title);
+        const result = await dbOperation.getSearchData(req.body.Title, req.body.myList, req.body.flag)
+        // console.log(result.rows)
+        res.send(result.rows);  
+        
+    } catch (error) {
+        console.log(error)
+        
+    }
+})
+
+app.post('/api/searchActor', async(req, res) => {
+    try {
+        console.log('Called search actor', req.body.name);
+        const result = await dbOperation.getSearchActorData(req.body.name, req.body.myList, req.body.flag)
+        // console.log(result.rows)
+        res.send(result.rows);  
+        
+    } catch (error) {
+        console.log(error)
+        
+    }
+})
+
+app.post('/api/show', async(req, res) => {
+    try {
+        console.log('Called show', req.body);
+        const result = await dbOperation.getShowActors(req.body.ShowID)
+        // console.log("result", result, count)
+        res.send(result.rows);
+        
+    } catch (error) {
+        console.log(error)
+        
     }
 })
 
@@ -157,6 +208,18 @@ app.post('/api/malA', async(req, res) => {
     }
 })
 
+app.post('/api/top', async(req, res) => {
+    try {
+        console.log('Called top');
+        const result = await dbOperation.getTop100()
+        // console.log("result", result)
+        res.send(result);
+        
+    } catch (error) {
+        console.log(error)
+    }
+})
+
 app.post('/api/auth', async(req, res) => {
     try {
         console.log('Called auth');
@@ -187,56 +250,7 @@ app.post('/api/auth', async(req, res) => {
     }
 })
 
-app.post('/api/roles', async(req, res) => {
-    try {
-        console.log('Called roles', req.body.ActorID);
-        const result = await dbOperation.getRoles(req.body.ActorID, req.body.myList, req.body.flag)
-        // console.log(result.rows)
-        res.send(result.rows);  
-        
-    } catch (error) {
-        console.log(error)
-    }
-})
 
-app.post('/api/search', async(req, res) => {
-    try {
-        console.log('Called search', req.body.Title);
-        const result = await dbOperation.getSearchData(req.body.Title, req.body.myList, req.body.flag)
-        // console.log(result.rows)
-        res.send(result.rows);  
-        
-    } catch (error) {
-        console.log(error)
-        
-    }
-})
-
-app.post('/api/searchActor', async(req, res) => {
-    try {
-        console.log('Called search actor', req.body.name);
-        const result = await dbOperation.getSearchActorData(req.body.name, req.body.myList, req.body.flag)
-        // console.log(result.rows)
-        res.send(result.rows);  
-        
-    } catch (error) {
-        console.log(error)
-        
-    }
-})
-
-app.post('/api/show', async(req, res) => {
-    try {
-        console.log('Called show', req.body);
-        const result = await dbOperation.getShowActors(req.body.ShowID)
-        // console.log("result", result, count)
-        res.send(result.rows);
-        
-    } catch (error) {
-        console.log(error)
-        
-    }
-})
 
 
 // dbOperation.getMAL("RufusPeanut").then(res => {
