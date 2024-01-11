@@ -173,7 +173,7 @@ app.post('/api/mal', async(req, res) => {
                     data = data.toString();
                     dataToSend["url"] = data.substring(0,data.indexOf(" "))
                     dataToSend["veri"] = data.substring(data.indexOf(" ") + 1, data.indexOf("\r\n"))
-                    // console.log(dataToSend)
+                    console.log(dataToSend)
                     // res.send(dataToSend);
                 });
                 // in close event we are sure that stream from child process is closed
