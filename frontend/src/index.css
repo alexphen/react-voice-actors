@@ -1174,7 +1174,7 @@ button:hover {
   
   .home {
     display: flex;
-    justify-content: ;
+    justify-content: space-between;
     width: 100%;
     padding-top: 2vw;
   }
