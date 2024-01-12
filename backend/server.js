@@ -237,7 +237,7 @@ app.post('/api/auth', async(req, res) => {
                 // in close event we are sure that stream from child process is closed
                 python.on('close', (code) => {
                     console.log(`child process close all stdio with code ${code}`);
-                    // console.log(dataToSend)
+                    console.log(dataToSend)
                     // send data to browser
                     res.send(dataToSend)
                 });
