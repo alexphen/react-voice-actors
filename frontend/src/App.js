@@ -12,7 +12,7 @@ function App() {
 
 	const [cookies, setCookie, removeCookie] = useCookies(["list", "acc", "veri", "token", "auth"])
 	const [entry, setEntry]  	= useState(cookies.acc || "");
-	const [myList, setMyList] 	= useState(cookies.list || []);
+	const [myList, setMyList] 	= useState(cookies.list || "");
   	const [user, setUser]     	= useState(cookies.acc || "");
 	const [searchParams, setSearchParams] = useSearchParams();
 	const navigate = useNavigate();
@@ -288,7 +288,7 @@ function App() {
 			<Routes>
 				<Route path="/Anime/:id?/:title?" element={<Show user={user} myList={myList}/>} />
 				<Route path="/Actor/:id?" element={<Actor user={user} myList={myList}/>} />
-				<Route path="/" element={<Home user={user} myList={myList}/>} />
+				<Route path="/" element={<Home user={user} myList={cookies.list}/>} />
 				<Route path="/OAuth/:code?" element={<OAuth cookies={cookies} setCookie={setCookie} authorized={authorized}/>} />
 			</Routes>
 		</div>

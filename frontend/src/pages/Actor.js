@@ -80,7 +80,6 @@ export default function Actor({user, myList}) {
     }
 
     const getSearchData = async(keyword) => {
-        console.log("searchng")
         setKeyword(keyword);
         setNames([])
         // if(keyword === "") {
@@ -157,7 +156,7 @@ export default function Actor({user, myList}) {
                         <div className="results">
                             {/* Display 10 filtered results. Change Show on click */}
                             {names.slice(0,10).map((name, index) => (
-                                <Link to={`/Actor/${ids[index]}/`} className="resBox" key={name}>{name}</Link>
+                                <Link key={name} to={`/Actor/${ids[index]}/`} className="resBox">{name}</Link>
                             ))}
                         </div>
                     </div>
@@ -165,7 +164,7 @@ export default function Actor({user, myList}) {
                 <div id="actorMain">
                     <div className="actorRoles">
                         {roles.map((role, n) => 
-                            <div className="actorRole">
+                            <div key={n} className="actorRole">
                                 <img src={role[charImg]}></img>
                                     <div className="info">
                                         <h3>{role[charName]}</h3>

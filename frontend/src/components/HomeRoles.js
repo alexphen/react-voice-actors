@@ -38,7 +38,9 @@ const HomeRoles = ({actorID, actorName, actorImg, showID, flag, user, myList, ca
     var filterFlag = user.length > 0;
 
     const rolesContainer = document.getElementById("rolesContainer");
-    
+    const rolesGallery = document.getElementsByClassName("homeRoleGallery");
+    // console.log(rolesContainer)
+    // console.log(rolesGallery)
 
     useEffect(() => {
         getRoles(actorID);
@@ -47,8 +49,9 @@ const HomeRoles = ({actorID, actorName, actorImg, showID, flag, user, myList, ca
     useEffect(() => {
         // console.log(1, prevUser, 2, user)
         if (!_.isEqual(prevUser.current, user)) {
+            // debugger
             cache = {};
-            getRoles(actorID);
+            // getRoles(actorID);
         }
         prevUser.current = user
         // if (!_.isEqual(prevUser, user)) {
@@ -76,16 +79,19 @@ const HomeRoles = ({actorID, actorName, actorImg, showID, flag, user, myList, ca
             }
             setDirection(1);
             getRoles(actorID);
+
             if (rolesContainer) {
                 rolesContainer.scrollTo({
                     top: 0,
                     left: 0,
                     behavior: "instant"
                 })
+                setTimeout(() => {
+                    if (rolesContainer.scrollWidth >= rolesGallery[0].clientWidth) {
+                            resumeScroll(1);
+                        }
+                    }, 1500);
             }
-            setTimeout(() => {
-                resumeScroll(1);
-            }, 1300);
         }
         prevActor.current = actorID;
     }, [actorID]);
@@ -158,16 +164,6 @@ const HomeRoles = ({actorID, actorName, actorImg, showID, flag, user, myList, ca
                             topTitleID={role[ShowID][0]} 
                             topTitle={role[Title][0]}/>
                     )}
-                    {/* <div className="homeRoleCarousel js-flickity flickity-enabled is-draggable"
-                        data-flickity-options='{ "cellAlign": "left", "contain": true }'>
-                        <div className="flickity-viewport">
-                            <div className="flickity-slider">
-                                {roleReturn.map((role, i) =>
-                                    <HomeChar key={i} charName={role[CharName]} charImg={role[ImageURL]} topTitleID={role[ShowID][0]} topTitle={role[Title][0]}/>
-                                )}
-                            </div>
-                        </div>
-                    </div> */}
                     </div>
                     <img className="homeScrollArrow" 
                         src={require("../assets/right.png")} 
@@ -259,7 +255,6 @@ const HomeRoles = ({actorID, actorName, actorImg, showID, flag, user, myList, ca
     }
 
     function stopScroll() {
-        console.log("stop")
         clearInterval(intID);
         setScrolling(false);
     }
