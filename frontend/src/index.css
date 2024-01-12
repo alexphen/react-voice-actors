@@ -299,6 +299,7 @@ button:hover {
   #userSearchArea {
     display: flex;
     top: -6vh;
+    background-color: var(--bg);
     position: absolute;
     padding: 1vh 0;
     height: 4vh;
@@ -378,6 +379,7 @@ button:hover {
     display: flex;
     flex-direction: column;
     padding-bottom: 3vh;
+    /* width: 558px; */
     /* top: 6vh; */
   }
   #homeTitle {
@@ -1172,6 +1174,7 @@ button:hover {
   
   .home {
     display: flex;
+    justify-content: ;
     width: 100%;
     padding-top: 2vw;
   }
@@ -1179,7 +1182,7 @@ button:hover {
     display: flex;
     flex-direction: column;
     /* padding-left: 30px; */
-    width: 50%;
+    /* width: 800px; */
     align-self: flex-start;
   }
   .homeInfo h6 {
@@ -1310,8 +1313,10 @@ button:hover {
   } */
   .homeCharImg {
     width: 225px;
+    height: 350px;
   }
   .homeImgContainer {
+    width: 225px;
     height: 350px;
   }
   .homeCharName {
@@ -1360,7 +1365,7 @@ button:hover {
     height: fit-content;
     font-size: min(50px, 2vw);
     /* align-self: auto; */
-    margin: auto;
+    /* margin: auto; */
     /* margin-bottom: auto; */
     position: relative;
     align-self: center;

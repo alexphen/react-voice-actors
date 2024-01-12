@@ -1,7 +1,4 @@
 import secrets
-import requests
-import json
-import sys
 from decouple import config
 
 
