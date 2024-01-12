@@ -32,10 +32,10 @@ export default function Show({user, myList}) {
     const getSearchData = async(keyword) => {
         setKeyword(keyword);
         setTitles([])
-        if(keyword === "") {
-            setTitles([])
-        }
-        else {
+        // if(keyword === "") {
+        //     setTitles([])
+        // }
+        // else {
             var idRes = [];
             var tRes = [];
 
@@ -62,7 +62,7 @@ export default function Show({user, myList}) {
             }
             setTitles(tRes);
             setShows(idRes);
-        }
+        // }
     }
 
     return (   

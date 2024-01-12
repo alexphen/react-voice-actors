@@ -337,6 +337,27 @@ button:hover {
     padding: 0 1vw 0 1vw;
     text-wrap: nowrap;
   }
+  #userTip {
+    display: none;
+    position: absolute;
+    visibility: hidden;
+    opacity: 0;
+    font-size: small;
+    background-color: var(--bg);
+    border: 4px inset var(--trim4);
+  }
+  #topTip {
+    display: none;
+    position: absolute;
+    visibility: hidden;
+    width: 200px;
+    opacity: 0;
+    padding: 5px;
+    text-justify: auto;
+    font-size: small;
+    background-color: var(--bg);
+    border: 4px inset var(--trim4);
+  }
   #filter {
     font-size: 1vh;
     /* text-wrap: nowrap; */
@@ -528,7 +549,7 @@ button:hover {
     position: relative;
     display: flex;
     flex-direction: column;
-    background-color: var(--bg);
+    /* background-color: var(--bg); */
     top: 6vh;
     min-height: 100vh;
     height: 100%;
@@ -884,9 +905,11 @@ button:hover {
     border-top: none; */
   }
   .roleGallery img {
-    width: 225px;
-    height: 326px;
+    width: 219px;
+    height: 344px;
     align-self: center;
+    border: 3px solid var(--trim4);
+    object-fit: cover;
   }
   .roleTogglePrev {
     background-color: var(--trim2);
@@ -1156,15 +1179,52 @@ button:hover {
     padding: 0vw 0vw 0vw .25vw;
     border-width: .2vw;
   }
-  /* #userSearchButton { */
+  /* #userSearchButton {
+    width: 200px;
+    transition: width 1s 2s;
+
+  } */
   .nav button {
     position: relative;
+    top: 0;
+    height: 100%;
     z-index: 11;
     font-size: 1.5vw;
     background-color: var(--trim4);  
     border-width: .2vw;
     /* border-radius: 1vw; */
     padding: 0 1vw 0 1vw;
+  }
+  #userTip {
+    /* display: flex; */
+    position: absolute;
+    visibility: hidden;
+    opacity: 0;
+    font-size: small;
+    background-color: var(--bg);
+    border: 4px inset var(--trim4);
+  }
+  #userSearchButton:hover ~ #userTip {
+    transition: all 1s 1s;
+    visibility: visible;
+    opacity: 100%;
+  }
+  #topTip {
+    display: flex;
+    position: absolute;
+    visibility: hidden;
+    width: 200px;
+    opacity: 0;
+    padding: 5px;
+    text-justify: auto;
+    font-size: small;
+    background-color: var(--bg);
+    border: 4px inset var(--trim4);
+  }
+  #top100Button:hover ~ #topTip {
+    transition: all 1s 1s;
+    visibility: visible;
+    opacity: 100%;
   }
 
 
@@ -1382,7 +1442,7 @@ button:hover {
     position: relative;
     display: flex;
     flex-direction: column;
-    background-color: var(--bg);
+    /* background-color: var(--bg); */
     top: 0;
     /* min-height: 100vh; */
     height: 100%;
@@ -1536,7 +1596,7 @@ button:hover {
   font-size: 2vw;
   border-width: .25vw;
   border-radius: 1vw;
-  color: white;
+  color: black;
   margin: 0 1vw;
   padding: 1vw;
 }

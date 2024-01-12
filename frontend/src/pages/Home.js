@@ -47,7 +47,7 @@ const Home = ({user, myList}) => {
     useEffect(() => {
         // console.log("HA from []")
         getHomeActors();
-        started = false;
+        // started = false;
         cache = {};
     }, [])
 
@@ -55,23 +55,23 @@ const Home = ({user, myList}) => {
         // console.log(prevList.current)
         if (!_.isEqual(prevList.current, myList)) {
             setIndex(0);
-            // console.log('index', index)
-            started = false;
-            // console.log("HA from [myList]")
             getHomeActors()
-            // resetIndex();
-            if (started) {
-                nextActor(0)
-            }
+            console.log(started)
+            // if (started) {
+            //     nextActor()
+            // }
         }
         prevList.current = myList;
     }, [myList])
 
 
 
-    // useEffect(() => {
-    //     getData()
-    // }, [topActors])
+    useEffect(() => {
+        if(started) {
+            setActorID(topActors[0]);
+            getData(topActors[0]);
+        }
+    }, [topActors])
 
     const getHomeActors = async() => {
         const actorData = await fetch('/api/homeActor', {
@@ -123,6 +123,7 @@ const Home = ({user, myList}) => {
 
         // getHomeActors();
         // nextActor(index);
+        started = true;
         setActorID(topActors[0]);
         getData(topActors[0])
     }
@@ -217,7 +218,7 @@ const Home = ({user, myList}) => {
                 : <>
                     <div className="homeInfo">
                         <h1 id="homeTitle" style={{"fontSize":"10vh"}}>Who Seiyu?</h1>
-                        <h2>A tool to display all the works of the voice actors you might know!</h2>
+                        <h2>A tool to display all the works of the<br></br>voice actors you might know!</h2>
                         <br></br>
                         <h5>(Seiyu is a Japanese word for voice actor)</h5>
                         <br></br>

@@ -65,14 +65,12 @@ const HomeRoles = ({actorID, actorName, actorImg, showID, flag, user, myList, ca
             // console.log("rolescontainer")
             resumeScroll(tempDir);
             // console.log(started)
-        }, 1000) 
+        }, 1500) 
     }, [rolesContainer]);
 
     useEffect(() => {
-        // debugger
         if (!_.isEqual(prevActor.current, actorID)) {
             // console.log("roles [actorID]")
-            console.log(started)
             if (started) {
                 stopScroll();
             }
