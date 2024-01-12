@@ -52,7 +52,6 @@ export default function Show({user, myList}) {
                 })
             })
             .then(res => res.json());
-            console.log("SD", searchData)
 
             // console.log("RD", returnedData)
             for (let i in searchData) {
@@ -106,7 +105,7 @@ export default function Show({user, myList}) {
                         <div className="results">
                             {/* Display 10 filtered results. Change Show on click */}
                             {titles.slice(0,10).map((title, index) => (
-                                <Link to={`/Anime/${shows[index]}/${title}`} className="resBox">{title}</Link>
+                                <Link key={title} to={`/Anime/${shows[index]}/${title}`} className="resBox">{title}</Link>
                             ))}
                         </div>
                     </div></>

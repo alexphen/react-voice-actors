@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import HomeRoles from "../components/HomeRoles";
 import { useParams, Link } from "react-router-dom";
+import { Cookies } from "react-cookie";
 const _ = require('lodash')
 
 // const ActorID   = 0;
@@ -56,7 +57,6 @@ const Home = ({user, myList}) => {
         if (!_.isEqual(prevList.current, myList)) {
             setIndex(0);
             getHomeActors()
-            console.log(started)
             // if (started) {
             //     nextActor()
             // }
@@ -67,9 +67,9 @@ const Home = ({user, myList}) => {
 
 
     useEffect(() => {
+        getData(topActors[0]);
         if(started) {
             setActorID(topActors[0]);
-            getData(topActors[0]);
         }
     }, [topActors])
 
@@ -143,20 +143,6 @@ const Home = ({user, myList}) => {
         setActorID(temp);
         getData(temp);
     }
-    // function nextActor(pos) {
-    //     started = true;
-    //     let temp;
-    //     if (pos < topActors.length - 1) {
-    //         setIndex(pos + 1);
-    //         temp = topActors[pos];
-    //     }
-    //     else {
-    //         setIndex(0);
-    //         temp = topActors[0];
-    //     }
-    //     setActorID(temp);
-    //     getData(temp);
-    // }
 
     function prevActor() {
         started = true;
@@ -172,10 +158,6 @@ const Home = ({user, myList}) => {
         }
         setActorID(temp);
         getData(temp);
-    }
-
-    function toTop() {
-        window.scroll({top: 0, left: 0, behavior: "smooth"})
     }
 
     return ( 

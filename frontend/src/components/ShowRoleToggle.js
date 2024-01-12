@@ -68,7 +68,6 @@ const ShowRoleToggle = ({actorID, actorName, actorImg, showID, flag, user, myLis
     }, [user])
 
     useEffect(() => {
-        // console.log(1, prevUser, 2, user)
         if (!_.isEqual(prevActor.current, actorID)) {
             // console.log("roles [actorID]")
             cache = {};
