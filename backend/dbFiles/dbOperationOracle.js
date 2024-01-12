@@ -166,11 +166,11 @@ const getHomeActors = async(flag, myList) => {
             //                             WHERE Roles.ShowID IN ${myList}
             //                             ORDER BY Actors.aFavs DESC
             //                             FETCH FIRST 20 ROWS ONLY`)
-            res = connection.execute(`SELECT Actors.ACTORID, Actors.ActorName, COUNT(Roles.CharID) FROM Roles
+            res = connection.execute(`SELECT Actors.ACTORID, Actors.ActorName, SUM(Roles.Favorites) FROM Roles
                                         INNER JOIN Actors ON Roles.ActorID=Actors.ActorID
                                         WHERE Roles.ShowID IN ${myList}
                                         GROUP BY Actors.ACTORID, Actors.ActorName
-                                        ORDER BY COUNT(Roles.CharID) DESC
+                                        ORDER BY SUM(Roles.Favorites) DESC
                                         FETCH FIRST 50 ROWS ONLY`)
         }
         else {
@@ -178,10 +178,10 @@ const getHomeActors = async(flag, myList) => {
             //                             INNER JOIN Roles ON Roles.ActorID=Actors.ActorID
             //                             ORDER BY Actors.aFavs DESC
             //                             FETCH FIRST 20 ROWS ONLY`)
-            res = connection.execute(`SELECT Actors.ACTORID, Actors.ActorName, COUNT(Roles.CharID) FROM Roles
+            res = connection.execute(`SELECT Actors.ACTORID, Actors.ActorName, SUM(Roles.Favorites) FROM Roles
                                         INNER JOIN Actors ON Roles.ActorID=Actors.ActorID
                                         GROUP BY Actors.ACTORID, Actors.ActorName
-                                        ORDER BY COUNT(Roles.CharID) DESC
+                                        ORDER BY SUM(Roles.Favorites) DESC
                                         FETCH FIRST 50 ROWS ONLY`)
         }
         return res;

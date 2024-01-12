@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 
 const   actorName   = 0,
         actorImg    = 1,
@@ -20,6 +20,7 @@ export default function Actor({user, myList}) {
     const [names, setNames] = useState([]);
     const [ids, setIds]     = useState([]);
     const [keyword, setKeyword] = useState('');
+    const navigate = useNavigate();
     
     var filterFlag = user.length > 0;
     // console.log(actor)
@@ -31,9 +32,9 @@ export default function Actor({user, myList}) {
     }, [])
 
     useEffect(() => {
+        setKeyword("")
+        getSearchData("")
         if (id > 0) {
-            setKeyword("")
-            getSearchData("")
             getData();
         }
     }, [id])
@@ -43,6 +44,9 @@ export default function Actor({user, myList}) {
             setKeyword("")
             getSearchData("")
             getData();
+        }
+        if (roles.length < 1) {
+            navigate("/Actor")
         }
     }, [myList])
 
@@ -64,19 +68,25 @@ export default function Actor({user, myList}) {
         for (let i in actorData) {
             actorData[i] = Object.values(actorData[i])
         }
-        // console.log(actorData[0][actorID], actorData[0][actorName], actorData[0][actorImg])
-        setActor([actorData[0][actorID], actorData[0][actorName], actorData[0][actorImg], actorData[0][aFavs]]);
-        setRoles(actorData)
-        console.log(actorData);
+        if (actorData.length==0) {
+            setActor(0, "", "", 0)
+            navigate("/Actor")
+        }
+        else {
+            // console.log(actorData[0][actorID], actorData[0][actorName], actorData[0][actorImg])
+            setActor([actorData[0][actorID], actorData[0][actorName], actorData[0][actorImg], actorData[0][aFavs]]);
+            setRoles(actorData)
+        }
     }
 
     const getSearchData = async(keyword) => {
+        console.log("searchng")
         setKeyword(keyword);
         setNames([])
-        if(keyword === "") {
-            setNames([])
-        }
-        else {
+        // if(keyword === "") {
+        //     setNames([])
+        // }
+        // else {
             var idRes = [];
             var nRes = [];
 
@@ -107,7 +117,7 @@ export default function Actor({user, myList}) {
             setIds(idRes);
             // console.log(nRes)
             // console.log(idRes)
-        }
+        // }
     }
 
     return (

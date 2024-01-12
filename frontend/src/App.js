@@ -263,8 +263,14 @@ function App() {
 							value={entry} 
 							onChange={(e) => setEntry(e.target.value)}
 							onKeyDown={(e) => handleKeyDown(e)}></input>
-						<button id="userSearchButton" onClick={userFilter}>Filter by User</button>
-						<button id="top100Button" onClick={topFilter}>Top 100 Anime</button>
+						<div style={{"display":"flex"}}>
+							<button id="userSearchButton" onClick={userFilter}>Filter by User</button>
+							<p id="userTip">Enter your MyAnimeList Username in order to filter this sites results to only the content of your Anime List</p>
+						</div>
+						<div style={{"display":"flex"}}>
+							<button id="top100Button" onClick={topFilter}>Top 100 Anime</button>
+							<p id="topTip">Filter results based on the Top 100 Anime on MyAnimeList</p>
+						</div>
 					</div>
 				<div id='filterLabel'>
 					<h6 id='filter'>Filtered by: {user.length > 0 ? user : "All Anime"}</h6>
@@ -314,6 +320,11 @@ function App() {
 		if (e.key === 'Enter') {
 			userFilter();
 		}
+	}
+
+	function dispTip() {
+		let tip = document.getElementById("userTip");
+		tip.style.display="block"
 	}
 
 	function removeFilter() {

@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import ShowRoleToggle from "./ShowRoleToggle";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 const _ = require('lodash')
 
 const   CharName    = 0,
@@ -28,6 +28,7 @@ const ShowInfo = ({ user, myList, flag }) => {
     const [keyword, setKeyword] = useState('');
     const [dispActors, setDispActors] = useState([]);
     const prevID = useRef(0);
+    const navigate = useNavigate();
     
 
     const getShowActors = async() => {
@@ -75,6 +76,13 @@ const ShowInfo = ({ user, myList, flag }) => {
         }
         prevID.current = id
     }, [id]);
+
+    useEffect(() => {
+        console.log(myList)
+        if (user && !(myList.includes(`${id},`) || myList.includes(`${id})`))) {
+            navigate("/Anime")
+        }
+    }, [myList]);
 
     useEffect(() => {
         setCount(dispActors.length)
