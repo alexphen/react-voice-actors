@@ -1,9 +1,12 @@
 import secrets
-from decouple import config
+import os
+# from decouple import config
+from dotenv import load_dotenv
 
+load_dotenv()
 
-CLIENT_ID = config('MAL_CLIENT_ID')
-CLIENT_SECRET = config('MAL_CLIENT_SECRET')
+CLIENT_ID = os.getenv('MAL_CLIENT_ID')
+CLIENT_SECRET = os.getenv('MAL_CLIENT_SECRET')
 
 
 # 1. Generate a new Code Verifier / Code Challenge.
