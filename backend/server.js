@@ -162,18 +162,21 @@ app.post('/api/mal', async(req, res) => {
             console.log(error.message)
             // Private Account
             if (error.message.includes("403:")) {
-            
-                let dataToSend = {};
+		let dataToSend = {};
                 // spawn new child process to call the python script 
                 // and pass the variable values to the python script
-                const python = spawn('python', ['auth.py', req.body.Username]);
+                const python = spawn('python3', ['auth.py', req.body.Username]);
                 // collect data from script
                 python.stdout.on('data', function (data) {
                     console.log('Pipe data from python script ...');
                     data = data.toString();
+		            // console.log(data)
                     dataToSend["url"] = data.substring(0,data.indexOf(" "))
-                    dataToSend["veri"] = data.substring(data.indexOf(" ") + 1, data.indexOf("\r\n"))
-                    console.log(dataToSend)
+                    // dataToSend["veri"] = data.substring(data.indexOf(" ") + 1, data.indexOf("\n"))
+                    dataToSend["veri"] = data.includes("\r") 
+                        ? data.substring(data.indexOf(" ") + 1, data.indexOf("\r"))
+                        : data.substring(data.indexOf(" ") + 1, data.indexOf("\n"))
+                    // console.log(dataToSend)
                     // res.send(dataToSend);
                 });
                 // in close event we are sure that stream from child process is closed
@@ -181,8 +184,8 @@ app.post('/api/mal', async(req, res) => {
                     console.log(`child process close all stdio with code ${code}`);
                     // send data to browser
                     res.send(dataToSend)
-                });
-                // res.send(false)
+                });            
+                //res.send(false)
             }
         }
         
@@ -198,7 +201,7 @@ app.post('/api/malA', async(req, res) => {
             const result = await dbOperation.getMAL(req.body.Username, req.body.auth_token)
             console.log(result.data.length)
             res.send(result);
-            console.log("sent")
+            // console.log("sent")
         } catch (error) {
             console.log(error.message)
         }
@@ -227,7 +230,7 @@ app.post('/api/auth', async(req, res) => {
             let dataToSend = {};
                 // spawn new child process to call the python script 
                 // and pass the variable values to the python script
-                const python = spawn('python', ['auth2.py', req.body.code, req.body.veri]);
+                const python = spawn('python3', ['auth2.py', req.body.code, req.body.veri]);
                 // collect data from script 
                 python.stdout.on('data', function (data) {
                     console.log('Pipe data from python script ...');
@@ -237,7 +240,7 @@ app.post('/api/auth', async(req, res) => {
                 // in close event we are sure that stream from child process is closed
                 python.on('close', (code) => {
                     console.log(`child process close all stdio with code ${code}`);
-                    console.log(dataToSend)
+                    // console.log(dataToSend)
                     // send data to browser
                     res.send(dataToSend)
                 });

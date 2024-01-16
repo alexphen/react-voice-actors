@@ -31,7 +31,7 @@ const OAuth = ({ cookies, setCookie, authorized }) => { //setToken
         // setToken(oauth);
         // setAuthToken(oauth);
         setCookie("token", oauth, {path: '/'})
-        setCookie("authorized", true, {path: '/'});
+        setCookie("auth", true, {path: '/'});
         // setCookie("token", oauth)
         // console.log("actorData", actorData)
     }
@@ -56,8 +56,6 @@ const OAuth = ({ cookies, setCookie, authorized }) => { //setToken
      );
 
         function submit() {
-            // token = authToken;
-            // setCookie("token", authToken)
             window.close();
         }
 
