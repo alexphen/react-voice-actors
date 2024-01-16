@@ -179,6 +179,9 @@ const ShowInfo = ({ user, myList, flag }) => {
         }
         setPerPage(num);
         setPage(pageTracker)
+
+        pageTracker == 0 ? setHasPrev(false) : setHasPrev(true);
+        pageTracker+1 < Math.ceil(count/num) ? setHasNext(true) : setHasNext(false);
     }
     
     function toTop() {
@@ -212,26 +215,7 @@ const ShowInfo = ({ user, myList, flag }) => {
                                                 flag={flag}
                                                 user={user}
                                                 myList={myList}
-                                                cache={cache}/>
-                            {/* {console.log(toggles)}
-                                {!toggles.includes(actor[ActorID])
-
-                                    ?   <><ShowRoleToggle key={actor[ActorID]}
-                                                actorID={actor[ActorID]}
-                                                actorName={actor[ActorName]}
-                                                actorImg={actor[ImageURL]}
-                                                showID={id}
-                                                flag={flag}
-                                                user={user}
-                                                myList={myList}
-                                                cache={cache}/>
-                                            {console.log("toggle for ", actor[ActorID])}
-                                            {toggles.push(actor[ActorID])}
-                                        </>
-                                    :   <>{console.log("duplicate", actor[ActorID])}</>
-
-                                } */}
-                                     
+                                                cache={cache}/>                                     
                             </>
                     )
                     

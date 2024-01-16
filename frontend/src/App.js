@@ -72,6 +72,7 @@ function App() {
 	// 	console.log(window.location)
 	// }, [window.location]);
 
+
 	const getMALData = async() => {
 		if (entry != "" && entry != user) {
 			if (cookies.token && cookies.token["access_token"]) {
@@ -101,6 +102,7 @@ function App() {
 							setUser(entry)
 							setCookie('acc', entry, {path: '/'})
 							setCookie('list', str, {path: '/'})
+							authPopup.close();
 						}
 					}
 				}
@@ -122,18 +124,18 @@ function App() {
 						})
 					})
 					.then(res => res.json());
+					// if failed, open OAuth window
 					if (!malData["data"]) {
 						try {
-							console.log(malData)
 							let authURL = malData["url"];
 							setVeri(malData["veri"]);
-							console.log(malData["veri"])
 							setCookie("veri", malData["veri"]);
 							// navigate("/OAuth");
 							authPopup = window.open(authURL, "", `left=${window.screenLeft},top=${window.screenTop},width=600,height=800`);
-							// alert("Your List is marked as private. Please make it public to use this feature.")
+							authPopup.addEventListener('unload', console.log("closed"))
 						} catch (error) {
-							console.log("failed to authorize")
+							alert("Your List is marked as private. Please make it public to use this feature.")
+							console.log("failed to authorize", error)
 						}
 					}
 					else {
@@ -243,7 +245,7 @@ function App() {
 	}
 
 	useEffect(() => {
-		if(authorized)
+		if(cookies.auth)
 			getMALDataAuthd();
 	}, [cookies.auth]);
 
@@ -273,10 +275,10 @@ function App() {
 						</div>
 					</div>
 				<div id='filterLabel'>
-					<h6 id='filter'>Filtered by: {user.length > 0 ? user : "All Anime"}</h6>
+					<h6 id='filter'>{user.length > 0 ? user : "Filtered by: " + "\n" + "All Anime"}</h6>
 					{user != ""
 						? <button id='unfilter' onClick={removeFilter}>Remove Filter</button>
-						: <></>
+						: <p id="filterTip">Apply a filter to limit results. Either enter your MyAnimeList username to see the anime you're interested in, or simply view the Top 100 Anime</p>
 					}
 				</div>
 			</div>
