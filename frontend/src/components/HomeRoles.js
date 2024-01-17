@@ -14,9 +14,10 @@ const ShowID    = 5;
 const Title     = 7;
 const rank      = 8;
 
-const SPEED = 20;
+const SPEED = 10;
 
 var intID;
+var timeID;
 var started = false;
 
 
@@ -64,7 +65,7 @@ const HomeRoles = ({actorID, actorName, actorImg, showID, flag, user, myList, ca
     useEffect(() => {
         let tempDir = direction;
         started = true;
-        setTimeout(() => {
+        timeID = setTimeout(() => {
             // console.log("rolescontainer")
             resumeScroll(tempDir);
             // console.log(started)
@@ -86,11 +87,9 @@ const HomeRoles = ({actorID, actorName, actorImg, showID, flag, user, myList, ca
                     left: 0,
                     behavior: "instant"
                 })
-                setTimeout(() => {
-                    if (rolesContainer.scrollWidth >= rolesGallery[0].clientWidth) {
-                            resumeScroll(1);
-                        }
-                    }, 1500);
+                timeID = setTimeout(() => {
+                    resumeScroll(1);
+                }, 1500);
             }
         }
         prevActor.current = actorID;
@@ -266,6 +265,7 @@ const HomeRoles = ({actorID, actorName, actorImg, showID, flag, user, myList, ca
         setDirection(dir);
         clearInterval(intID);
         intID = window.self.setInterval(() => {
+        // if (rolesContainer && rolesContainer.scrollWidth > 0) {
         if (rolesContainer && rolesContainer.scrollWidth > 0) {
             // console.log(SPEED, tempDir, rolesContainer.scrollLeft, (rolesContainer.scrollWidth - rolesContainer.clientWidth))
             // move right
