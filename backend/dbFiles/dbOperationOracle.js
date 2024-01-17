@@ -6,7 +6,7 @@ const   MAL           = require('myanimelist-api-wrapper'),
 
 const getAnime = async(title) => {
     try {        
-        connection = await oracledb.getConnection();
+        let connection = await oracledb.getConnection();
         let res = connection.execute(`SELECT * FROM Anime WHERE Anime.Title='${title}'`);
         // let res = pool.execute(`SELECT * FROM Anime`);
         //console.log(res);
@@ -25,7 +25,7 @@ const getAnime = async(title) => {
 }
 const addAnime = async(Anime) => {
     try {  
-        connection = await oracledb.getConnection();
+        let connection = await oracledb.getConnection();
         let anime = connection.execute(`INSERT INTO Anime VALUES
         (${Anime.ShowID}, '${Anime.Title}', '${Anime.ImageURL}')`);
         // console.log(anime);
@@ -43,7 +43,6 @@ const addAnime = async(Anime) => {
         }
     }
 }
-
 const getActor = async(actID) => {
     let connection;
     try {        
@@ -68,7 +67,7 @@ const getActor = async(actID) => {
 }
 const getActorFull = async(actID, myList, flag) => {
     try {        
-        connection = await oracledb.getConnection();
+        let connection = await oracledb.getConnection();
         if (flag) {
             let res = await connection.execute(`SELECT Actors.ActorName, Actors.ImageURL, Roles.*, Anime.Title, Actors.aFavs FROM Actors
                                                     INNER JOIN Roles ON Roles.ActorID=Actors.ActorID
@@ -102,7 +101,7 @@ const getActorFull = async(actID, myList, flag) => {
 }
 const addActor = async(Actor) => {
     try {        
-        connection = await oracledb.getConnection();
+        let connection = await oracledb.getConnection();
         let actor = connection.execute(`INSERT INTO Actors VALUES
         (${Actor.ActorID}, '${Actor.ActorName}', ${Actor.Favorites}, '${Actor.ImageURL}')`);
         // console.log(actor);
@@ -122,7 +121,7 @@ const addActor = async(Actor) => {
 }
 const getRoles = async(actID, myList, flag) => {
     try {        
-        connection = await oracledb.getConnection();
+        let connection = await oracledb.getConnection();
         if (flag) {
             let res = connection.execute(`SELECT Roles.*, Actors.ActorName, Anime.Title, Anime.Popularity FROM Roles
                                             INNER JOIN Actors ON Roles.ActorID=Actors.ActorID
@@ -200,7 +199,7 @@ const getHomeActors = async(flag, myList) => {
 }
 const getHomeData = async(flag, myList) => {
     try {        
-        connection = await oracledb.getConnection();
+        let connection = await oracledb.getConnection();
         if (flag) {
             let res = connection.execute(`SELECT Roles.*, Actors.ActorName, Actors.ImageURL, Actors.aFavs, Anime.Title FROM Roles
                                             INNER JOIN Actors ON Roles.ActorID=Actors.ActorID
@@ -235,7 +234,7 @@ const getHomeData = async(flag, myList) => {
 }
 const getSearchData = async(title, myList, flag) => {
     try {        
-        connection = await oracledb.getConnection();
+        let connection = await oracledb.getConnection();
         if (flag) {
             let res = connection.execute(`SELECT * FROM Anime
                                             WHERE UPPER(Anime.Title) LIKE UPPER('%${title}%')
@@ -263,7 +262,7 @@ const getSearchData = async(title, myList, flag) => {
 }
 const getSearchActorData = async(name, myList, flag) => {
     try {        
-        connection = await oracledb.getConnection();
+        let connection = await oracledb.getConnection();
         if (flag) {
             let res = connection.execute(`SELECT DISTINCT Actors.* FROM Actors 
                                             INNER JOIN ROLES ON ROLES.ACTORID=Actors.ACTORID                            
@@ -303,7 +302,7 @@ const getSearchActorData = async(name, myList, flag) => {
 }
 const getShowActors = async(showID, flag) => {
     try {        
-        connection = await oracledb.getConnection();
+        let connection = await oracledb.getConnection();
         // let res = pool.execute(`SELECT Roles.* FROM Roles
         //                                 WHERE Roles.ShowID=${showID}`);
 
